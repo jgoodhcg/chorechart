@@ -35,30 +35,26 @@
    [:div.col-md-2 [:label label]]
    [:div.col-md-5 input]])
 
-(defn input [label type id]
-  (row label [:input.form-control {:field type :id id}]))
+(defn input [label name type]
+  (row label [:input.form-control {:type type :name name}]))
 
 (defn select [label name options]
-  (row label [:select {:name name}
-              (map #([:option {:value (:value %)} (:label %)]))]))
+  (row label (into
+              [:select.form-control {:name name}]
+              (mapv #(-> [:option {:value (:value %)} (:label %)]) options))))
 
 (defn home-page []
   [:div.container
-   (input "first name" :text :person.first-name)
-   (select "Name" "name" [{:value "option1" :label "Option One"}])
+   (select "Name" "name"
+           [{:value "option1" :label "Option One"}
+            {:value "option2" :label "Option Two"}])
 
-   [:div.row
-    [:div.col-sm-12.col-lg-4
-     [:select {:name "name"}
-      [:option {:value "option5"} "Option 5"]]]]
+   (select "Chore" "chore"
+           [{:value "option1" :label "Option One"}
+            {:value "option2" :label "Option Two"}])
 
-   [:div.row
-    [:div.col-sm-12.col-lg-4
-     [:label "Date"]
-     [:input {:type "date" :name "date-done"}]
-     ]]
-
-    ])
+   (input "Date" "date" "date")
+   ])
 
 (def pages
   {:home #'home-page})

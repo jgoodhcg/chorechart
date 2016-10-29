@@ -11,6 +11,7 @@ Vagrant.configure(2) do |config|
     config.vm.synced_folder "~/.m2", "/home/vagrant/.m2"
     config.vm.network "forwarded_port", guest: 3000, host: 3000
     config.vm.network "forwarded_port", guest: 3449, host: 3449
+    config.vm.network "forwarded_port", guest: 7002, host: 7002
     config.vm.provision "shell", path: "vagrantscript.sh"
 
     config.vm.provider "virtualbox" do |v,override|
