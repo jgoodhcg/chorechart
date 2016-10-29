@@ -28,25 +28,40 @@
       (when-not @collapsed? {:class "in"})
       [:a.navbar-brand {:href "#/"} "chorechart"]
       [:ul.nav.navbar-nav
-       [nav-link "#/" "Home" :home collapsed?]
-       [nav-link "#/about" "About" :about collapsed?]]]]))
+       [nav-link "#/" "Home" :home collapsed?]]]]))
 
-(defn about-page []
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     "this is the story of chorechart... work in progress"]]])
+(defn row [label input]
+  [:div.row
+   [:div.col-md-2 [:label label]]
+   [:div.col-md-5 input]])
+
+(defn input [label type id]
+  (row label [:input.form-control {:field type :id id}]))
+
+(defn select [label name options]
+  (row label [:select {:name name}
+              (map #([:option {:value (:value %)} (:label %)]))]))
 
 (defn home-page []
   [:div.container
-   (when-let [docs @(rf/subscribe [:docs])]
-     [:div.row>div.col-sm-12
-      [:div {:dangerouslySetInnerHTML
-             {:__html (md->html docs)}}]])])
+   (input "first name" :text :person.first-name)
+   (select "Name" "name" [{:value "option1" :label "Option One"}])
+
+   [:div.row
+    [:div.col-sm-12.col-lg-4
+     [:select {:name "name"}
+      [:option {:value "option5"} "Option 5"]]]]
+
+   [:div.row
+    [:div.col-sm-12.col-lg-4
+     [:label "Date"]
+     [:input {:type "date" :name "date-done"}]
+     ]]
+
+    ])
 
 (def pages
-  {:home #'home-page
-   :about #'about-page})
+  {:home #'home-page})
 
 (defn page []
   [:div
@@ -59,9 +74,6 @@
 
 (secretary/defroute "/" []
   (rf/dispatch [:set-active-page :home]))
-
-(secretary/defroute "/about" []
-  (rf/dispatch [:set-active-page :about]))
 
 ;; -------------------------
 ;; History
@@ -85,6 +97,5 @@
 (defn init! []
   (rf/dispatch-sync [:initialize-db])
   (load-interceptors!)
-  (fetch-docs!)
   (hook-browser-navigation!)
   (mount-components))

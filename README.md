@@ -1,21 +1,16 @@
-# chorechart
+##todo
 
-generated using Luminus version "2.9.11.10"
-
-FIXME
-
-## Prerequisites
-
-You will need [Leiningen][1] 2.0 or above installed.
-
-[1]: https://github.com/technomancy/leiningen
-
-## Running
-
-To start a web server for the application, run:
-
-    lein run
-
-## License
-
-Copyright © 2016 FIXME
+- [ ] simple chore submission
+  - [ ] create form that submits
+    - [ ] form components
+     - [ ] connect nREPL cljs to emacs
+    - [ ] backend route
+    - [ ] form ajax submission
+    - [ ] database migrations
+      - [ ] chore chart table
+    - [ ] database action
+    - [ ] backend route writes to db
+    - [ ] test
+      - [ ] sql 
+      - [ ] form submission
+      - [ ] back end route
