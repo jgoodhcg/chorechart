@@ -1,4 +1,7 @@
 (ns chorechart.db)
 
 (def default-db
-  {:page :home})
+  {:page :home
+   :current {:chore ""
+             :name ""
+             :date ""}})

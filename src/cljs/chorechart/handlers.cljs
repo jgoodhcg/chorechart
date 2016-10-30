@@ -1,6 +1,6 @@
 (ns chorechart.handlers
   (:require [chorechart.db :as db]
-            [re-frame.core :refer [dispatch reg-event-db]]))
+            [re-frame.core :refer [dispatch reg-event-db path]]))
 
 (reg-event-db
   :initialize-db
@@ -16,3 +16,21 @@
   :set-docs
   (fn [db [_ docs]]
     (assoc db :docs docs)))
+
+(reg-event-db
+ :set-chore
+ (path [:current :chore])
+       (fn [old-chore [_ new-chore]]
+         new-chore))
+
+(reg-event-db
+ :set-name
+ (path [:current :name])
+       (fn [old-name [_ new-name]]
+         new-name))
+
+(reg-event-db
+ :set-date
+ (path [:current :date])
+       (fn [old-date [_ new-date]]
+         new-date))

@@ -1,0 +1,7 @@
+ALTER TABLE chart ALTER COLUMN id DROP DEFAULT;
+--;;
+ALTER SEQUENCE chart_id_seq OWNED BY NONE;
+--;;
+DROP SEQUENCE chart_id_seq;
+--;;
+DROP TABLE chart;

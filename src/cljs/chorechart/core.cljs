@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [secretary.core :as secretary]
+            [cljs.pprint :refer [pprint]]
             [goog.events :as events]
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
@@ -35,25 +36,49 @@
    [:div.col-md-2 [:label label]]
    [:div.col-md-5 input]])
 
-(defn input [label name type]
-  (row label [:input.form-control {:type type :name name}]))
+(defn input [label name type dispatch-key]
+  (row label [:input.form-control {:type type
+                                   :name name
+                                   :on-change
+                                   #(rf/dispatch [dispatch-key (-> % .-target .-value)])}]))
 
-(defn select [label name options]
+(defn select [label name dispatch-key options]
   (row label (into
-              [:select.form-control {:name name}]
-              (mapv #(-> [:option {:value (:value %)} (:label %)]) options))))
+              [:select.form-control {:name name
+                                     :defaultValue "def"
+                                     :on-change #(rf/dispatch
+                                                  [dispatch-key (-> % .-target .-value)])}]
+              (cons
+               [:option {:value "def" :disabled true} "-- choose an option --"]
+               (mapv #(-> [:option {:value (:value %)} (:label %)]) options)))))
+
+(defn submit-btn []
+  (let [current (rf/subscribe [:current])]
+    [:button.btn
+     {:on-click
+     ;;  #(pprint @current)}
+
+     #(POST (str js/context "/add")
+          {:params @current
+           :handler pprint})}
+
+      ;; #(GET (str js/context "/docs") {:handler pprint})}
+
+     "Submit"]))
 
 (defn home-page []
   [:div.container
-   (select "Name" "name"
+   (select "Name" "name" :set-name
            [{:value "option1" :label "Option One"}
             {:value "option2" :label "Option Two"}])
 
-   (select "Chore" "chore"
+   (select "Chore" "chore" :set-chore
            [{:value "option1" :label "Option One"}
             {:value "option2" :label "Option Two"}])
 
-   (input "Date" "date" "date")
+   (input "Date" "date" "date" :set-date)
+
+   (submit-btn)
    ])
 
 (def pages

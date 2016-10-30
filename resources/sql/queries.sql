@@ -19,3 +19,9 @@ WHERE id = :id
 -- :doc delete a user given the id
 DELETE FROM users
 WHERE id = :id
+
+-- :name ins-chore! :! :n
+-- :doc adds chore to chart table
+INSERT INTO chart
+(chore, person, completed)
+VALUES (:chore, :person, :completed)

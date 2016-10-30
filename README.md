@@ -2,12 +2,12 @@
 
 - [ ] simple chore submission
   - [ ] create form that submits
-    - [ ] form components
-    - [ ] backend route
+    - [x] form components
+    - [x] backend route
     - [ ] form ajax submission
-    - [ ] database migrations
-      - [ ] chore chart table
-    - [ ] database action
+    - [x] database migrations
+      - [x] chore chart table
+    - [x] database action
     - [ ] backend route writes to db
     - [ ] test
       - [ ] sql 
