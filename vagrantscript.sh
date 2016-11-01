@@ -37,5 +37,5 @@ sudo -u postgres psql -c "ALTER DATABASE chorechart_test OWNER TO test;"
 chmod +x /home/vagrant/chorechart/cider-deps-repl
 
 cd /home/vagrant/chorechart
-# lein migratus migrate
+lein migratus migrate
 
