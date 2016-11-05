@@ -12,3 +12,4 @@ profiles.clj
 /log
 .vagrant
 *.log
+figwheel_server.log

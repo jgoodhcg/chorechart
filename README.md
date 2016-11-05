@@ -14,8 +14,8 @@
 5. run `bash start.sh` to conenct to vm with ssh ?tunneled ports?
 6. run `cd/chorechart` to get into the project
 7. run `./cider-deps-repl` to create an nrepl that cider can connect to
-8. in spacemacs open a repl by going to **.clj** file and running `SPC m s c` and selecting **port localhost and port 7000**
-9. open repl buffer
+8. in spacemacs open a repl by going to a **.clj** file and running `SPC m s c` and selecting **localhost and  then chorechart:port 7000**
+9. open repl buffer `SPC b b` using arrow keys to select repl buffer
 10. run `(start)` to launch the webserver
 11. when that returns run `(start-fw)` to start figwheel
 12. when that returns run `(cljs)` to start a cljs nrepl
@@ -24,8 +24,9 @@
 
 ##todo
 
-- [ ] simple chore submission
-  - [ ] create form that submits
+###simple proof of concept
+- [x] simple chore submission
+  - [x] create form that submits
     - [x] form components
     - [x] backend route
     - [x] form ajax submission
@@ -33,18 +34,21 @@
       - [x] chore chart table
     - [x] database action
     - [x] backend route writes to db
-    - [ ] test
-      - [ ] sql 
-      - [ ] form submission
-      - [ ] back end route
       
+- [x] figure out how to get nrepl for clojure/cljs
+
+###mvp
+- [x] migrations
 - [ ] add account functionality
-  - [ ] migrations
-    - [ ] account table
-    - [ ] people table for the N -> 1 relationship people -> account
-    - [ ] person id in chart table
-  - [ ] account creation
-  - [ ] person creation
+  - [ ] person signup
   - [ ] person login
+  - [ ] household 
+    - [ ] creation by person (automatic living situation entry)
+    - [ ] person in living situation can **add/remove any another person**
+- [ ] chore creation
+- [ ] chore chart entry
     
-- [ ] figure out how to get nrepl for clojure/cljs
+###eventually
+
+ - [ ] admin privs for households
+ - [ ] copy chore from one household to another
