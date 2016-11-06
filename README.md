@@ -40,8 +40,13 @@
 ###mvp
 - [x] migrations
 - [ ] add account functionality
-  - [ ] person signup
+  - [ ] add buddy-auth
+    - [ ] add middleware
   - [ ] person login
+    - [ ] mock in-memory users
+    - [ ] secure backend home-page (SPA) behind auth
+    - [ ] add login & signup (backend page not behind auth)
+  - [ ] person signup
   - [ ] household 
     - [ ] creation by person (automatic living situation entry)
     - [ ] person in living situation can **add/remove any another person**

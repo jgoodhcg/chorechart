@@ -8,6 +8,16 @@
 (defn home-page []
   (layout/render "home.html"))
 
+(defn signup [req]
+  (let [{:keys [params]} req
+        {:keys [username password confirm]} params]
+    (str username " " password " " confirm)
+    ))
+
+(defroutes auth-routes
+  (GET "/signup" [] "signup page")
+  (GET "/login"  [] "login page"))
+
 (defroutes home-routes
   (GET "/" []
        (home-page))
@@ -23,6 +33,7 @@
     )
 
   (GET "/docs" []
-       (-> (response/ok (-> "docs/docs.md" io/resource slurp))
-       (response/header "Content-Type" "text/plain; charset=utf-8"))))
+    (-> (response/ok (-> "docs/docs.md" io/resource slurp))
+        (response/header "Content-Type" "text/plain; charset=utf-8"))))
+
 

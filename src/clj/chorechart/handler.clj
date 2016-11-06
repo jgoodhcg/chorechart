@@ -1,7 +1,7 @@
 (ns chorechart.handler
   (:require [compojure.core :refer [routes wrap-routes]]
             [chorechart.layout :refer [error-page]]
-            [chorechart.routes.home :refer [home-routes]]
+            [chorechart.routes.home :refer [auth-routes home-routes]]
             [compojure.route :as route]
             [chorechart.env :refer [defaults]]
             [mount.core :as mount]
@@ -13,13 +13,14 @@
 
 (def app-routes
   (routes
-    (-> #'home-routes
-        (wrap-routes middleware/wrap-csrf)
-        (wrap-routes middleware/wrap-formats))
-    (route/not-found
-      (:body
-        (error-page {:status 404
-                     :title "page not found"})))))
+   auth-routes
+   (-> #'home-routes
+       (wrap-routes middleware/wrap-csrf)
+       (wrap-routes middleware/wrap-formats))
+   (route/not-found
+    (:body
+     (error-page {:status 404
+                  :title "page not found"})))))
 
 
 (defn app [] (middleware/wrap-base #'app-routes))

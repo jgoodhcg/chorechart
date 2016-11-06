@@ -9,7 +9,5 @@ pom.xml
 profiles.clj
 /.env
 .nrepl-port
-/log
 .vagrant
 *.log
-figwheel_server.log

@@ -30,7 +30,8 @@
                  [ring-webjars "0.1.1"]
                  [ring/ring-defaults "0.2.1"]
                  [secretary "1.2.3"]
-                 [selmer "1.10.0"]]
+                 [selmer "1.10.0"]
+                 [buddy/buddy-auth "1.2.0"]]
 
   :min-lein-version "2.0.0"
 
