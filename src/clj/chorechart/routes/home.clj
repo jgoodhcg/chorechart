@@ -17,12 +17,18 @@
 (defn signup [req]
   (let [{:keys [params]} req
         {:keys [username password confirm]} params]
-    (str username " " password " " confirm)
-    ))
+    (str username " " password " " confirm)))
+
+(defn login [req]
+  (let [{:keys [params]} req
+        {:keys [username password confirm]} params]
+    (str username " " password " " confirm)))
 
 (defroutes auth-routes
   (GET "/signup" [] (signup-page))
-  (GET "/login"  [] (login-page)))
+  (POST "/signup" [] signup)
+  (GET "/login"  [] (login-page))
+  (POST "/login" [] login))
 
 (defroutes home-routes
   (GET "/" []

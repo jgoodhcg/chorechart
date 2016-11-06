@@ -7,20 +7,59 @@
   </head>
   <body>
 
-    <div id="app">
-      <div class="container-fluid">
-        <div class="card-deck">
-          <div class="card-block">
-              <p>This is the signup page</p>
-         </div>
-        </div>
+      <div id="app">
+          <div class="container">
+              <div class="row">
+                  <div class="col-xs-12">
+                      <h1>Signup</h1>
+                  </div>
+              </div>
+              <form action="/signup" method="post">
+                  <div class="row">
+                      <div class="col-xs-4">
+                          <label>User Name</label>
+                      </div>
+                      <div class="col-xs-8">
+                          <input name="user-name" type="text" />
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-xs-4">
+                          <label>email</label>
+                      </div>
+                      <div class="col-xs-8">
+                          <input name="email" type="text" />
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-xs-4">
+                          <label>Password</label>
+                      </div>
+                      <div class="col-xs-8">
+                          <input name="password" type="text" />
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-xs-4">
+                          <label>Confirm Password</label>
+                      </div>
+                      <div class="col-xs-8">
+                          <input name="confirm" type="text" />
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-xs-12">
+                          <input type="submit" value="Login">
+                      </div>
+                  </div>
+              </form>
+          </div>
       </div>
-    </div>
 
-    <!-- scripts and styles -->
-    {% style "/assets/bootstrap/css/bootstrap.min.css" %}
-    {% style "/assets/font-awesome/css/font-awesome.min.css" %}
-    {% style "/css/screen.css" %}
+      <!-- scripts and styles -->
+      {% style "/assets/bootstrap/css/bootstrap.min.css" %}
+      {% style "/assets/font-awesome/css/font-awesome.min.css" %}
+      {% style "/css/screen.css" %}
 
   </body>
 </html>
