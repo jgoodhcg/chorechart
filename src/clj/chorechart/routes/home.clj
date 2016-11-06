@@ -8,6 +8,12 @@
 (defn home-page []
   (layout/render "home.html"))
 
+(defn signup-page []
+  (layout/render "signup.html"))
+
+(defn login-page []
+  (layout/render "login.html"))
+
 (defn signup [req]
   (let [{:keys [params]} req
         {:keys [username password confirm]} params]
@@ -15,8 +21,8 @@
     ))
 
 (defroutes auth-routes
-  (GET "/signup" [] "signup page")
-  (GET "/login"  [] "login page"))
+  (GET "/signup" [] (signup-page))
+  (GET "/login"  [] (login-page)))
 
 (defroutes home-routes
   (GET "/" []
