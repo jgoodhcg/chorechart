@@ -7,9 +7,10 @@
             [ring.middleware.format :refer [wrap-restful-format]]
             [chorechart.config :refer [env]]
             [ring.middleware.flash :refer [wrap-flash]]
-            [immutant.web.middleware :refer [wrap-session]]
-            [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
-            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]])
+            ;; [immutant.web.middleware :refer [wrap-session]]
+            [ring.middleware.session :refer [wrap-session]]
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
 
   (:import [javax.servlet ServletContext]))
 

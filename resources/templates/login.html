@@ -15,6 +15,7 @@
                   </div>
               </div>
               <form action="/login" method="post">
+                  {% csrf-field %}
                   <div class="row">
                       <div class="col-xs-4">
                           <label>User Name</label>

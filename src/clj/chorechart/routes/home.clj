@@ -3,10 +3,16 @@
             [compojure.core :refer [defroutes GET POST]]
             [ring.util.http-response :as response]
             [chorechart.db.core :refer [*db*] :as db]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [buddy.auth :refer [authenticated?]]
+            ))
 
-(defn home-page []
-  (layout/render "home.html"))
+(defn home-page [req]
+  (if-not (authenticated? req)
+    ;; (str "not authenticated " (authenticated? req))
+    (str req)
+    (layout/render "home.html")
+    ))
 
 (defn signup-page []
   (layout/render "signup.html"))
@@ -19,10 +25,22 @@
         {:keys [username password confirm]} params]
     (str username " " password " " confirm)))
 
+(def authdata
+  "TEST DATA TODO: REMOVE"
+  {:user-name "test"
+   :password "test"})
+
 (defn login [req]
+  ;; (str req))
   (let [{:keys [params]} req
-        {:keys [username password confirm]} params]
-    (str username " " password " " confirm)))
+        {:keys [user-name password]} params
+        session (:session req)
+        found-pass (:password authdata)]
+    (if (and found-pass (= found-pass password))
+      (let [ updated-session (assoc session :identity user-name)]
+        (-> (response/found "/")
+            (assoc :session updated-session)))
+      (str "failed login"))))
 
 (defroutes auth-routes
   (GET "/signup" [] (signup-page))
@@ -31,8 +49,7 @@
   (POST "/login" [] login))
 
 (defroutes home-routes
-  (GET "/" []
-       (home-page))
+  (GET "/" [] home-page)
 
   (POST "/add" []
     (fn [req]

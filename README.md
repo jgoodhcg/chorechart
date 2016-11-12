@@ -40,12 +40,11 @@
 ###mvp
 - [x] migrations
 - [ ] add account functionality
-  - [ ] add buddy-auth
-    - [ ] add middleware
+  - [x] add buddy-auth
+    - [ ] mock users in memory to test login adds session
+    - [ ] add middleware to SPA and test redirect
+    - [ ] add hashers
   - [ ] person login
-    - [ ] mock in-memory users
-    - [ ] secure backend home-page (SPA) behind auth
-    - [ ] add login & signup (backend page not behind auth)
   - [ ] person signup
   - [ ] household 
     - [ ] creation by person (automatic living situation entry)
