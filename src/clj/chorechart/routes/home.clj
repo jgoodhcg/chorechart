@@ -9,16 +9,16 @@
 
 (defn home-page [req]
   (if-not (authenticated? req)
-    ;; (str "not authenticated " (authenticated? req))
-    (str req)
+    (str "not authenticated " (authenticated? req))
     (layout/render "home.html")
     ))
 
 (defn signup-page []
   (layout/render "signup.html"))
 
-(defn login-page []
-  (layout/render "login.html"))
+(defn login-page
+  ([] (layout/render "login.html"))
+  ([ops] (layout/render "login.html" ops)))
 
 (defn signup [req]
   (let [{:keys [params]} req
@@ -40,7 +40,7 @@
       (let [ updated-session (assoc session :identity user-name)]
         (-> (response/found "/")
             (assoc :session updated-session)))
-      (str "failed login"))))
+      (login-page {:flash "Failed Login"}))))
 
 (defroutes auth-routes
   (GET "/signup" [] (signup-page))
