@@ -46,11 +46,23 @@
     - [x] add middleware to SPA and test redirect
   - [x] person signup
   - [x] person login
-  - [ ] household 
-    - [ ] creation by person (automatic living situation entry)
-    - [ ] person in living situation can **add/remove any another person**
-- [ ] chore creation
-- [ ] chore chart entry
+  - [ ] add initial household 
+    - [ ] db query
+    - [ ] add action to successful signup
+  - [ ] view/add households
+    - [ ] queries
+      - [ ] insert
+      - [ ] get 
+    - [ ] view
+    - [ ] request
+      - [ ] get
+      - [ ] add
+    - [ ] request action/return
+      - [ ] get
+      - [ ] add
+    - [ ] return handling
+      - [ ] get
+      - [ ] add
 #### styling
 - [ ] password inputs
     
