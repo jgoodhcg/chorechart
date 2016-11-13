@@ -41,11 +41,10 @@
 - [x] migrations
 - [ ] add account functionality
   - [x] add buddy-auth
-    - [ ] mock users in memory to test login adds session
-    - [ ] add middleware to SPA and test redirect
-    - [ ] add hashers
-  - [ ] person login
-  - [ ] person signup
+    - [x] mock users in memory to test login adds session
+    - [x] add middleware to SPA and test redirect
+  - [x] person signup
+  - [x] person login
   - [ ] household 
     - [ ] creation by person (automatic living situation entry)
     - [ ] person in living situation can **add/remove any another person**
@@ -56,3 +55,6 @@
 
  - [ ] admin privs for households
  - [ ] copy chore from one household to another
+ - [ ] hash/salt passwords
+ - [ ] add no null values to user_name
+ - [ ] rename pass to password people table

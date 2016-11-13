@@ -1,27 +1,12 @@
--- :name create-user! :! :n
--- :doc creates a new user record
-INSERT INTO users
-(id, first_name, last_name, email, pass)
-VALUES (:id, :first_name, :last_name, :email, :pass)
+-- :name add-person! :! :n
+-- :doc creates a new person record
+insert into people
+(user_name, email, pass)
+values (:user_name, :email, :password)
 
--- :name update-user! :! :n
--- :doc update an existing user record
-UPDATE users
-SET first_name = :first_name, last_name = :last_name, email = :email
-WHERE id = :id
 
--- :name get-user :? :1
--- :doc retrieve a user given the id.
-SELECT * FROM users
-WHERE id = :id
-
--- :name delete-user! :! :n
--- :doc delete a user given the id
-DELETE FROM users
-WHERE id = :id
-
--- :name ins-chore! :! :n
--- :doc adds chore to chart table
-INSERT INTO chart
-(chore, person, completed)
-VALUES (:chore, :person, :completed)
+-- :name find-person :? :1
+-- :doc retrieves a person given user_name record
+select *
+from people
+where user_name = :user_name
