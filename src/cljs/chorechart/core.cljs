@@ -29,7 +29,9 @@
       (when-not @collapsed? {:class "in"})
       [:a.navbar-brand {:href "#/"} "chorechart"]
       [:ul.nav.navbar-nav
-       [nav-link "#/" "Home" :home collapsed?]]]]))
+       [nav-link "#/" "Home" :home collapsed?]
+       [nav-link "#/households" "Households" :households collapsed?]
+       ]]]))
 
 (defn row [label input]
   [:div.row
@@ -55,34 +57,23 @@
 (defn submit-btn []
   (let [current (rf/subscribe [:current])]
     [:button.btn
-     {:on-click
-     ;;  #(pprint @current)}
-
-     #(POST (str js/context "/add")
-          {:params @current
-           :handler pprint})}
-
-      ;; #(GET (str js/context "/docs") {:handler pprint})}
-
+     {:on-click #(pprint @current)}
      "Submit"]))
 
 (defn home-page []
   [:div.container
-   (select "Name" "name" :set-name
-           [{:value "option1" :label "Option One"}
-            {:value "option2" :label "Option Two"}])
-
-   (select "Chore" "chore" :set-chore
-           [{:value "option1" :label "Option One"}
-            {:value "option2" :label "Option Two"}])
-
-   (input "Date" "date" "date" :set-date)
-
-   (submit-btn)
+   "home page"
    ])
 
+(defn households-page []
+  [:div.container
+   "households page"
+   ]
+  )
+
 (def pages
-  {:home #'home-page})
+  {:home #'home-page
+   :households #'households-page})
 
 (defn page []
   [:div
@@ -96,6 +87,8 @@
 (secretary/defroute "/" []
   (rf/dispatch [:set-active-page :home]))
 
+(secretary/defroute "/households" []
+  (rf/dispatch [:set-active-page :households]))
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined

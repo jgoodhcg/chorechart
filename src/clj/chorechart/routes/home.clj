@@ -10,18 +10,10 @@
     (layout/render "home.html")
     ))
 
-(defn signup-page
-  ([] (layout/render "signup.html"))
-  ([ops] (layout/render "signup.html" ops)))
-
-(defn login-page
-  ([] (layout/render "login.html"))
-  ([ops] (layout/render "login.html" ops)))
-
 (defroutes auth-routes
-  (GET "/signup" [] (signup-page))
+  (GET "/signup" [] (auth/signup-page))
   (POST "/signup" [] auth/signup)
-  (GET "/login"  [] (login-page))
+  (GET "/login"  [] (auth/login-page))
   (POST "/login" [] auth/login))
 
 (defn add-household [] (str "not done"))

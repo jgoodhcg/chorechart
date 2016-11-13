@@ -46,9 +46,9 @@
     - [x] add middleware to SPA and test redirect
   - [x] person signup
   - [x] person login
-  - [ ] add initial household 
-    - [ ] db query
-    - [ ] add action to successful signup
+  - [x] add initial household 
+    - [x] db query
+    - [x] add action to successful signup
   - [ ] view/add households
     - [ ] queries
       - [ ] insert
@@ -74,4 +74,8 @@
  - [ ] add no null values to user_name
  - [ ] rename pass to password people table
  - [ ] authorization
+ - [ ] refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`)
+ - [ ] refactor code to use only `-` instead of `_`
+ - [ ] take off unique constraint on households
+ - [ ] refactor db intensive actions to use rollback transactions (ex: signup with default house setup)
 

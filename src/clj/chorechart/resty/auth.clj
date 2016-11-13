@@ -2,7 +2,15 @@
   (:require
    [ring.util.http-response :as response]
    [chorechart.db.core :refer [*db*] :as db]
-   [chorechart.routes.home :refer [signup-page login-page]]))
+   [chorechart.layout :as layout]))
+
+(defn signup-page
+  ([] (layout/render "signup.html"))
+  ([ops] (layout/render "signup.html" ops)))
+
+(defn login-page
+  ([] (layout/render "login.html"))
+  ([ops] (layout/render "login.html" ops)))
 
 (defn signup [req]
   (let [{:keys [params]} req
@@ -11,11 +19,18 @@
       (signup-page {:flash "username cannot be blank"})
       (if-not (= password confirm)
         (signup-page {:flash "passwords must match"})
-        (try
-          (do
-            (db/add-person! {:user_name user_name :email email :password password})
-            (response/found "/login"))
-          (catch Exception e (signup-page {:flash "username taken"})))))))
+        (let [house_name (str user_name "'s house")] ;; default household name
+          (try
+            (do
+              (db/add-person! {:user_name user_name :email email :password password})
+              ;; add default household
+              (db/add-household! {:house_name house_name})
+              (let [person_id (:id (db/find-person {:user_name user_name}))
+                    household_id (:id (db/find-household {:house_name house_name}))]
+                (db/add-living-situation! {:person_id person_id :household_id household_id}))
+              (response/found "/login"))
+            ;; logically the only thing that breaks the above is taken person user_name
+            (catch Exception e (signup-page {:flash (str (.getMessage e))}))))))))
 
 (defn login [req]
   ;; (str req))
