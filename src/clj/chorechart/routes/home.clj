@@ -1,11 +1,8 @@
 (ns chorechart.routes.home
   (:require [chorechart.layout :as layout]
             [compojure.core :refer [defroutes GET POST]]
-            [ring.util.http-response :as response]
-            [chorechart.db.core :refer [*db*] :as db]
-            [clojure.java.io :as io]
             [buddy.auth :refer [authenticated?]]
-            ))
+            [chorechart.resty.auth :as auth]))
 
 (defn home-page [req]
   (if-not (authenticated? req)
@@ -21,62 +18,36 @@
   ([] (layout/render "login.html"))
   ([ops] (layout/render "login.html" ops)))
 
-(defn signup [req]
-  (let [{:keys [params]} req
-        {:keys [user_name password confirm email]} params]
-    (if (empty? user_name)
-      (signup-page {:flash "username cannot be blank"})
-      (if-not (= password confirm)
-        (signup-page {:flash "passwords must match"})
-        (try
-          (do
-            (db/add-person! {:user_name user_name :email email :password password})
-            (response/found "/login"))
-          (catch Exception e (signup-page {:flash "username taken"})))))))
-
-(def authdata
-  "TEST DATA TODO: REMOVE"
-  {:user_name "test"
-   :password "test"})
-
-(defn login [req]
-  ;; (str req))
-  (let [{:keys [params]} req
-        {:keys [user_name password]} params
-        session (:session req)]
-    (try
-      (do
-        (let [found-pass (:pass (db/find-person {:user_name user_name}))]
-          (if (and found-pass (= found-pass password))
-            (let [ updated-session (assoc session :identity user_name)]
-              (-> (response/found "/")
-                  (assoc :session updated-session)))
-            (login-page {:flash "failed login"}))
-          ))
-      (catch Exception e (login-page {:flash "failed login"})))
-    ))
-
 (defroutes auth-routes
   (GET "/signup" [] (signup-page))
-  (POST "/signup" [] signup)
+  (POST "/signup" [] auth/signup)
   (GET "/login"  [] (login-page))
-  (POST "/login" [] login))
+  (POST "/login" [] auth/login))
+
+(defn add-household [] (str "not done"))
+(defn add-living-situation [] (str "not done"))
+(defn add-chore [] (str "not done"))
+
+(defn chart-entry [] (str "not done"))
+(defn chart-entry-edit [] (str "not done"))
+(defn chart-entry-remove [] (str "not done"))
+
+(defn view-chart [] (str "not done"))
+(defn view-chores [] (str "not done"))
+(defn view-households [] (str "not done"))
 
 (defroutes home-routes
   (GET "/" [] home-page)
 
-  (POST "/add" []
-    (fn [req]
-      (let [chore (get-in req [:params :chore])
-            name (get-in req [:params :name])
-            date (get-in req [:params :date])]
-        (str "" )
-        )
-      )
-    )
+  (POST "/add/household" [] add-household)
+  (POST "/add/living-situation" [] add-living-situation)
+  (POST "/add/chore" [] add-chore)
 
-  (GET "/docs" []
-    (-> (response/ok (-> "docs/docs.md" io/resource slurp))
-        (response/header "Content-Type" "text/plain; charset=utf-8"))))
+  (POST "/chart-entry" [] chart-entry)
+  (POST "/chart-entry-edit" [] chart-entry-edit)
+  (POST "/chart-entry-remove" [] chart-entry-remove)
 
-
+  (POST "/view-chart" [] view-chart)
+  (POST "/view-chores" [] view-chores)
+  (POST "/view-households" [] view-households)
+  )

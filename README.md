@@ -37,7 +37,8 @@
       
 - [x] figure out how to get nrepl for clojure/cljs
 
-###mvp
+### mvp
+#### functionality
 - [x] migrations
 - [ ] add account functionality
   - [x] add buddy-auth
@@ -50,6 +51,8 @@
     - [ ] person in living situation can **add/remove any another person**
 - [ ] chore creation
 - [ ] chore chart entry
+#### styling
+- [ ] password inputs
     
 ###eventually
 
@@ -58,3 +61,5 @@
  - [ ] hash/salt passwords
  - [ ] add no null values to user_name
  - [ ] rename pass to password people table
+ - [ ] authorization
+
