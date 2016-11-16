@@ -78,4 +78,5 @@
  - [ ] refactor code to use only `-` instead of `_`
  - [ ] take off unique constraint on households
  - [ ] refactor db intensive actions to use rollback transactions (ex: signup with default house setup)
+ - [ ] actual redirecting not rendering login page on un-auth home route
 

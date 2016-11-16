@@ -54,15 +54,24 @@
                [:option {:value "def" :disabled true} "-- choose an option --"]
                (mapv #(-> [:option {:value (:value %)} (:label %)]) options)))))
 
+(defn printalter [map]
+  (pprint (assoc map :new "value")))
+
 (defn submit-btn []
   (let [current (rf/subscribe [:current])]
     [:button.btn
-     {:on-click #(pprint @current)}
+     {:on-click
+      ;; #(pprint @current)}
+      #(POST (str js/context "/view/households")
+          {:params {:user_name "test name"}
+           :handler printalter})}
      "Submit"]))
 
 (defn home-page []
   [:div.container
    "home page"
+   [:br]
+   (submit-btn)
    ])
 
 (defn households-page []

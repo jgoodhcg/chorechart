@@ -2,13 +2,13 @@
   (:require [chorechart.layout :as layout]
             [compojure.core :refer [defroutes GET POST]]
             [buddy.auth :refer [authenticated?]]
+            [ring.util.http-response :as response]
             [chorechart.resty.auth :as auth]))
 
 (defn home-page [req]
   (if-not (authenticated? req)
-    (str "not authenticated " (authenticated? req) " " req)
-    (layout/render "home.html")
-    ))
+    (auth/login-page {:flash "You have to login first"})
+    (layout/render "home.html")))
 
 (defroutes auth-routes
   (GET "/signup" [] (auth/signup-page))
@@ -25,8 +25,13 @@
 (defn chart-entry-remove [] (str "not done"))
 
 (defn view-chart [] (str "not done"))
-(defn view-chores [] (str "not done"))
-(defn view-households [] (str "not done"))
+(defn view-chores [req] (str "not done"))
+(defn view-households [req]
+  (let [{:keys [params]} req
+         {:keys [user_name]} params]
+     (response/ok {:user-name user_name})
+     )
+   )
 
 (defroutes home-routes
   (GET "/" [] home-page)
@@ -35,11 +40,11 @@
   (POST "/add/living-situation" [] add-living-situation)
   (POST "/add/chore" [] add-chore)
 
-  (POST "/chart-entry" [] chart-entry)
-  (POST "/chart-entry-edit" [] chart-entry-edit)
-  (POST "/chart-entry-remove" [] chart-entry-remove)
+  (POST "/chart/entry" [] chart-entry)
+  (POST "/chart/entry/edit" [] chart-entry-edit)
+  (POST "/chart/entry/remove" [] chart-entry-remove)
 
-  (POST "/view-chart" [] view-chart)
-  (POST "/view-chores" [] view-chores)
-  (POST "/view-households" [] view-households)
+  (POST "/view/chart" [] view-chart)
+  (POST "/view/chores" [] view-chores)
+  (POST "/view/households" [] view-households)
   )
