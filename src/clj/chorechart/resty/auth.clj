@@ -8,9 +8,10 @@
   ([] (layout/render "signup.html"))
   ([ops] (layout/render "signup.html" ops)))
 
-(defn login-page
-  ([] (layout/render "login.html"))
-  ([ops] (layout/render "login.html" ops)))
+(defn login-page [error]
+  (case error
+    "" (layout/render "login.html")
+    "no-auth" (layout/render "login.html" {:flash "please log in to do that"})))
 
 (defn signup [req]
   (let [{:keys [params]} req

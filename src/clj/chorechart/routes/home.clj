@@ -5,16 +5,15 @@
             [ring.util.http-response :as response]
             [chorechart.resty.auth :as auth]))
 
-(defn home-page [req]
-  (if-not (authenticated? req)
-    (auth/login-page {:flash "You have to login first"})
-    (layout/render "home.html")))
+(defn authenticated-route [req route-fn]
+  (if (authenticated? req)
+    (route-fn req)
+    (response/found "/login/no-auth")))
 
-(defroutes auth-routes
-  (GET "/signup" [] (auth/signup-page))
-  (POST "/signup" [] auth/signup)
-  (GET "/login"  [] (auth/login-page))
-  (POST "/login" [] auth/login))
+(defn home-page [req]
+  (let [{:keys [session]} req]
+    (layout/render "home.html" {:user_name (:identity session)}))
+    )
 
 (defn add-household [] (str "not done"))
 (defn add-living-situation [] (str "not done"))
@@ -29,12 +28,19 @@
 (defn view-households [req]
   (let [{:keys [params]} req
          {:keys [user_name]} params]
-     (response/ok {:user-name user_name})
+     ()
      )
    )
 
+(defroutes auth-routes
+  (GET "/signup" [] (auth/signup-page))
+  (POST "/signup" [] auth/signup)
+  (GET "/login"  [] (auth/login-page ""))
+  (GET "/login/:error"  [error] (auth/login-page error))
+  (POST "/login" [] auth/login))
+
 (defroutes home-routes
-  (GET "/" [] home-page)
+  (GET "/" req (authenticated-route req home-page))
 
   (POST "/add/household" [] add-household)
   (POST "/add/living-situation" [] add-living-situation)
@@ -46,5 +52,5 @@
 
   (POST "/view/chart" [] view-chart)
   (POST "/view/chores" [] view-chores)
-  (POST "/view/households" [] view-households)
+  (POST "/view/households" req (authenticated-route req view-households))
   )

@@ -49,20 +49,10 @@
   - [x] add initial household 
     - [x] db query
     - [x] add action to successful signup
-  - [ ] view/add households
-    - [ ] queries
-      - [ ] insert
-      - [ ] get 
-    - [ ] view
-    - [ ] request
-      - [ ] get
-      - [ ] add
-    - [ ] request action/return
-      - [ ] get
-      - [ ] add
-    - [ ] return handling
-      - [ ] get
-      - [ ] add
+  - [ ] signup refactor error handling and reroute to look like login
+  - [ ] home-routes
+    - [ ] view-households
+  
 #### styling
 - [ ] password inputs
     

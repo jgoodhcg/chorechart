@@ -4,9 +4,8 @@ insert into people
 (user_name, email, pass)
 values (:user_name, :email, :password)
 
-
 -- :name find-person :? :1
--- :doc retrieves a person given user_name 
+-- :doc retrieves a person given user_name
 select * from people
 where user_name = :user_name
 
@@ -26,3 +25,11 @@ where house_name = :house_name
 insert into living_situations
 (person_id, household_id)
 values (:person_id, :household_id)
+
+-- :name list-households :? :*
+-- :doc given a user_name lists all associated households
+select households.id, households.house_name from households
+inner join living_situations
+on households.id = living_situations.household_id
+inner join people
+on people.user_name = :user_name

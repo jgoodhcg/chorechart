@@ -62,14 +62,14 @@
     [:button.btn
      {:on-click
       ;; #(pprint @current)}
-      #(POST (str js/context "/view/households")
-          {:params {:user_name "test name"}
+      #(POST "/view/households"
+          {:params {:user_name js/user_name}
            :handler printalter})}
      "Submit"]))
 
 (defn home-page []
   [:div.container
-   "home page"
+   (str js/user_name " home page")
    [:br]
    (submit-btn)
    ])
