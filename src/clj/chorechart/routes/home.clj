@@ -25,7 +25,12 @@
 (defn chart-entry-remove [] (str "not done"))
 
 (defn view-chart [] (str "not done"))
-(defn view-chores [req] (str "not done"))
+(defn view-chores [req]
+  (let [{:keys [params]} req
+        {:keys [user_name]} params]
+    (list {:chores "should be here" :user_name user_name})
+    )
+  )
 (defn view-households [req]
   (let [{:keys [params]} req
          {:keys [user_name]} params]
@@ -52,6 +57,6 @@
   (POST "/chart/entry/remove" [] chart-entry-remove)
 
   (POST "/view/chart" [] view-chart)
-  (POST "/view/chores" [] view-chores)
+  (POST "/view/chores" req (authenticated-route req view-chores))
   (POST "/view/households" req (authenticated-route req view-households))
   )

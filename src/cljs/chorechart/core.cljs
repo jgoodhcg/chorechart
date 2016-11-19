@@ -54,21 +54,32 @@
                [:option {:value "def" :disabled true} "-- choose an option --"]
                (mapv #(-> [:option {:value (:value %)} (:label %)]) options)))))
 
-(defn submit-btn []
+(defn get-btn []
     [:button.btn
      {:on-click
       #(do
-        (pprint "button pressed")
-        (rf/dispatch [:get-households])
+        (pprint "get pressed")
+        (rf/dispatch [:get-all-user-state])
         )
       }
-     "Submit"])
+     "get"])
+
+(defn print-btn []
+  [:button.btn
+   {:on-click
+    #(do
+       (pprint "print pressed")
+       (rf/dispatch [:print-db])
+       )
+    }
+   "print"])
 
 (defn home-page []
   [:div.container
    (str js/user_name " home page")
    [:br]
-   (submit-btn)
+   (get-btn)
+   (print-btn)
    ])
 
 (defn households-page []
@@ -118,4 +129,6 @@
   (rf/dispatch-sync [:initialize-db])
   (load-interceptors!)
   (hook-browser-navigation!)
-  (mount-components))
+  (mount-components)
+  (rf/dispatch [:get-all-user-state])
+  )
