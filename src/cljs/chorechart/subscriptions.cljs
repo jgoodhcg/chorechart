@@ -15,3 +15,8 @@
  :current
  (fn [db _]
    (:current db)))
+
+(reg-sub
+ :households
+ (fn [db _]
+   (:households db)))

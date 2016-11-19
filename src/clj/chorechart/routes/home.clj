@@ -3,7 +3,8 @@
             [compojure.core :refer [defroutes GET POST]]
             [buddy.auth :refer [authenticated?]]
             [ring.util.http-response :as response]
-            [chorechart.resty.auth :as auth]))
+            [chorechart.resty.auth :as auth]
+            [chorechart.db.core :as db]))
 
 (defn authenticated-route [req route-fn]
   (if (authenticated? req)
@@ -28,7 +29,7 @@
 (defn view-households [req]
   (let [{:keys [params]} req
          {:keys [user_name]} params]
-     ()
+     (db/list-households {:user_name user_name})
      )
    )
 

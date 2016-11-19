@@ -11,6 +11,7 @@
 (defn login-page [error]
   (case error
     "" (layout/render "login.html")
+    "failed" (layout/render "login.html" {:flash "failed login"})
     "no-auth" (layout/render "login.html" {:flash "please log in to do that"})))
 
 (defn signup [req]
@@ -45,7 +46,6 @@
             (let [ updated-session (assoc session :identity user_name)]
               (-> (response/found "/")
                   (assoc :session updated-session)))
-            (login-page {:flash "failed login"}))
+            (response/found "/login/failed"))
           ))
-      (catch Exception e (login-page {:flash "failed login"})))))
-
+      (catch Exception e (response/found "/login/failed")))))

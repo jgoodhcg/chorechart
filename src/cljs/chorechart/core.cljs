@@ -64,7 +64,7 @@
       ;; #(pprint @current)}
       #(POST "/view/households"
           {:params {:user_name js/user_name}
-           :handler printalter})}
+           :handler pprint})}
      "Submit"]))
 
 (defn home-page []
@@ -75,9 +75,8 @@
    ])
 
 (defn households-page []
-  [:div.container
-   "households page"
-   ]
+  (let [households (rf/subscribe [:households])]
+    [:div (str @households)])
   )
 
 (def pages

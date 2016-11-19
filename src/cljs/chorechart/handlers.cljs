@@ -1,12 +1,21 @@
 (ns chorechart.handlers
   (:require [chorechart.db :as db]
-            [ajax.core :refer [GET POST]]
             [re-frame.core :refer [dispatch reg-event-db path]]))
 
 (reg-event-db
   :initialize-db
   (fn [_ _]
+    ;; {:http {:method :post
+    ;;         :url "/view-households"
+    ;;         :on-success [:set-households]
+    ;;         :on-fail    [:set-households]}
+    ;;  :db db/default-db}))
     db/default-db))
+
+(reg-event-db
+ :set-households
+ (fn [db [_ households]]
+   (assoc db :households households)))
 
 (reg-event-db
   :set-active-page
