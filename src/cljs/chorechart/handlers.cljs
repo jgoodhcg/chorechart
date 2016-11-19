@@ -10,16 +10,6 @@
   (fn [db [_ a]]
     db/default-db))
 
-;; (reg-event-db
-;;  :get-households
-;;  (fn [db [_ _]]
-;;    (do
-;;      (pprint "making a post")
-;;      (if-let [new (:new db)]
-;;        (assoc db :new (+ new 1))
-;;        (assoc db :new 1))
-;;      )))
-
 (reg-event-fx
  :get-households
  (fn [_world [_ val]]
@@ -29,7 +19,7 @@
                  :timeout         5000
                  :format          (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success      [:post-resp]
+                 :on-success      [:set-households]
                  :on-failure      [:post-resp]}}))
 
 (reg-event-db
@@ -41,6 +31,11 @@
    (if-let [new (:new db)]
      (assoc db :new (+ new 1))
      (assoc db :new 1))))
+
+(reg-event-db
+ :set-households
+ (fn [db [_ households]]
+   (assoc db :households households)))
 
 (reg-event-db
   :set-active-page

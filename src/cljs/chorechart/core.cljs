@@ -73,6 +73,7 @@
 
 (defn households-page []
   (let [households (rf/subscribe [:households])]
+    (rf/dispatch [:get-households])
     [:div (str @households)])
   )
 
