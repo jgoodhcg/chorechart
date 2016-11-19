@@ -1,21 +1,46 @@
 (ns chorechart.handlers
   (:require [chorechart.db :as db]
-            [re-frame.core :refer [dispatch reg-event-db path]]))
+            [cljs.pprint :refer [pprint]]
+            [day8.re-frame.http-fx]
+            [ajax.core :as ajax]
+            [re-frame.core :refer [dispatch reg-event-db reg-event-fx path]]))
 
 (reg-event-db
   :initialize-db
-  (fn [_ _]
-    ;; {:http {:method :post
-    ;;         :url "/view-households"
-    ;;         :on-success [:set-households]
-    ;;         :on-fail    [:set-households]}
-    ;;  :db db/default-db}))
+  (fn [db [_ a]]
     db/default-db))
 
+;; (reg-event-db
+;;  :get-households
+;;  (fn [db [_ _]]
+;;    (do
+;;      (pprint "making a post")
+;;      (if-let [new (:new db)]
+;;        (assoc db :new (+ new 1))
+;;        (assoc db :new 1))
+;;      )))
+
+(reg-event-fx
+ :get-households
+ (fn [_world [_ val]]
+   {:http-xhrio {:method          :post
+                 :uri             "/view/households"
+                 :params          {:user_name js/user_name}
+                 :timeout         5000
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [:post-resp]
+                 :on-failure      [:post-resp]}}))
+
 (reg-event-db
- :set-households
- (fn [db [_ households]]
-   (assoc db :households households)))
+ :post-resp
+ (fn [db [a b]]
+   (pprint a)
+   (pprint b)
+   (pprint db)
+   (if-let [new (:new db)]
+     (assoc db :new (+ new 1))
+     (assoc db :new 1))))
 
 (reg-event-db
   :set-active-page

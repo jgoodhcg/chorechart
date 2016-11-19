@@ -24,6 +24,7 @@
                  [org.webjars/font-awesome "4.6.3"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
                  [re-frame "0.8.0"]
+                 [day8.re-frame/http-fx "0.1.2"]
                  [reagent "0.6.0"]
                  [reagent-utils "0.2.0"]
                  [ring-middleware-format "0.7.0"]
