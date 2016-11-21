@@ -58,14 +58,15 @@
 
 (defn select [label name dispatch-key options]
   [:div
-   [:select {:name name
-                   :defaultValue "default"
-                   :style {:width "100%"}
-                   :on-change #(rf/dispatch
-                                [dispatch-key (-> % .-target .-value)])}
-         (cons
-          [:option {:value "default" :disabled true} "-- choose an option --"]
-          (mapv #(-> [:option {:value (:value %) :key (str (.indexOf options %)) } (:label %)]) options))
+   [:select.form-control
+    {:name name
+     :defaultValue "default"
+     :style {:width "100%"}
+     :on-change #(rf/dispatch
+                  [dispatch-key (-> % .-target .-value)])}
+    (cons
+     [:option {:value "default" :disabled true} "-- choose an option --"]
+     (mapv #(-> [:option {:value (:value %) :key (str (.indexOf options %)) } (:label %)]) options))
     ]
    ])
 
@@ -110,16 +111,18 @@
       [:div.col-xs-12 {:style {:background-color "#787878"}}
        [:div.col-xs-4 "Person"] [:div.col-xs-4 "Chore"] [:div.col-xs-4 "Date"]
        ]]
-     [:div.row {:style {:position "fixed" :bottom "10px"}}
-      [:div.hidden-xs-down.col-sm-4
-        [:input {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
-      [:div.col-xs-5.col-sm-4
-       (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
-      [:div.col-xs-5.col-sm-4
-       [:input {:type "date" :style {:width "100%"}}]]
-      [:div.col-xs-2
-       [:input.button.button-default {:type "button"}]]
-       ]]))
+     [:div.row
+       [:div.col-xs-12-down.col-sm-4.form-group
+        [:input.form-control {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
+       [:div.col-xs-12.col-sm-4.form-group
+        (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
+       [:div.col-xs-12.col-sm-4.form-group
+        [:input.form-control
+         {:type "date" :style {:width "100%"}
+          :value (str (.getFullYear (js/Date.)) "-" (+ 1 (.getMonth (js/Date.))) "-" (.getDate (js/Date.)))}]]
+       [:div.col-xs-12.col-sm-12.form-group
+        [:input.btn.btn-primary.btn-block {:type "button" :value "submit" :width "100%"}]]
+      ]]))
 
 (def pages
   {:home #'home-page
