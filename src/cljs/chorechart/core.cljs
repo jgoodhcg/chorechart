@@ -22,21 +22,33 @@
 
 (defn navbar []
   (r/with-let [collapsed? (r/atom true)]
-    [:nav.navbar.navbar-dark.bg-primary
-     [:button.navbar-toggler.hidden-sm-up
-      {:on-click #(swap! collapsed? not)} "☰"]
-     [:div.collapse.navbar-toggleable-xs
-      (when-not @collapsed? {:class "in"})
-      [:a.navbar-brand {:href "#/"} "chorechart"]
-      [:ul.nav.navbar-nav
-       [nav-link "#/" "Home" :home collapsed?]
-       [nav-link "#/households" "Households" :households collapsed?]
-       ]]]))
+    (let [selected-page (rf/subscribe [:page])]
+      [:nav.navbar.navbar-dark.bg-primary
+       [:div.row
+        [:div.col-xs-10
+         [:a.navbar-brand {:href "#/"} "chorechart"]
+         [:ul.nav.navbar-nav.hidden-md-up
+          [:li.nav-item.active
+           [:a.nav-link {:href (str "#/" (name @selected-page))} @selected-page]]]]
+        [:div.col-xs-2
+         [:button.navbar-toggler.hidden-md-up
+          {:on-click #(swap! collapsed? not)} "☰"]]]
+       [:div.row
+        [:div.col-xs-12
+         [:div.collapse.navbar-toggleable-sm
+          (when-not @collapsed? {:class "in"})
+          [:ul.nav.navbar-nav
+           [nav-link "#/" "Home" :home collapsed?]
+           [nav-link "#/chart" "chart" :chart collapsed?]
+           [nav-link "#/households" "Households" :households collapsed?]
+           ]]
+         ]]
+       ])))
 
 (defn row [label input]
   [:div.row
-   [:div.col-md-2 [:label label]]
-   [:div.col-md-5 input]])
+   [:div.col-xs-2 [:label label]]
+   [:div.col-xs-5 input]])
 
 (defn input [label name type dispatch-key]
   (row label [:input.form-control {:type type
@@ -45,18 +57,21 @@
                                    #(rf/dispatch [dispatch-key (-> % .-target .-value)])}]))
 
 (defn select [label name dispatch-key options]
-  (row label (into
-              [:select.form-control {:name name
-                                     :defaultValue "def"
-                                     :on-change #(rf/dispatch
-                                                  [dispatch-key (-> % .-target .-value)])}]
-              (cons
-               [:option {:value "def" :disabled true} "-- choose an option --"]
-               (mapv #(-> [:option {:value (:value %)} (:label %)]) options)))))
+  [:div
+   [:select {:name name
+                   :defaultValue "default"
+                   :style {:width "100%"}
+                   :on-change #(rf/dispatch
+                                [dispatch-key (-> % .-target .-value)])}
+         (cons
+          [:option {:value "default" :disabled true} "-- choose an option --"]
+          (mapv #(-> [:option {:value (:value %) :key (str (.indexOf options %)) } (:label %)]) options))
+    ]
+   ])
 
 (defn get-btn []
-    [:button.btn
-     {:on-click
+  [:button.btn
+   {:on-click
       #(do
         (pprint "get pressed")
         (rf/dispatch [:get-all-user-state])
@@ -88,8 +103,27 @@
     [:div (str @households)])
   )
 
+(defn chart-page []
+  (let [subscribe "to something"]
+    [:div.container-fluid
+     [:div.row
+      [:div.col-xs-12 {:style {:background-color "#787878"}}
+       [:div.col-xs-4 "Person"] [:div.col-xs-4 "Chore"] [:div.col-xs-4 "Date"]
+       ]]
+     [:div.row {:style {:position "fixed" :bottom "10px"}}
+      [:div.hidden-xs-down.col-sm-4
+        [:input {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
+      [:div.col-xs-5.col-sm-4
+       (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
+      [:div.col-xs-5.col-sm-4
+       [:input {:type "date" :style {:width "100%"}}]]
+      [:div.col-xs-2
+       [:input.button.button-default {:type "button"}]]
+       ]]))
+
 (def pages
   {:home #'home-page
+   :chart #'chart-page
    :households #'households-page})
 
 (defn page []
@@ -106,6 +140,9 @@
 
 (secretary/defroute "/households" []
   (rf/dispatch [:set-active-page :households]))
+
+(secretary/defroute "/chart" []
+  (rf/dispatch [:set-active-page :chart]))
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined

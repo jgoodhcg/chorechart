@@ -33,3 +33,13 @@ inner join living_situations
 on households.id = living_situations.household_id
 inner join people
 on people.user_name = :user_name
+
+-- :name list-chores :? :*
+-- :doc given a user_name lists all the chores they have with the households associated
+select households.id as household_id, households.house_name as house_name,
+       chores.id as chore_id, chores.chore_name as chore_name
+from chores
+inner join households
+on households.id = chores.household_id
+inner join people
+on people.user_name = 'test'

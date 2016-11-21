@@ -6,6 +6,16 @@
             [chorechart.resty.auth :as auth]
             [chorechart.db.core :as db]))
 
+(defn authenticated-resty [req route-fn]
+  (if (authenticated? req)
+    (let [{ :keys [params] } req
+          { :keys [user_name] } params]
+      (if (= (:identity req) user_name)
+        (route-fn user_name)
+        (str "you can't access that") ;; tried to use a user_name that isn't their identity
+        ))
+    (response/found "/login/no-auth"))) ;; not signed in
+
 (defn authenticated-route [req route-fn]
   (if (authenticated? req)
     (route-fn req)
@@ -24,19 +34,12 @@
 (defn chart-entry-edit [] (str "not done"))
 (defn chart-entry-remove [] (str "not done"))
 
-(defn view-chart [] (str "not done"))
-(defn view-chores [req]
-  (let [{:keys [params]} req
-        {:keys [user_name]} params]
-    (list {:chores "should be here" :user_name user_name})
-    )
-  )
-(defn view-households [req]
-  (let [{:keys [params]} req
-         {:keys [user_name]} params]
-     (db/list-households {:user_name user_name})
-     )
-   )
+(defn view-chart [user_name]
+  (db/list-households {:user_name user_name}))
+(defn view-chores [user_name]
+  (db/list-households {:user_name user_name}))
+(defn view-households [user_name]
+  (db/list-households {:user_name user_name}))
 
 (defroutes auth-routes
   (GET "/signup" [] (auth/signup-page))
@@ -56,7 +59,7 @@
   (POST "/chart/entry/edit" [] chart-entry-edit)
   (POST "/chart/entry/remove" [] chart-entry-remove)
 
-  (POST "/view/chart" [] view-chart)
-  (POST "/view/chores" req (authenticated-route req view-chores))
-  (POST "/view/households" req (authenticated-route req view-households))
+  (POST "/view/chart" req (authenticated-resty req view-chart))
+  (POST "/view/chores" req (authenticated-resty req view-chores))
+  (POST "/view/households" req (authenticated-resty req view-households)) ;; TODO put authenticated-route in middleware
   )
