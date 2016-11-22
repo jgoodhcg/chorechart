@@ -118,8 +118,7 @@
         (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
        [:div.col-xs-12.col-sm-4.form-group
         [:input.form-control
-         {:type "date" :style {:width "100%"}
-          :value (str (.getFullYear (js/Date.)) "-" (+ 1 (.getMonth (js/Date.))) "-" (.getDate (js/Date.)))}]]
+         {:type "date" :style {:width "100%"}}]]
        [:div.col-xs-12.col-sm-12.form-group
         [:input.btn.btn-primary.btn-block {:type "button" :value "submit" :width "100%"}]]
       ]]))
