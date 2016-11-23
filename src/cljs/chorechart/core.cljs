@@ -23,16 +23,19 @@
 (defn navbar []
   (r/with-let [collapsed? (r/atom true)]
     (let [selected-page (rf/subscribe [:page])]
-      [:nav.navbar.navbar-dark.bg-primary
+      [:nav.navbar.navbar-light.bg-faded {:style {:border-radius "0em"}}
        [:div.row
-        [:div.col-xs-10
+        [:div.col-xs-6
          [:a.navbar-brand {:href "#/"} "chorechart"]
+         ]
+        [:div.col-xs-4
          [:ul.nav.navbar-nav.hidden-md-up
           [:li.nav-item.active
-           [:a.nav-link {:href (str "#/" (name @selected-page))} @selected-page]]]]
+           [:a.nav-link {:href (str "#/" (name @selected-page))} @selected-page]]]
+         ]
         [:div.col-xs-2
          [:button.navbar-toggler.hidden-md-up
-          {:on-click #(swap! collapsed? not)} "☰"]]]
+          {:on-click #(swap! collapsed? not) } "☰"]]]
        [:div.row
         [:div.col-xs-12
          [:div.collapse.navbar-toggleable-sm
@@ -104,24 +107,46 @@
     [:div (str @households)])
   )
 
+(defn chart-table []
+  [:div.row
+   [:div.col-xs-12
+    [:table.table
+     [:thead
+      [:tr [:th "Person"] [:th "Chore"] [:th "Date"]]]
+     [:tbody
+      [:tr [:td "Justin"] [:td "dishes"] [:td "11-21-2016"]]
+      [:tr [:td "Justin"] [:td "dishes"] [:td "11-21-2016"]]]]]])
+
+(defn chart-input []
+  (r/with-let [collapsed (r/atom true)]
+    [:div.container-fluid.bg-faded {:style { :width "100%" :padding-top "1em"
+                                            :position "fixed" :bottom "0em" :left "0em" :right "0em"}}
+    (if @collapsed
+       [:div.row
+        [:input.btn.btn-default {:type "button" :value "▼"
+                                 :on-click #(reset! collapsed false)}]
+        [:div.col-xs-12-down.col-sm-4.form-group
+         [:input.form-control {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
+        [:div.col-xs-12.col-sm-4.form-group
+         (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
+        [:div.col-xs-12.col-sm-4.form-group
+         [:input.form-control {:type "date" :style {:width "100%"}}]]
+        [:div.col-xs-12.col-sm-12.form-group
+         [:input.btn.btn-primary.btn-block {:type "button" :value "submit" :width "100%"}]]]
+       [:div.row
+        [:input.btn.btn-default {:type "button" :value "▲"
+                                 :on-click #(reset! collapsed true)}]
+        ]
+      )
+     ]
+    )
+  )
+
 (defn chart-page []
   (let [subscribe "to something"]
     [:div.container-fluid
-     [:div.row
-      [:div.col-xs-12 {:style {:background-color "#787878"}}
-       [:div.col-xs-4 "Person"] [:div.col-xs-4 "Chore"] [:div.col-xs-4 "Date"]
-       ]]
-     [:div.row
-       [:div.col-xs-12-down.col-sm-4.form-group
-        [:input.form-control {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
-       [:div.col-xs-12.col-sm-4.form-group
-        (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
-       [:div.col-xs-12.col-sm-4.form-group
-        [:input.form-control
-         {:type "date" :style {:width "100%"}}]]
-       [:div.col-xs-12.col-sm-12.form-group
-        [:input.btn.btn-primary.btn-block {:type "button" :value "submit" :width "100%"}]]
-      ]]))
+     (chart-table)
+     (chart-input)]))
 
 (def pages
   {:home #'home-page
