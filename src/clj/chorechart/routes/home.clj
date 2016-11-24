@@ -8,12 +8,13 @@
 
 (defn authenticated-resty [req route-fn]
   (if (authenticated? req)
-    (let [{ :keys [params] } req
-          { :keys [user_name] } params]
-      (if (= (:identity req) user_name)
-        (route-fn user_name)
+    (let [{ :keys [params session] } req
+          { :keys [person_id] } params]
+      (if (= (get-in session [:person :id]) person_id)
+        (route-fn params)
         (str "you can't access that") ;; tried to use a user_name that isn't their identity
-        ))
+        )
+      )
     (response/found "/login/no-auth"))) ;; not signed in
 
 (defn authenticated-route [req route-fn]
@@ -22,9 +23,10 @@
     (response/found "/login/no-auth")))
 
 (defn home-page [req]
-  (let [{:keys [session]} req]
-    (layout/render "home.html" {:user_name (:identity session)}))
-    )
+  (let [{:keys [session]} req
+        user_name (:identity session)
+        person (:person session)]
+    (layout/render "home.html" {:user_name user_name :person person})))
 
 (defn add-household [] (str "not done"))
 (defn add-living-situation [] (str "not done"))
@@ -34,12 +36,14 @@
 (defn chart-entry-edit [] (str "not done"))
 (defn chart-entry-remove [] (str "not done"))
 
-(defn view-chart [user_name]
-  (db/list-households {:user_name user_name}))
-(defn view-chores [user_name]
-  (db/list-households {:user_name user_name}))
-(defn view-households [user_name]
-  (db/list-households {:user_name user_name}))
+;; TODO some kind of validation that the session id can alter/view stuff
+
+(defn view-chart [person_id]
+  (db/list-chart-entries {:person_id person_id}))
+(defn view-chores [person_id]
+  (db/list-chores {:person_id person_id}))
+(defn view-households [params]
+  (db/list-households {:person_id (:person_id params)}))
 
 (defroutes auth-routes
   (GET "/signup" [] (auth/signup-page))

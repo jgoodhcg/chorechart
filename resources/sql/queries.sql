@@ -42,4 +42,4 @@ from chores
 inner join households
 on households.id = chores.household_id
 inner join people
-on people.user_name = 'test'
+on people.user_name = :user_name

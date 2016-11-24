@@ -34,8 +34,8 @@
            [:a.nav-link {:href (str "#/" (name @selected-page))} @selected-page]]]
          ]
         [:div.col-xs-2
-         [:button.navbar-toggler.hidden-md-up
-          {:on-click #(swap! collapsed? not) } "☰"]]]
+         [:input.hidden-md-up.btn.btn-sm
+          {:type "button" :value "☰" :on-click #(swap! collapsed? not) } ]]]
        [:div.row
         [:div.col-xs-12
          [:div.collapse.navbar-toggleable-sm
@@ -78,7 +78,8 @@
    {:on-click
       #(do
         (pprint "get pressed")
-        (rf/dispatch [:get-all-user-state])
+        ;; (rf/dispatch [:set-person])
+        (rf/dispatch [:get-households])
         )
       }
      "get"])
@@ -202,5 +203,5 @@
   (load-interceptors!)
   (hook-browser-navigation!)
   (mount-components)
-  (rf/dispatch [:get-all-user-state])
+  (rf/dispatch [:set-person])
   )

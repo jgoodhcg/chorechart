@@ -16,41 +16,26 @@
   (fn [db [_ a]]
     db/default-db))
 
-(reg-event-fx
- :get-all-user-state
- (fn [_world [_ val]]
-    {:http-xhrio [
-                  {:method          :post
-                   :uri             "/view/chores"
-                   :params          {:user_name js/user_name}
-                   :timeout         5000
-                   :format          (ajax/json-request-format)
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [:set-chores]
-                   :on-failure      [:post-resp]}
-                  {:method          :post
-                   :uri             "/view/households"
-                   :params          {:user_name js/user_name}
-                   :timeout         5000
-                   :format          (ajax/json-request-format)
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [:set-households]
-                   :on-failure      [:post-resp]}
-                  ] }
-   ))
-
+(reg-event-db
+ :set-person
+ (fn [db [_ _]]
+      (assoc db
+             :id (.-id js/person)
+             :user_name (.-user_name js/person))))
 
 (reg-event-fx
  :get-households
- (fn [_world [_ val]]
-   {:http-xhrio {:method          :post
-                 :uri             "/view/households"
-                 :params          {:user_name js/user_name}
-                 :timeout         5000
-                 :format          (ajax/json-request-format)
-                 :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success      [:set-households]
-                 :on-failure      [:post-resp]}}))
+ (fn [_world [_ _]]
+    {:http-xhrio
+     {:method          :post
+      :uri             "/view/households"
+      :params          {:person_id (get-in _world [:db :id])}
+      :timeout         5000
+      :format          (ajax/json-request-format)
+      :response-format (ajax/json-response-format {:keywords? true})
+      :on-success      [:set-households]
+      :on-failure      [:post-resp]}}))
+
 
 (reg-event-db
  :post-resp

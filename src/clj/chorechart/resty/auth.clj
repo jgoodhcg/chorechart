@@ -41,9 +41,12 @@
         session (:session req)]
     (try
       (do
-        (let [found-pass (:pass (db/find-person {:user_name user_name}))]
+        (let [person (db/find-person {:user_name user_name})
+              found-pass (:pass person)]
           (if (and found-pass (= found-pass password))
-            (let [ updated-session (assoc session :identity user_name)]
+            (let [ updated-session (assoc session
+                                          :identity user_name
+                                          :person (select-keys person [:id :user_name :email]))]
               (-> (response/found "/")
                   (assoc :session updated-session)))
             (response/found "/login/failed"))
