@@ -26,3 +26,4 @@ inner join chores
 on chores.id = chart.chore_id
 where chart.household_id = :household_id
 and chart.moment >= :date_from::date
+order by chart.moment asc

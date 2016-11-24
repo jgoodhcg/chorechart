@@ -47,11 +47,13 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] refactor db intensive actions to use rollback transactions (ex: signup with default house setup)
  - [ ] actual redirecting not rendering login page on un-auth home route
  - [ ] script to run on mockaroo scripts in the right order 
+ - [ ] display first name in the chart
 
 #### migrations
- - [ ]  add no null values to user_name  
- - [ ]  rename pass to password people table
- - [ ]  refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`)
- - [ ]  take off unique constraint on household names 
- - [ ]  change chart table to use living situation id instead of household and person id
- - [ ]  add on delete cascade clause
+ - [ ] add no null values to user_name  
+ - [ ] rename pass to password people table
+ - [ ] refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`)
+ - [ ] take off unique constraint on household names 
+ - [ ] change chart table to use living situation id instead of household and person id
+ - [ ] add on delete cascade clause
+ - [ ] add a first/last name to the people table

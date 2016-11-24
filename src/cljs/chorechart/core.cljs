@@ -109,15 +109,19 @@
     [:div (str @households)])
   )
 
-(defn chart-table []
+(defn chart-table [chart]
   [:div.row
    [:div.col-xs-12
     [:table.table
      [:thead
       [:tr [:th "Person"] [:th "Chore"] [:th "Date"]]]
      [:tbody
-      [:tr [:td "Justin"] [:td "dishes"] [:td "11-21-2016"]]
-      [:tr [:td "Justin"] [:td "dishes"] [:td "11-21-2016"]]]]]])
+      (map
+       #(vec [:tr
+              [:td (:user_name %)]
+              [:td (:chore_name %)]
+              [:td (subs (:moment %) 5 10)]])
+       chart)]]]])
 
 (defn chart-input []
   (r/with-let [collapsed (r/atom false)]
@@ -153,9 +157,9 @@
   )
 
 (defn chart-page []
-  (let [subscribe "to something"]
+  (let [chart (rf/subscribe [:chart])]
     [:div.container-fluid
-     (chart-table)
+     (chart-table @chart)
      (chart-input)]))
 
 (def pages

@@ -20,3 +20,8 @@
  :households
  (fn [db _]
    (:households db)))
+
+(reg-sub
+ :chart
+ (fn [db _]
+   (:chart db)))
