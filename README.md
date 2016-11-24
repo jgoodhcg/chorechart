@@ -7,12 +7,12 @@
 3. run `vagrant up` in cloned directory
 4. wait
 
--- non connectable repl way  
+### non connectable repl way  
 5. open 2 shells and run `vagrant ssh` in both, after the box is initialized  
 6. in 1 shell run `lein run` and wait until it is serving  
 7. in the other shell run `lein figwheel`  
 
--- connectable repl way  
+### connectable repl way  
 5. run `bash start.sh` to conenct to vm with ssh ?tunneled ports?  
 6. run `cd/chorechart` to get into the project  
 7. run `./cider-deps-repl` to create an nrepl that cider can connect to  
@@ -38,18 +38,20 @@ expect some commands to fail due to the nature of random data generation and rel
     
 ### eventually
 
+#### general
  - [ ] admin privs for households
  - [ ] copy chore from one household to another
  - [ ] hash/salt passwords
- - [ ] (migration) add no null values to user_name
- - [ ] (migration) rename pass to password people table
  - [ ] authorization
- - [ ] (migration) refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`)
  - [ ] refactor code to use only `-` instead of `_`
- - [ ] (migration) take off unique constraint on household names 
  - [ ] refactor db intensive actions to use rollback transactions (ex: signup with default house setup)
  - [ ] actual redirecting not rendering login page on un-auth home route
- - [ ] (migration) change chart table to use living situation id instead of household and person id
- - [ ] (migration) add on delete cascade clause
  - [ ] script to run on mockaroo scripts in the right order 
 
+#### migrations
+ - [ ]  add no null values to user_name  
+ - [ ]  rename pass to password people table
+ - [ ]  refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`)
+ - [ ]  take off unique constraint on household names 
+ - [ ]  change chart table to use living situation id instead of household and person id
+ - [ ]  add on delete cascade clause
