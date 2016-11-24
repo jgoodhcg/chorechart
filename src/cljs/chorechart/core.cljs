@@ -118,24 +118,32 @@
       [:tr [:td "Justin"] [:td "dishes"] [:td "11-21-2016"]]]]]])
 
 (defn chart-input []
-  (r/with-let [collapsed (r/atom true)]
+  (r/with-let [collapsed (r/atom false)]
     [:div.container-fluid.bg-faded {:style { :width "100%" :padding-top "1em"
                                             :position "fixed" :bottom "0em" :left "0em" :right "0em"}}
-    (if @collapsed
+    (if-not @collapsed
        [:div.row
-        [:input.btn.btn-default {:type "button" :value "▼"
-                                 :on-click #(reset! collapsed false)}]
-        [:div.col-xs-12-down.col-sm-4.form-group
-         [:input.form-control {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
-        [:div.col-xs-12.col-sm-4.form-group
-         (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
-        [:div.col-xs-12.col-sm-4.form-group
-         [:input.form-control {:type "date" :style {:width "100%"}}]]
-        [:div.col-xs-12.col-sm-12.form-group
-         [:input.btn.btn-primary.btn-block {:type "button" :value "submit" :width "100%"}]]]
+        [:div.row
+         [:div.col-xs-1.offset-xs-10.form-group
+         [:input.btn.btn-sm {:type "button" :value "▼"
+                                  :on-click #(reset! collapsed true)}]]
+         ]
+        [:div.row
+         [:div.col-xs-12-down.col-sm-4.form-group
+          [:input.form-control {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
+         [:div.col-xs-12.col-sm-4.form-group
+          (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
+         [:div.col-xs-12.col-sm-4.form-group
+          [:input.form-control {:type "date" :style {:width "100%"}}]]
+         [:div.col-xs-12.col-sm-12.form-group
+          [:input.btn.btn-primary.btn-block {:type "button" :value "submit" :width "100%"}]]]
+         ]
+
+       ;; collapsed
        [:div.row
-        [:input.btn.btn-default {:type "button" :value "▲"
-                                 :on-click #(reset! collapsed true)}]
+        [:div.col-xs-1.offset-xs-10.form-group
+         [:input.btn.btn-sm {:type "button" :value "▲"
+                             :on-click #(reset! collapsed false)}]]
         ]
       )
      ]
