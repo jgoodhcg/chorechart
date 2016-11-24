@@ -59,7 +59,7 @@
                                    :on-change
                                    #(rf/dispatch [dispatch-key (-> % .-target .-value)])}]))
 
-(defn select [label name dispatch-key options]
+(defn select [name dispatch-key options]
   [:div
    [:select.form-control
     {:name name
@@ -68,19 +68,20 @@
      :on-change #(rf/dispatch
                   [dispatch-key (-> % .-target .-value)])}
     (cons
-     [:option {:value "default" :disabled true :key (str -1)} "-- choose an option --"]
-     (mapv #(-> [:option {:value (:value %) :key (str (.indexOf options %)) } (:label %)]) options))
-    ]
-   ])
+     [:option
+      {:value "default" :disabled true :key (str -1)}
+      "-- choose an option --"]
+     (mapv
+      #(-> [:option
+            {:value (:value %) :key (str (.indexOf options %)) }
+            (:label %)]) options))]])
 
 (defn get-btn [dispatch-key]
   [:button.btn
    {:on-click
       #(do
         (pprint (str "dispatched " dispatch-key))
-        (rf/dispatch [dispatch-key])
-        )
-      }
+        (rf/dispatch [dispatch-key]))}
      (str dispatch-key)])
 
 (defn print-btn []
@@ -133,7 +134,7 @@
          [:div.col-xs-12-down.col-sm-4.form-group
           [:input.form-control {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
          [:div.col-xs-12.col-sm-4.form-group
-          (select "label" "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
+          (select "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
          [:div.col-xs-12.col-sm-4.form-group
           [:input.form-control {:type "date" :style {:width "100%"}}]]
          [:div.col-xs-12.col-sm-12.form-group
