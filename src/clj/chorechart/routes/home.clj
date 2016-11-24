@@ -12,7 +12,7 @@
           { :keys [person_id] } params]
       (if (= (get-in session [:person :id]) person_id)
         (route-fn params)
-        (str "you can't access that") ;; tried to use a user_name that isn't their identity
+        (str "you can't access that") ;; tried to use a person_id that isn't their session identity
         )
       )
     (response/found "/login/no-auth"))) ;; not signed in
@@ -38,8 +38,9 @@
 
 ;; TODO some kind of validation that the session id can alter/view stuff
 
-(defn view-chart [person_id]
-  (db/list-chart-entries {:person_id person_id}))
+(defn view-chart [params]
+  (let [{:keys [person_id date]} params]
+    (db/list-chart-entries {:person_id person_id})))
 (defn view-chores [person_id]
   (db/list-chores {:person_id person_id}))
 (defn view-households [params]

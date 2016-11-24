@@ -3,6 +3,7 @@
             [cljs.pprint :refer [pprint]]
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]
+            [chorechart.misc :as misc]
             [re-frame.core :refer [dispatch reg-event-db reg-event-fx path]]))
 
 (reg-event-db
@@ -36,6 +37,19 @@
       :on-success      [:set-households]
       :on-failure      [:post-resp]}}))
 
+(reg-event-fx
+ :get-chart
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/view/chart"
+     :params          {:person_id (get-in _world [:db :id])
+                       :date (misc/start-of-week (new js/Date))}
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:set-chart]
+     :on-failure      [:post-resp]}}))
 
 (reg-event-db
  :post-resp
@@ -49,12 +63,12 @@
 (reg-event-db
  :set-households
  (fn [db [_ households]]
-   (assoc db :households households)))
+   (assoc db :households households :selected-household (first households))))
 
 (reg-event-db
- :set-chores
- (fn [db [_ chores]]
-   (assoc db :chores chores)))
+ :set-chart
+ (fn [db [_ chart]]
+   (assoc db :chart chart)))
 
 (reg-event-db
   :set-active-page

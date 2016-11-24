@@ -3,10 +3,8 @@
 (def default-db
   {:page :home
    :households []
-   :housemates []
-   :chores []
-   :chore-entries []
-   :filter {}
+   :selected-household {:id nil :house_name nil}
+   :chart []
    })
 
 ;; filters for entries
