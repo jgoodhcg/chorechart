@@ -68,21 +68,20 @@
      :on-change #(rf/dispatch
                   [dispatch-key (-> % .-target .-value)])}
     (cons
-     [:option {:value "default" :disabled true} "-- choose an option --"]
+     [:option {:value "default" :disabled true :key (str -1)} "-- choose an option --"]
      (mapv #(-> [:option {:value (:value %) :key (str (.indexOf options %)) } (:label %)]) options))
     ]
    ])
 
-(defn get-btn []
+(defn get-btn [dispatch-key]
   [:button.btn
    {:on-click
       #(do
-        (pprint "get pressed")
-        ;; (rf/dispatch [:set-person])
-        (rf/dispatch [:get-households])
+        (pprint (str "dispatched " dispatch-key))
+        (rf/dispatch [dispatch-key])
         )
       }
-     "get"])
+     (str dispatch-key)])
 
 (defn print-btn []
   [:button.btn
@@ -98,7 +97,8 @@
   [:div.container
    (str js/user_name " home page")
    [:br]
-   (get-btn)
+   (get-btn :get-households)
+   (get-btn :get-chart)
    (print-btn)
    ])
 

@@ -43,8 +43,10 @@
    {:http-xhrio
     {:method          :post
      :uri             "/view/chart"
-     :params          {:person_id (get-in _world [:db :id])
-                       :date (misc/start-of-week (new js/Date))}
+     :params          {:household_id
+                       (get-in _world [:db :selected-household :id])
+                       ;; :date (misc/start-of-week (new js/Date))}
+                       :date "2016-5-1"}
      :timeout         5000
      :format          (ajax/json-request-format)
      :response-format (ajax/json-response-format {:keywords? true})

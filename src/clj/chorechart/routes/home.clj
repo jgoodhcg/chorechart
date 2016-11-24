@@ -8,14 +8,9 @@
 
 (defn authenticated-resty [req route-fn]
   (if (authenticated? req)
-    (let [{ :keys [params session] } req
-          { :keys [person_id] } params]
-      (if (= (get-in session [:person :id]) person_id)
-        (route-fn params)
-        (str "you can't access that") ;; tried to use a person_id that isn't their session identity
-        )
-      )
-    (response/found "/login/no-auth"))) ;; not signed in
+    (let [{:keys [params]} req]
+      (route-fn params))
+    (response/found "/login/no-auth")))
 
 (defn authenticated-route [req route-fn]
   (if (authenticated? req)
@@ -39,8 +34,9 @@
 ;; TODO some kind of validation that the session id can alter/view stuff
 
 (defn view-chart [params]
-  (let [{:keys [person_id date]} params]
-    (db/list-chart-entries {:person_id person_id})))
+  (let [{:keys [household_id date]} params]
+    (db/list-chart-entries
+     {:household_id household_id :date_from date})))
 (defn view-chores [person_id]
   (db/list-chores {:person_id person_id}))
 (defn view-households [params]
