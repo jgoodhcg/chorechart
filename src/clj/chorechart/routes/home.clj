@@ -37,8 +37,8 @@
   (let [{:keys [household_id date]} params]
     (db/list-chart-entries
      {:household_id household_id :date_from date})))
-(defn view-chores [person_id]
-  (db/list-chores {:person_id person_id}))
+(defn view-chores [params]
+  (db/list-chores {:household_id (:household_id params)}))
 (defn view-households [params]
   (db/list-households {:person_id (:person_id params)}))
 
@@ -62,5 +62,6 @@
 
   (POST "/view/chart" req (authenticated-resty req view-chart))
   (POST "/view/chores" req (authenticated-resty req view-chores))
-  (POST "/view/households" req (authenticated-resty req view-households)) ;; TODO put authenticated-route in middleware
+  (POST "/view/households" req (authenticated-resty req view-households))
+  ;; TODO put authenticated-route/resty in middleware
   )

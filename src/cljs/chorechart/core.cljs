@@ -100,6 +100,7 @@
    [:br]
    (get-btn :get-households)
    (get-btn :get-chart)
+   (get-btn :get-chores)
    (print-btn)
    ])
 
@@ -123,7 +124,7 @@
               [:td (subs (:moment %) 5 10)]])
        chart)]]]])
 
-(defn chart-input []
+(defn chart-input [chores]
   (r/with-let [collapsed (r/atom false)]
     [:div.container-fluid.bg-faded {:style { :width "100%" :padding-top "1em"
                                             :position "fixed" :bottom "0em" :left "0em" :right "0em"}}
@@ -132,35 +133,36 @@
         [:div.row
          [:div.col-xs-1.offset-xs-10.form-group
          [:input.btn.btn-sm {:type "button" :value "▼"
-                                  :on-click #(reset! collapsed true)}]]
-         ]
+                                  :on-click #(reset! collapsed true)}]]]
         [:div.row
          [:div.col-xs-12-down.col-sm-4.form-group
           [:input.form-control {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
          [:div.col-xs-12.col-sm-4.form-group
-          (select "name" :dispatch-event [{:value "option-2" :label "option-dos"}])]
+          (select "name" :set-pending-chore-id
+                  (map
+                   #(hash-map :value (:id %) :label (:chore_name %)) ;; format chore maps for select fn
+                   chores))]
          [:div.col-xs-12.col-sm-4.form-group
-          [:input.form-control {:type "date" :style {:width "100%"}}]]
+          [:input.form-control
+           {:type "date" :style {:width "100%"}
+            :on-change #(rf/dispatch [:set-pending-date (-> % .-target .-value)])}]]
          [:div.col-xs-12.col-sm-12.form-group
-          [:input.btn.btn-primary.btn-block {:type "button" :value "submit" :width "100%"}]]]
-         ]
+          [:input.btn.btn-primary.btn-block
+           {:type "button" :value "submit" :width "100%"
+            :on-click #(pprint "clicked submit")}]]]]
 
        ;; collapsed
        [:div.row
         [:div.col-xs-1.offset-xs-10.form-group
          [:input.btn.btn-sm {:type "button" :value "▲"
-                             :on-click #(reset! collapsed false)}]]
-        ]
-      )
-     ]
-    )
-  )
+                             :on-click #(reset! collapsed false)}]]])]))
 
 (defn chart-page []
-  (let [chart (rf/subscribe [:chart])]
+  (let [chart (rf/subscribe [:chart])
+        chores (rf/subscribe [:chores])]
     [:div.container-fluid
      (chart-table @chart)
-     (chart-input)]))
+     (chart-input @chores)]))
 
 (def pages
   {:home #'home-page
@@ -184,6 +186,7 @@
 
 (secretary/defroute "/chart" []
   (rf/dispatch [:set-active-page :chart]))
+
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined
@@ -197,9 +200,6 @@
 
 ;; -------------------------
 ;; Initialize app
-(defn fetch-docs! []
-  (GET (str js/context "/docs") {:handler #(rf/dispatch [:set-docs %])}))
-
 (defn mount-components []
   (r/render [#'page] (.getElementById js/document "app")))
 

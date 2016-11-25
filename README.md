@@ -57,3 +57,4 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] change chart table to use living situation id instead of household and person id
  - [ ] add on delete cascade clause
  - [ ] add a first/last name to the people table
+ - [ ] constraint for no duplicate names on chores per household

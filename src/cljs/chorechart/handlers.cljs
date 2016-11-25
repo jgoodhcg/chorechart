@@ -53,6 +53,30 @@
      :on-success      [:set-chart]
      :on-failure      [:post-resp]}}))
 
+(reg-event-fx
+ :get-chores
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/view/chores"
+     :params          {:household_id
+                       (get-in _world [:db :selected-household :id])}
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:set-chores]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-db
+ :set-pending-chore-id
+ (fn [db [_ chore_id]]
+   (assoc-in db [:pending-chart-entry :chore_id] chore_id)))
+
+(reg-event-db
+ :set-pending-date
+ (fn [db [_ date]]
+   (assoc-in db [:pending-chart-entry :date] date)))
+
 (reg-event-db
  :post-resp
  (fn [db [a b]]
@@ -71,6 +95,11 @@
  :set-chart
  (fn [db [_ chart]]
    (assoc db :chart chart)))
+
+(reg-event-db
+ :set-chores
+ (fn [db [_ chores]]
+   (assoc db :chores chores)))
 
 (reg-event-db
   :set-active-page

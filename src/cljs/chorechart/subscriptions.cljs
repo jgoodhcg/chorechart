@@ -25,3 +25,8 @@
  :chart
  (fn [db _]
    (:chart db)))
+
+(reg-sub
+ :chores
+ (fn [db _]
+   (:chores db)))
