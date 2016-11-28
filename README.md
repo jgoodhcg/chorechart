@@ -35,6 +35,14 @@ expect some commands to fail due to the nature of random data generation and rel
 ## todo
 
 ### mvp
+ - [ ] add more chart entries with mockaroo
+ - [ ] chart entry
+   - [ ] change chart table to use living situation id instead of household and person id
+   - [ ] sql insert for chart entry
+   - [ ] endpoint
+   - [ ] get living situation id into households
+   - [ ] front end handler
+   - [ ] pending style change on working
     
 ### eventually
 
@@ -54,7 +62,6 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] rename pass to password people table
  - [ ] refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`)
  - [ ] take off unique constraint on household names 
- - [ ] change chart table to use living situation id instead of household and person id
  - [ ] add on delete cascade clause
  - [ ] add a first/last name to the people table
  - [ ] constraint for no duplicate names on chores per household

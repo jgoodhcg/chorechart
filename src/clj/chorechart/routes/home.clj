@@ -27,7 +27,9 @@
 (defn add-living-situation [] (str "not done"))
 (defn add-chore [] (str "not done"))
 
-(defn chart-entry [] (str "not done"))
+(defn chart-entry [params]
+  (let [{:keys [chart_id household_id person_id]} params]
+    (str "not done")))
 (defn chart-entry-edit [] (str "not done"))
 (defn chart-entry-remove [] (str "not done"))
 
@@ -56,7 +58,7 @@
   (POST "/add/living-situation" [] add-living-situation)
   (POST "/add/chore" [] add-chore)
 
-  (POST "/chart/entry" [] chart-entry)
+  (POST "/chart/entry" req (authenticated-resty req chart-entry))
   (POST "/chart/entry/edit" [] chart-entry-edit)
   (POST "/chart/entry/remove" [] chart-entry-remove)
 

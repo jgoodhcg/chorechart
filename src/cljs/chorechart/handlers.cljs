@@ -70,12 +70,27 @@
 (reg-event-db
  :set-pending-chore-id
  (fn [db [_ chore_id]]
-   (assoc-in db [:pending-chart-entry :chore_id] chore_id)))
+   (assoc-in db [:pending-chart-entry :id] chore_id)))
 
 (reg-event-db
  :set-pending-date
  (fn [db [_ date]]
    (assoc-in db [:pending-chart-entry :date] date)))
+
+(reg-event-fx
+ :send-chart-entry
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/view/chores"
+     :params          {:household_id
+                       (get-in _world [:db :selected-household :id])}
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:set-chores]
+     :on-failure      [:post-resp]}}))
+
 
 (reg-event-db
  :post-resp

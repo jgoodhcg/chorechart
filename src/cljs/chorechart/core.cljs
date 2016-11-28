@@ -118,7 +118,7 @@
       [:tr [:th "Person"] [:th "Chore"] [:th "Date"]]]
      [:tbody
       (map
-       #(vec [:tr
+       #(vec [:tr {:key (.indexOf chart %)}
               [:td (:user_name %)]
               [:td (:chore_name %)]
               [:td (subs (:moment %) 5 10)]])
