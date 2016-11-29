@@ -160,6 +160,7 @@
 (defn chart-page []
   (let [chart (rf/subscribe [:chart])
         chores (rf/subscribe [:chores])]
+    (rf/dispatch [:set-pending-living-situation])
     [:div.container-fluid
      (chart-table @chart)
      (chart-input @chores)]))

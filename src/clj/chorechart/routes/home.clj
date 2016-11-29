@@ -28,8 +28,10 @@
 (defn add-chore [] (str "not done"))
 
 (defn chart-entry [params]
-  (let [{:keys [chart_id household_id person_id]} params]
-    (str "not done")))
+  (let [{:keys [chore_id living_situation_id moment]} params]
+    (db/add-chart-entry! {:living_situation_id living_situation_id
+                          :chore_id chore_id
+                          :moment moment})))
 (defn chart-entry-edit [] (str "not done"))
 (defn chart-entry-remove [] (str "not done"))
 
@@ -56,7 +58,7 @@
 
   (POST "/add/household" [] add-household)
   (POST "/add/living-situation" [] add-living-situation)
-  (POST "/add/chore" [] add-chore)
+  (POST "/add/chore" req (authenticated-resty req add-chore))
 
   (POST "/chart/entry" req (authenticated-resty req chart-entry))
   (POST "/chart/entry/edit" [] chart-entry-edit)

@@ -76,20 +76,31 @@
  (fn [db [_ date]]
    (assoc-in db [:pending-chart-entry :date] date)))
 
+(reg-event-db
+ :set-pending-living-situation
+ (fn [db [_ _]]
+   (assoc-in db [:pending-chart-entry :living_situation_id]
+            (get-in db [:selected-household :living_situation_id]))))
+
 (reg-event-fx
  :send-chart-entry
  (fn [_world [_ _]]
    {:http-xhrio
     {:method          :post
-     :uri             "/view/chores"
-     :params          {:household_id
-                       (get-in _world [:db :selected-household :id])}
+     :uri             "/chart/entry"
+     :params          {(get-in _world [:db :pending-chart-entry])}
      :timeout         5000
      :format          (ajax/json-request-format)
      :response-format (ajax/json-response-format {:keywords? true})
-     :on-success      [:set-chores]
+     :on-success      [:confirmed-chart-entry]
      :on-failure      [:post-resp]}}))
 
+(reg-event-db
+ :confirmed-chart-entry
+ (fn [db [a b]]
+   (pprint {:db db
+            :a a
+            :b b})))
 
 (reg-event-db
  :post-resp
