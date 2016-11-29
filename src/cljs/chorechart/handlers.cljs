@@ -45,8 +45,7 @@
      :uri             "/view/chart"
      :params          {:living_situation_id
                        (get-in _world [:db :selected-household :living_situation_id])
-                       ;; :date (misc/start-of-week (new js/Date))}
-                       :date "2016-5-1"}
+                       :date (misc/start-of-week (new js/Date))}
      :timeout         5000
      :format          (ajax/json-request-format)
      :response-format (ajax/json-response-format {:keywords? true})

@@ -24,8 +24,6 @@ values (:chore_name, :description, :household_id)
 
 -- :name add-chart-entry! :! :n
 -- :doc creates a chore chart entry given a person_id, chore_id, and timestamp in yyyy-mm-dd
-insert into chore_chart
-(person_id, chore_id, moment)
-values (:person_id, :chore_id,
---~ (str (:moment params) " 00:00:00")
-)
+insert into chart
+(living_situation_id, chore_id, moment)
+values (:living_situation_id, :chore_id, :moment::date)
