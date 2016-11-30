@@ -26,6 +26,5 @@ inner join living_situations
 on living_situations.id = chart.living_situation_id
 inner join people
 on people.id = living_situations.person_id
-where chart.living_situation_id = :living_situation_id
-and chart.moment >= :date_from::date
+where chart.moment >= :date_from::date
 order by chart.moment asc

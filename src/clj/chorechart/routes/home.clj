@@ -29,9 +29,9 @@
 
 (defn chart-entry [params]
   (let [{:keys [chore_id living_situation_id moment]} params]
-    (db/add-chart-entry! {:living_situation_id living_situation_id
-                          :chore_id chore_id
-                          :moment moment})))
+    (str (db/add-chart-entry! {:living_situation_id living_situation_id
+                               :chore_id chore_id
+                               :moment moment}))))
 (defn chart-entry-edit [] (str "not done"))
 (defn chart-entry-remove [] (str "not done"))
 

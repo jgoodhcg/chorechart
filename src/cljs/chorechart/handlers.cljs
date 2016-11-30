@@ -69,12 +69,12 @@
 (reg-event-db
  :set-pending-chore-id
  (fn [db [_ chore_id]]
-   (assoc-in db [:pending-chart-entry :id] chore_id)))
+   (assoc-in db [:pending-chart-entry :chore_id] chore_id)))
 
 (reg-event-db
  :set-pending-date
  (fn [db [_ date]]
-   (assoc-in db [:pending-chart-entry :date] date)))
+   (assoc-in db [:pending-chart-entry :moment] date)))
 
 (reg-event-db
  :set-pending-living-situation
@@ -88,7 +88,7 @@
    {:http-xhrio
     {:method          :post
      :uri             "/chart/entry"
-     :params          {(get-in _world [:db :pending-chart-entry])}
+     :params          (get-in _world [:db :pending-chart-entry])
      :timeout         5000
      :format          (ajax/json-request-format)
      :response-format (ajax/json-response-format {:keywords? true})
@@ -98,9 +98,7 @@
 (reg-event-db
  :confirmed-chart-entry
  (fn [db [a b]]
-   (pprint {:db db
-            :a a
-            :b b})))
+   (assoc db :pending-chart-entr {})))
 
 (reg-event-db
  :post-resp

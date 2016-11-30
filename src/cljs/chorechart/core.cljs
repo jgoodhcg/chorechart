@@ -66,7 +66,7 @@
      :defaultValue "default"
      :style {:width "100%"}
      :on-change #(rf/dispatch
-                  [dispatch-key (-> % .-target .-value)])}
+                  [dispatch-key (-> % .-target .-value int)])}
     (cons
      [:option
       {:value "default" :disabled true :key (str -1)}
@@ -149,7 +149,7 @@
          [:div.col-xs-12.col-sm-12.form-group
           [:input.btn.btn-primary.btn-block
            {:type "button" :value "submit" :width "100%"
-            :on-click #(pprint "clicked submit")}]]]]
+            :on-click #(rf/dispatch [:send-chart-entry])}]]]]
 
        ;; collapsed
        [:div.row
