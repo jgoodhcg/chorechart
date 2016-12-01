@@ -38,9 +38,9 @@
 ;; TODO some kind of validation that the session id can alter/view stuff
 
 (defn view-chart [params]
-  (let [{:keys [living_situation_id date]} params]
+  (let [{:keys [household_id date]} params]
     (db/list-chart-entries
-     {:living_situation_id living_situation_id :date_from date})))
+     {:household_id household_id :date_from date})))
 (defn view-chores [params]
   (db/list-chores {:household_id (:household_id params)}))
 (defn view-households [params]

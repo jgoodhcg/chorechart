@@ -35,14 +35,14 @@ expect some commands to fail due to the nature of random data generation and rel
 ## todo
 
 ### mvp
- - [ ] add more chart entries with mockaroo
+ - [x] add more chart entries with mockaroo
  - [ ] chart entry
-   - [ ] change chart table to use living situation id instead of household and person id
-   - [ ] sql insert for chart entry
-   - [ ] endpoint
-   - [ ] get living situation id into households
-   - [ ] front end handler
-   - [ ] pending style change on working
+   - [x] change chart table to use living situation id instead of household and person id
+   - [x] sql insert for chart entry
+   - [x] endpoint
+   - [x] get living situation id into households
+   - [x] front end handler
+   - [x] pending style change on working
     
 ### eventually
 
