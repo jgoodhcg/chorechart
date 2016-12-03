@@ -35,15 +35,26 @@ expect some commands to fail due to the nature of random data generation and rel
 ## todo
 
 ### mvp
- - [x] add more chart entries with mockaroo
- - [ ] chart entry
-   - [x] change chart table to use living situation id instead of household and person id
-   - [x] sql insert for chart entry
-   - [x] endpoint
-   - [x] get living situation id into households
-   - [x] front end handler
-   - [x] pending style change on working
-    
+ - [ ] remove all data from db
+ - [ ] migration improvement
+   - [ ] no unique constraint on household_name
+   - [ ] add email to people table
+ - [ ] populate database with single household with multiple people
+ - [ ] add email* and household name to signup
+ - [ ] households page
+   - [ ] display households with roomates
+   - [ ] add household
+   - [ ] select household
+   - [ ] invite user to household
+ - [ ] chores page
+  - [ ] list selected household chores
+  - [ ] list all chores from all households
+  - [ ] copy chore
+  - [ ] remove chore
+  - [ ] add chore
+  - [ ] edit chore
+ - [ ] chart page
+
 ### eventually
 
 #### general
