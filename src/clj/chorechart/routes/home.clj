@@ -23,7 +23,16 @@
         person (:person session)]
     (layout/render "home.html" {:user_name user_name :person person})))
 
-(defn add-household [] (str "not done"))
+(defn add-household [params]
+  (let [{:keys [house_name person_id]} params]
+    (if-let [household_id (:id (db/add-household! {:house_name house_name}))]
+      (list (assoc (db/add-living-situation!
+                    {:person_id person_id :household_id household_id})
+                   :household_id household_id :house_name house_name))
+      (response/not-found "error entering household")
+    ))
+  )
+
 (defn add-living-situation [] (str "not done"))
 (defn add-chore [] (str "not done"))
 
@@ -56,7 +65,8 @@
 (defroutes home-routes
   (GET "/" req (authenticated-route req home-page))
 
-  (POST "/add/household" [] add-household)
+  (POST "/add/household" req (authenticated-resty req add-household))
+  (POST "/add/test" [] (hash-map :key "value"))
   (POST "/add/living-situation" [] add-living-situation)
   (POST "/add/chore" req (authenticated-resty req add-chore))
 

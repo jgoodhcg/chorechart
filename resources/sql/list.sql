@@ -1,6 +1,6 @@
 -- :name list-households :? :*
 -- :doc given a person's id lists all associated households
-select households.id, households.house_name,
+select households.id as household_id, households.house_name,
 living_situations.id as living_situation_id
 from households
 inner join living_situations
@@ -14,7 +14,7 @@ from chores
 where chores.household_id = :household_id
 
 -- :name list-chart-entries :? :*
--- :doc given a household_id list all chores with the people who did them
+-- :doc given a household_id  and a start date list all chores with the people who did them from date
 select people.user_name as user_name,
 chores.chore_name as chore_name, chores.id as chore_id,
 chart.id as chart_id, chart.moment as moment

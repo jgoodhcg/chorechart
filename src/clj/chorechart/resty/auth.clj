@@ -17,19 +17,14 @@
 (defn signup [req]
   (let [{:keys [params]} req
         {:keys [user_name password confirm email]} params]
-    (if (empty? user_name)
-      (signup-page {:flash "username cannot be blank"})
+    (if (empty? email)
+      (signup-page {:flash "email cannot be blank"})
       (if-not (= password confirm)
         (signup-page {:flash "passwords must match"})
         (let [house_name (str user_name "'s house")] ;; default household name
           (try
             (do
               (db/add-person! {:user_name user_name :email email :password password})
-              ;; add default household
-              (db/add-household! {:house_name house_name})
-              (let [person_id (:id (db/find-person {:user_name user_name}))
-                    household_id (:id (db/find-household {:house_name house_name}))]
-                (db/add-living-situation! {:person_id person_id :household_id household_id}))
               (response/found "/login"))
             ;; logically the only thing that breaks the above is taken person user_name
             (catch Exception e (signup-page {:flash (str (.getMessage e))}))))))))
@@ -37,15 +32,15 @@
 (defn login [req]
   ;; (str req))
   (let [{:keys [params]} req
-        {:keys [user_name password]} params
+        {:keys [email password]} params
         session (:session req)]
     (try
       (do
-        (let [person (db/find-person {:user_name user_name})
+        (let [person (db/find-person {:email email})
               found-pass (:pass person)]
           (if (and found-pass (= found-pass password))
             (let [ updated-session (assoc session
-                                          :identity user_name
+                                          :identity email
                                           :person (select-keys person [:id :user_name :email]))]
               (-> (response/found "/")
                   (assoc :session updated-session)))

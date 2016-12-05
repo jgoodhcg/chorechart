@@ -1,7 +1,7 @@
 -- :name find-person :? :1
 -- :doc retrieves a person given user_name
 select * from people
-where user_name = :user_name
+where email = :email
 
 -- :name find-household :? :1
 -- :doc retrieves a household given house_name

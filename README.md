@@ -35,15 +35,20 @@ expect some commands to fail due to the nature of random data generation and rel
 ## todo
 
 ### mvp
- - [ ] remove all data from db
- - [ ] migration improvement
-   - [ ] no unique constraint on household_name
-   - [ ] add email to people table
- - [ ] populate database with single household with multiple people
- - [ ] add email* and household name to signup
+ - [x] remove all data from db
+ - [x] migration improvement
+   - [x] remove unique constraint on household_name
+   - [x] remove unique constraint on user_name
+   - [x] add email unique constraint
+ - [x] populate database with single household with multiple people
+ - [x] signup page
+   - [x] email first
+   - [x] handle error
+ - [x] login page
+   - [x] email as login credential
  - [ ] households page
-   - [ ] display households with roomates
    - [ ] add household
+   - [ ] display households with roomates
    - [ ] select household
    - [ ] invite user to household
  - [ ] chores page
@@ -54,6 +59,7 @@ expect some commands to fail due to the nature of random data generation and rel
   - [ ] add chore
   - [ ] edit chore
  - [ ] chart page
+ - [ ] logout in navbar
 
 ### eventually
 
@@ -63,16 +69,15 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] hash/salt passwords
  - [ ] authorization
  - [ ] refactor code to use only `-` instead of `_`
+ - [ ] redirect (signup/login) if logged in
  - [ ] refactor db intensive actions to use rollback transactions (ex: signup with default house setup)
  - [ ] actual redirecting not rendering login page on un-auth home route
  - [ ] script to run on mockaroo scripts in the right order 
  - [ ] display first name in the chart
 
 #### migrations
- - [ ] add no null values to user_name  
  - [ ] rename pass to password people table
  - [ ] refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`)
- - [ ] take off unique constraint on household names 
  - [ ] add on delete cascade clause
  - [ ] add a first/last name to the people table
  - [ ] constraint for no duplicate names on chores per household

@@ -21,8 +21,7 @@
  :set-person
  (fn [db [_ _]]
       (assoc db
-             :id (.-id js/person)
-             :user_name (.-user_name js/person))))
+             :id (.-id js/person))))
 
 (reg-event-fx
  :get-households
@@ -95,10 +94,39 @@
      :on-success      [:confirmed-chart-entry]
      :on-failure      [:post-resp]}}))
 
+(reg-event-fx
+ :add-household
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/add/household"
+     :params          {:house_name
+                       (:house_name (get-in _world [:db :pending-add-household]))
+                       :person_id (get-in _world [:db :id])}
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:confirm-add-household]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-db
+ :confirm-add-household
+ (fn [db [_ new_household]]
+   (assoc db
+          :pending-add-household {}
+          :confirmed-add-household new_household
+          :households (conj (:households db) new_household))
+   ))
+
+(reg-event-db
+ :set-pending-household
+ (fn [db [_ house_name]]
+   (assoc db :pending-add-household {:house_name house_name})))
+
 (reg-event-db
  :confirmed-chart-entry
  (fn [db [a b]]
-   (assoc db :pending-chart-entr {})))
+   (assoc db :pending-chart-entry {})))
 
 (reg-event-db
  :post-resp

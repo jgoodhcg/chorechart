@@ -105,9 +105,51 @@
    ])
 
 (defn households-page []
-  (let [households (rf/subscribe [:households])]
-    (rf/dispatch [:get-households])
-    [:div (str @households)])
+  (r/with-let [add-new-pressed (r/atom false)]
+    (let [households (rf/subscribe [:households])
+          house-name-input "house-name-input"]
+      (rf/dispatch [:get-households])
+      [:div.container
+       [:div.row
+        [:div.col-xs-12
+         [:h2 "Households"]
+         [:div (str @households)]
+         ]]
+       (if @add-new-pressed
+         ;; new form
+
+         [:div.row
+          [:div.col-xs-12
+           [:div.row
+            [:div.col-xs-12 [:label "Household Name"]]]
+           [:div.row
+            [:div.col-xs-9.form-group
+             [:input.form-control
+              {:type "text" :id house-name-input
+               :on-change
+               #(rf/dispatch [:set-pending-household (-> % .-target .-value)])}]]
+            [:div.col-xs-3.form-group
+             [:input.btn.btn-primary.btn-block
+              {:type "button" :value "submit"
+               :on-click
+               #(do
+                  (reset! add-new-pressed false)
+                  (rf/dispatch [:add-household])
+                  )}]]]]]
+
+          ;; button only
+
+          [:div.row
+           [:div.col-xs-12.form-group
+            [:input.btn.btn-primary.btn-block
+             {:type "button" :value "add new household"
+              :on-click #(reset! add-new-pressed true)}]
+            ]]
+
+           )
+         ]
+       )
+    )
   )
 
 (defn chart-table [chart]
