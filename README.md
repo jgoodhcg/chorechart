@@ -47,7 +47,7 @@ expect some commands to fail due to the nature of random data generation and rel
  - [x] login page
    - [x] email as login credential
  - [ ] households page
-   - [ ] add household
+   - [x] add household
    - [ ] display households with roomates
    - [ ] select household
    - [ ] invite user to household

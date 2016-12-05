@@ -104,6 +104,17 @@
    (print-btn)
    ])
 
+(defn list-households [households]
+  (map
+   (fn [household]
+     (vec
+      (list
+       :div.col-xs-12
+       [:input.btn.btn-sm {:type "button" :value "..."
+                           :on-click #(pprint (:house_name household))}]
+       (str (:house_name household)))))
+   households))
+
 (defn households-page []
   (r/with-let [add-new-pressed (r/atom false)]
     (let [households (rf/subscribe [:households])
@@ -113,7 +124,8 @@
        [:div.row
         [:div.col-xs-12
          [:h2 "Households"]
-         [:div (str @households)]
+         [:div
+          (list-households @households)
          ]]
        (if @add-new-pressed
          ;; new form
@@ -147,7 +159,7 @@
             ]]
 
            )
-         ]
+         ]]
        )
     )
   )
