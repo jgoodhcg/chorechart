@@ -106,30 +106,36 @@
 
 (defn household-row [index household options-pressed]
   (let [this_options_pressed (nth @options-pressed index)]
-    (if this_options_pressed
-      ;; options
-      [:tr {:key index}
-       [:td
-        [:input.btn.btn-sm
-         {:type "button" :value "edit"}]]
-       [:td
-        [:input.btn.btn-sm
-         {:type "button" :value "delete"}]]
-       [:td
-        [:input.btn.btn-sm
-         {:type "button" :value "back"
-          :on-click #(swap! options-pressed assoc index false) ;; flip this house and show ops
-          }]]]
+    (case this_options_pressed
+      :options [:tr {:key index}
+                [:td
+                 [:button.btn.btn-sm
+                  {:on-click #(swap! options-pressed assoc index :edit)}
+                  "edit"]]
+                [:td
+                 [:button.btn.btn-sm
+                  {:on-click #(pprint %)}
+                  "delete"]]
+                [:td
+                 [:button.btn.btn-sm
+                  {:on-click #(swap! options-pressed assoc index :normal)}
+                  "cancel"]]]
 
-      ;; house name
-      [:tr {:key index}
-       [:td (:house_name household)]
-       [:td ] ;; needs three cells
-       [:td
-        [:input.btn.btn-sm
-         {:type "button" :value "..."
-          :on-click #(swap! options-pressed assoc index true) ;; flip this house and show ops
-          }]]]
+      :edit [:tr {:key index}
+             [:td [:input {:type "text"}]]
+             [:td [:button.btn.btn-sm "submit"]]
+             [:td [:button.btn.btn-sm {:on-click
+                                       #(swap! options-pressed assoc index :normal)}
+                   "cancel"]]]
+
+      :normal [:tr {:key index}
+               [:td (:house_name household)]
+               [:td ] ;; needs three cells
+               [:td
+                [:button.btn.btn-sm
+                 {:on-click #(swap! options-pressed assoc index :options)}
+                 "options"
+                 ]]]
       )
     )
   )
@@ -138,7 +144,7 @@
   (r/with-let [options-pressed ;; vec to hold state for each household
                (r/atom (vec
                         (map
-                         (fn [_] (= 1 2)) ;; always returns false (nothing pressed yet)
+                         (fn [_] :normal) ;; always returns false (nothing pressed yet)
                          households)))]
     [:table.table
      [:tbody
