@@ -104,16 +104,51 @@
    (print-btn)
    ])
 
-(defn list-households [households]
-  (map
-   (fn [household]
-     (vec
-      (list
-       :div.col-xs-12
-       [:input.btn.btn-sm {:type "button" :value "..."
-                           :on-click #(pprint (:house_name household))}]
-       (str (:house_name household)))))
-   households))
+(defn household-row [index household options-pressed]
+  (let [this_options_pressed (nth @options-pressed index)]
+    (if this_options_pressed
+      ;; options
+      [:tr {:key index}
+       [:td
+        [:input.btn.btn-sm
+         {:type "button" :value "edit"}]]
+       [:td
+        [:input.btn.btn-sm
+         {:type "button" :value "delete"}]]
+       [:td
+        [:input.btn.btn-sm
+         {:type "button" :value "back"
+          :on-click #(swap! options-pressed assoc index false) ;; flip this house and show ops
+          }]]]
+
+      ;; house name
+      [:tr {:key index}
+       [:td (:house_name household)]
+       [:td ] ;; needs three cells
+       [:td
+        [:input.btn.btn-sm
+         {:type "button" :value "..."
+          :on-click #(swap! options-pressed assoc index true) ;; flip this house and show ops
+          }]]]
+      )
+    )
+  )
+
+(defn households-list [households]
+  (r/with-let [options-pressed ;; vec to hold state for each household
+               (r/atom (vec
+                        (map
+                         (fn [_] (= 1 2)) ;; always returns false (nothing pressed yet)
+                         households)))]
+    [:table.table
+     [:tbody
+      (doall (map-indexed
+              #(household-row %1 %2 options-pressed)
+              households))
+      ]
+     ]
+    )
+  )
 
 (defn households-page []
   (r/with-let [add-new-pressed (r/atom false)]
@@ -125,7 +160,7 @@
         [:div.col-xs-12
          [:h2 "Households"]
          [:div
-          (list-households @households)
+          (households-list @households)
          ]]
        (if @add-new-pressed
          ;; new form
@@ -147,7 +182,14 @@
                #(do
                   (reset! add-new-pressed false)
                   (rf/dispatch [:add-household])
-                  )}]]]]]
+                  )}]
+             [:input.btn.btn-secondary.btn-block
+              {:type "button" :value "cancel"
+               :on-click
+               #(do
+                  (reset! add-new-pressed false)
+                  )}]
+             ]]]]
 
           ;; button only
 
