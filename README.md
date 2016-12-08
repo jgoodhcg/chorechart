@@ -74,6 +74,7 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] actual redirecting not rendering login page on un-auth home route
  - [ ] script to run on mockaroo scripts in the right order 
  - [ ] display first name in the chart
+ - [ ] pending household_edit should have some color indication when it is successful
 
 #### migrations
  - [ ] rename pass to password people table

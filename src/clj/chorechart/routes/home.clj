@@ -23,6 +23,14 @@
         person (:person session)]
     (layout/render "home.html" {:user_name user_name :person person})))
 
+(defn edit-household [params]
+  (let [{:keys [new_house_name living_situation_id]} params]
+    (list (db/edit-household!
+           {:new_house_name new_house_name
+            :living_situation_id living_situation_id}))
+    )
+  )
+
 (defn add-household [params]
   (let [{:keys [house_name person_id]} params]
     (if-let [household_id (:id (db/add-household! {:house_name house_name}))]
@@ -69,6 +77,8 @@
   (POST "/add/test" [] (hash-map :key "value"))
   (POST "/add/living-situation" [] add-living-situation)
   (POST "/add/chore" req (authenticated-resty req add-chore))
+
+  (POST "/edit/household" req (authenticated-resty req edit-household))
 
   (POST "/chart/entry" req (authenticated-resty req chart-entry))
   (POST "/chart/entry/edit" [] chart-entry-edit)

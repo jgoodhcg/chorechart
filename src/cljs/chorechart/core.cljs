@@ -122,10 +122,22 @@
                   "cancel"]]]
 
       :edit [:tr {:key index}
-             [:td [:input {:type "text"}]]
-             [:td [:button.btn.btn-sm "submit"]]
+             [:td [:input
+                   {:type "text"
+                    :on-change #(rf/dispatch
+                                [:set-pending-edit-household
+                                 {:new_household_name (-> % .-target .-value)
+                                  :living_situation_id
+                                  (:living_situation_id household)}])}]]
              [:td [:button.btn.btn-sm {:on-click
-                                       #(swap! options-pressed assoc index :normal)}
+                                       #(do
+                                         (rf/dispatch [:edit-household])
+                                         (swap! options-pressed assoc index :normal)
+                                         )
+                                       }"submit"]]
+             [:td [:button.btn.btn-sm {:on-click
+                                         #(swap! options-pressed assoc index :normal)
+                                       }
                    "cancel"]]]
 
       :normal [:tr {:key index}
@@ -144,7 +156,7 @@
   (r/with-let [options-pressed ;; vec to hold state for each household
                (r/atom (vec
                         (map
-                         (fn [_] :normal) ;; always returns false (nothing pressed yet)
+                         (fn [_] :normal)
                          households)))]
     [:table.table
      [:tbody

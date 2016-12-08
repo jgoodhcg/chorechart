@@ -124,6 +124,32 @@
    (assoc db :pending-add-household {:house_name house_name})))
 
 (reg-event-db
+ :set-pending-edit-household
+ (fn [db [_ info]]
+   (assoc db :pending-edit-household
+          (select-keys info [:new_household_name :living_situation_id]))))
+
+(reg-event-fx
+ :edit-household
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/edit/household"
+     :params          (select-keys (get-in _world [:db :pending-edit-household])
+                                   [:new_household_name :living_situation_id])
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:confirmed-edit-household]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-db
+ :confirmed-edit-household
+ (fn [db [a b]]
+   (pprint b)
+   db))
+
+(reg-event-db
  :confirmed-chart-entry
  (fn [db [a b]]
    (assoc db :pending-chart-entry {})))
