@@ -168,60 +168,50 @@
     )
   )
 
+(defn households-add-new []
+  (r/with-let [add-new-pressed (r/atom false)
+               house-name-input "house-name-input"]
+    (if @add-new-pressed
+      ;; new form
+      [:div.row
+       [:div.col-xs-12
+        [:div.row
+         [:div.col-xs-12.col-sm-9.form-group
+          [:input.form-control
+           {:type "text" :id house-name-input :placeholder "new household name"
+            :on-change
+            #(rf/dispatch [:set-pending-household (-> % .-target .-value)])}]]
+         [:div.col-xs-12.col-sm-3.form-group
+          [:input.btn.btn-primary.btn-block
+           {:type "button" :value "submit"
+            :on-click
+            #(do
+               (reset! add-new-pressed false)
+               (rf/dispatch [:add-household]))}]
+          [:input.btn.btn-secondary.btn-block
+           {:type "button" :value "cancel"
+            :on-click #(reset! add-new-pressed false)}]]]]]
+
+      ;; button only
+      [:div.row
+       [:div.col-xs-12.form-group
+        [:input.btn.btn-primary.btn-block
+         {:type "button" :value "add new household"
+          :on-click #(reset! add-new-pressed true)}]
+        ]])))
+
 (defn households-page []
-  (r/with-let [add-new-pressed (r/atom false)]
-    (let [households (rf/subscribe [:households])
-          house-name-input "house-name-input"]
-      (rf/dispatch [:get-households])
-      [:div.container
-       [:div.row
-        [:div.col-xs-12
-         [:h2 "Households"]
-         [:div
-          (households-list @households)
-         ]]
-       (if @add-new-pressed
-         ;; new form
-
-         [:div.row
-          [:div.col-xs-12
-           [:div.row
-            [:div.col-xs-12 [:label "Household Name"]]]
-           [:div.row
-            [:div.col-xs-9.form-group
-             [:input.form-control
-              {:type "text" :id house-name-input
-               :on-change
-               #(rf/dispatch [:set-pending-household (-> % .-target .-value)])}]]
-            [:div.col-xs-3.form-group
-             [:input.btn.btn-primary.btn-block
-              {:type "button" :value "submit"
-               :on-click
-               #(do
-                  (reset! add-new-pressed false)
-                  (rf/dispatch [:add-household])
-                  )}]
-             [:input.btn.btn-secondary.btn-block
-              {:type "button" :value "cancel"
-               :on-click
-               #(do
-                  (reset! add-new-pressed false)
-                  )}]
-             ]]]]
-
-          ;; button only
-
-          [:div.row
-           [:div.col-xs-12.form-group
-            [:input.btn.btn-primary.btn-block
-             {:type "button" :value "add new household"
-              :on-click #(reset! add-new-pressed true)}]
-            ]]
-
-           )
-         ]]
-       )
-    )
+  (let [households (rf/subscribe [:households])]
+    [:div.container
+     [:div.row
+      [:div.col-xs-12
+       [:h2 "Households"]
+       [:div
+        (if (> 0 (count @households))
+          (households-list @households))
+        ]]]
+     (households-add-new)
+     ])
   )
 
 (defn chart-table [chart]
@@ -322,6 +312,7 @@
   (rf/dispatch-sync [:initialize-db])
   (load-interceptors!)
   (hook-browser-navigation!)
-  (mount-components)
   (rf/dispatch [:set-person])
+  (rf/dispatch [:get-households])
+  (mount-components)
   )
