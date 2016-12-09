@@ -127,30 +127,21 @@
  :set-pending-edit-household
  (fn [db [_ info]]
    (assoc db :pending-edit-household
-          (select-keys info [:new_household_name :living_situation_id]))))
+          (select-keys info [:new_house_name :living_situation_id]))))
 
-;; (reg-event-fx
-;;  :edit-household
-;;  (fn [_world [_ _]]
-;;    {:http-xhrio
-;;     {:method          :post
-;;      :uri             "/edit/household"
-;;      :params          (select-keys (get-in _world [:db :pending-edit-household])
-;;                                    [:new_household_name :living_situation_id])
-;;      :timeout         5000
-;;      :format          (ajax/json-request-format)
-;;      :response-format (ajax/json-response-format {:keywords? true})
-;;      :on-success      [:confirmed-edit-household]
-;;      :on-failure      [:post-resp]}}))
-
-(reg-event-db
+(reg-event-fx
  :edit-household
- (fn [db [_ _]]
-   (pprint
-    (select-keys (get-in _world [:db :pending-edit-household])
-                 [:new_household_name :living_situation_id]))
-   db
-   ))
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/edit/household"
+     :params          (select-keys (get-in _world [:db :pending-edit-household])
+                                   [:new_house_name :living_situation_id])
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:confirmed-edit-household]
+     :on-failure      [:post-resp]}}))
 
 (reg-event-db
  :confirmed-edit-household
@@ -176,6 +167,14 @@
  :set-households
  (fn [db [_ households]]
    (assoc db :households households :selected-household (first households))))
+
+(reg-event-db
+ :set-selected-household
+ (fn [db [_ selected_living_situation_id]]
+   (assoc db :selected-household                    ;; set selected household
+          (filter #(= selected_living_situation_id  ;; to the household with a matching
+                      (get % :living_situation_id)) ;; living situtation id
+                  (:households db)))))              ;; from the households col
 
 (reg-event-db
  :set-chart

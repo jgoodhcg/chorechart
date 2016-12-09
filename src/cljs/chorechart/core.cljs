@@ -95,17 +95,22 @@
    "print"])
 
 (defn home-page []
-  [:div.container
-   (str js/user_name " home page")
-   [:br]
-   (get-btn :get-households)
-   (get-btn :get-chart)
-   (get-btn :get-chores)
-   (print-btn)
-   ])
+    [:div.container
+     (str js/user_name " home page")
+     [:br]
+     (get-btn :get-households)
+     (get-btn :get-chart)
+     (get-btn :get-chores)
+     (print-btn)
+     ]
+  )
 
 (defn household-row [index household options-pressed]
-  (let [this_options_pressed (nth @options-pressed index)]
+  (let [this_options_pressed (nth @options-pressed index)
+        selected_household (rf/subscribe [:selected-household])
+        is_selected (= (:living_situation_id household)
+                       (:living_situation_id @selected_household))]
+
     (case this_options_pressed
       :options [:tr {:key index}
                 [:td
@@ -113,11 +118,11 @@
                   {:on-click #(swap! options-pressed assoc index :edit)}
                   "edit"]]
                 [:td
-                 [:button.btn.btn-sm
+                 [:button.btn.btn-sm.btn-danger
                   {:on-click #(pprint %)}
                   "delete"]]
                 [:td
-                 [:button.btn.btn-sm
+                 [:button.btn.btn-sm.btn-secondary
                   {:on-click #(swap! options-pressed assoc index :normal)}
                   "cancel"]]]
 
@@ -126,25 +131,23 @@
                    {:type "text"
                     :on-change #(rf/dispatch
                                 [:set-pending-edit-household
-                                 {:new_household_name (-> % .-target .-value)
+                                 {:new_house_name (-> % .-target .-value)
                                   :living_situation_id
                                   (:living_situation_id household)}])}]]
              [:td [:button.btn.btn-sm {:on-click
                                        #(do
                                          (rf/dispatch [:edit-household])
-                                         (swap! options-pressed assoc index :normal)
-                                         )
-                                       }"submit"]]
-             [:td [:button.btn.btn-sm {:on-click
-                                         #(swap! options-pressed assoc index :normal)
-                                       }
+                                         (swap! options-pressed assoc index :normal))}
+                   "submit"]]
+             [:td [:button.btn.btn-sm.btn-secondary {:on-click
+                                         #(swap! options-pressed assoc index :normal)}
                    "cancel"]]]
 
-      :normal [:tr {:key index}
+      :normal [(if is_selected :tr.table-active :tr) {:key index}
                [:td (:house_name household)]
                [:td ] ;; needs three cells
                [:td
-                [:button.btn.btn-sm
+                [:button.btn.btn-sm.btn-secondary
                  {:on-click #(swap! options-pressed assoc index :options)}
                  "options"
                  ]]]
@@ -158,7 +161,7 @@
                         (map
                          (fn [_] :normal)
                          households)))]
-    [:table.table
+    [:table.table.table-responsive
      [:tbody
       (doall (map-indexed
               #(household-row %1 %2 options-pressed)
@@ -201,14 +204,16 @@
         ]])))
 
 (defn households-page []
+  (rf/dispatch [:get-households])
   (let [households (rf/subscribe [:households])]
     [:div.container
      [:div.row
       [:div.col-xs-12
        [:h2 "Households"]
        [:div
-        (if (> 0 (count @households))
-          (households-list @households))
+        (if (> (count @households) 0)
+          (households-list @households)
+          "no households yet ):")
         ]]]
      (households-add-new)
      ])
@@ -312,7 +317,6 @@
   (rf/dispatch-sync [:initialize-db])
   (load-interceptors!)
   (hook-browser-navigation!)
-  (rf/dispatch [:set-person])
-  (rf/dispatch [:get-households])
   (mount-components)
+  (rf/dispatch [:set-person])
   )

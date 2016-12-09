@@ -48,8 +48,10 @@ expect some commands to fail due to the nature of random data generation and rel
    - [x] email as login credential
  - [ ] households page
    - [x] add household
-   - [ ] display households with roomates
+   - [ ] display households
    - [ ] select household
+   - [ ] better default select household
+   - [ ] view roomates for a household
    - [ ] invite user to household
  - [ ] chores page
   - [ ] list selected household chores
@@ -75,6 +77,7 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] script to run on mockaroo scripts in the right order 
  - [ ] display first name in the chart
  - [ ] pending household_edit should have some color indication when it is successful
+ - [ ] get rid of tables for households listing
 
 #### migrations
  - [ ] rename pass to password people table

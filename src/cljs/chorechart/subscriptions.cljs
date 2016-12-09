@@ -22,6 +22,11 @@
    (:households db)))
 
 (reg-sub
+ :selected-household
+ (fn [db _]
+   (:selected-household db)))
+
+(reg-sub
  :chart
  (fn [db _]
    (:chart db)))
