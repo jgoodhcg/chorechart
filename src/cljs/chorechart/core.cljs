@@ -111,47 +111,54 @@
         is_selected (= (:living_situation_id household)
                        (:living_situation_id @selected_household))]
 
-    (case this_options_pressed
-      :options [:tr {:key index}
-                [:td
-                 [:button.btn.btn-sm
-                  {:on-click #(swap! options-pressed assoc index :edit)}
-                  "edit"]]
-                [:td
-                 [:button.btn.btn-sm.btn-danger
-                  {:on-click #(pprint %)}
-                  "delete"]]
-                [:td
-                 [:button.btn.btn-sm.btn-secondary
-                  {:on-click #(swap! options-pressed assoc index :normal)}
-                  "cancel"]]]
+    [:div.list-group-item
+     (if is_selected
+       {:style {:background-color "#f4f4f5"}
+        :key index})
 
-      :edit [:tr {:key index}
-             [:td [:input
-                   {:type "text"
-                    :on-change #(rf/dispatch
-                                [:set-pending-edit-household
-                                 {:new_house_name (-> % .-target .-value)
-                                  :living_situation_id
-                                  (:living_situation_id household)}])}]]
-             [:td [:button.btn.btn-sm {:on-click
-                                       #(do
-                                         (rf/dispatch [:edit-household])
-                                         (swap! options-pressed assoc index :normal))}
-                   "submit"]]
-             [:td [:button.btn.btn-sm.btn-secondary {:on-click
-                                         #(swap! options-pressed assoc index :normal)}
+     (case this_options_pressed
+       :options [:div.row
+                 [:div.col-xs-4.text-xs-left
+                  [:button.btn.btn-sm
+                   {:on-click #(swap! options-pressed assoc index :edit)}
+                   "edit"]]
+                 [:div.col-xs-4.text-xs-center
+                  [:button.btn.btn-sm.btn-danger
+                   {:on-click #(pprint %)}
+                   "delete"]]
+                 [:div.col-xs-4.text-xs-right
+                  [:button.btn.btn-sm.btn-secondary
+                   {:on-click #(swap! options-pressed assoc index :normal)}
                    "cancel"]]]
 
-      :normal [(if is_selected :tr.table-active :tr) {:key index}
-               [:td (:house_name household)]
-               [:td ] ;; needs three cells
-               [:td
-                [:button.btn.btn-sm.btn-secondary
-                 {:on-click #(swap! options-pressed assoc index :options)}
-                 "options"
-                 ]]]
-      )
+       :edit [:div.row
+              [:div.col-xs-8
+               [:input
+                {:type "text"
+                 :placeholder (str (:house_name household))
+                 :on-change #(rf/dispatch
+                              [:set-pending-edit-household
+                               {:new_house_name (-> % .-target .-value)
+                                :living_situation_id
+                                (:living_situation_id household)}])}]]
+              [:div.col-xs-2 [:button.btn.btn-sm.btn-primary
+                              {:on-click #(do
+                                            (rf/dispatch [:edit-household])
+                                            (swap! options-pressed assoc index :normal))}
+                              "submit"]]
+              [:div.col-xs-2 [:button.btn.btn-sm.btn-secondary
+                              {:on-click #(swap! options-pressed assoc index :normal)}
+                              "cancel"]]]
+
+       :normal [:div.row
+                [:div.col-xs-10.list-group-item-heading (:house_name household)]
+                [:div.col-xs-2
+                 [:button.btn.btn-sm.btn-secondary
+                  {:on-click #(swap! options-pressed assoc index :options)}
+                  "options"
+                  ]]]
+       )
+     ]
     )
   )
 
@@ -161,12 +168,10 @@
                         (map
                          (fn [_] :normal)
                          households)))]
-    [:table.table.table-responsive
-     [:tbody
+    [:div.list-group
       (doall (map-indexed
               #(household-row %1 %2 options-pressed)
               households))
-      ]
      ]
     )
   )
