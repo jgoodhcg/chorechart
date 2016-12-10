@@ -106,11 +106,11 @@
      :timeout         5000
      :format          (ajax/json-request-format)
      :response-format (ajax/json-response-format {:keywords? true})
-     :on-success      [:confirm-add-household]
+     :on-success      [:confirmed-add-household]
      :on-failure      [:post-resp]}}))
 
 (reg-event-db
- :confirm-add-household
+ :confirmed-add-household
  (fn [db [_ new_household]]
    (assoc db
           :pending-add-household {}

@@ -9,6 +9,7 @@
             [ajax.core :refer [GET POST]]
             [chorechart.ajax :refer [load-interceptors!]]
             [chorechart.handlers]
+            [chorechart.misc :as misc]
             [chorechart.subscriptions])
   (:import goog.History))
 
@@ -128,6 +129,8 @@
                        (rf/dispatch
                         [:remove-household
                          (:living_situation_id household)])
+                       ;; remove options for this hosuehold
+                       (swap! options-pressed misc/vec-remove index)
                        )}
                    "delete"]]
                  [:div.col-xs-4.text-xs-right
@@ -183,6 +186,10 @@
                         (map
                          (fn [_] :normal)
                          households)))]
+
+    (if (> (count households) (count @options-pressed)) ;; adds options for new households
+      (swap! options-pressed conj :normal))             ;; since component render
+
     [:div.list-group
       (doall (map-indexed
               #(household-row %1 %2 options-pressed)
@@ -235,6 +242,7 @@
           (households-list @households)
           "no households yet ):")
         ]]]
+     [:br]
      (households-add-new)
      ])
   )

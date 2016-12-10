@@ -12,3 +12,8 @@
       (str (.getFullYear d) "-" ;; creates a string in yyyy-mm-dd format
            (+ 1 (.getMonth d)) "-"
            (.getDate d)))))
+
+(defn vec-remove
+  "remove elem in coll"
+  [coll pos]
+  (vec (concat (subvec coll 0 pos) (subvec coll (inc pos)))))
