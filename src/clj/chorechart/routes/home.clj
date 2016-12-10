@@ -23,6 +23,13 @@
         person (:person session)]
     (layout/render "home.html" {:user_name user_name :person person})))
 
+(defn remove-living-situation [params]
+  (let [{:keys [living_situation_id]} params]
+    (db/remove-living-situation! {:living_situation_id living_situation_id})
+    (list {:living_situation_id living_situation_id})
+    )
+  )
+
 (defn edit-household [params]
   (let [{:keys [new_house_name living_situation_id]} params]
     (list (db/edit-household!
@@ -79,6 +86,8 @@
   (POST "/add/chore" req (authenticated-resty req add-chore))
 
   (POST "/edit/household" req (authenticated-resty req edit-household))
+
+  (POST "/remove/living-situation" req (authenticated-resty req remove-living-situation))
 
   (POST "/chart/entry" req (authenticated-resty req chart-entry))
   (POST "/chart/entry/edit" [] chart-entry-edit)

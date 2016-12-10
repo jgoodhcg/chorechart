@@ -143,6 +143,27 @@
      :on-success      [:confirmed-edit-household]
      :on-failure      [:post-resp]}}))
 
+(reg-event-fx
+ :remove-household
+ (fn [_world [_ living_situation_id]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/remove/living-situation"
+     :params          {:living_situation_id living_situation_id}
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:confirmed-remove-household]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-db
+ :confirmed-remove-household
+ (fn [db [a household_gone]]
+   (assoc db :households
+          (first (filter #(not (= (:living_situation_id household_gone)
+                             (get % :living_situation_id)))
+                         (:households db))))))
+
 (reg-event-db
  :confirmed-edit-household
  (fn [db [a b]]

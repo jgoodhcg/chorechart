@@ -123,7 +123,12 @@
                    "edit"]]
                  [:div.col-xs-4.text-xs-center
                   [:button.btn.btn-sm.btn-danger
-                   {:on-click #(pprint %)}
+                   {:on-click
+                    #(do
+                       (rf/dispatch
+                        [:remove-household
+                         (:living_situation_id household)])
+                       )}
                    "delete"]]
                  [:div.col-xs-4.text-xs-right
                   [:button.btn.btn-sm.btn-secondary
