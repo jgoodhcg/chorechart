@@ -340,16 +340,22 @@
         ]])))
 
 (defn roomates-page []
-  [:div.container
-   [:div.row
-    [:br]
-    [:div.col-xs-12
-     [:div "current household"]
-     [:br]
-     [:div "roomates list"]
-     [:br]
-     (roomates-add-new)
-     ]]]
+  (rf/dispatch [:get-roomates-selected-household])
+  (let [selected_household (rf/subscribe [:selected-household])]
+    [:div.container
+     [:div.row
+      [:br]
+      [:div.col-xs-12
+       [:div.list-group
+        [:div.list-group-item.text-xs-center
+         {:style {:background-color "#f4f4f5"}}
+         [:h3 (:house_name @selected_household)]]]
+       [:br]
+       [:div (str (:roomates @selected_household))]
+       [:br]
+       (roomates-add-new)
+       ]]]
+    )
   )
 
 (def pages

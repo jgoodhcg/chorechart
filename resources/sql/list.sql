@@ -28,3 +28,18 @@ on people.id = living_situations.person_id
 inner join chores
 on chores.id = chart.chore_id
 where chart.moment >= :date_from::date
+
+-- :name list-roomates :? :*
+-- :doc given a living_situation_id return a list of people living in the same household
+with household_id_to_match
+as (select living_situations.household_id as id
+   from living_situations
+   where living_situations.id = :living_situation_id)
+select people.user_name as user_name,
+people.id as person_id,
+living_situations.id as living_situation_id
+from living_situations
+inner join people
+on people.id = living_situations.person_id
+where living_situations.household_id
+in (select id from household_id_to_match)

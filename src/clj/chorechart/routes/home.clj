@@ -69,6 +69,8 @@
   (db/list-chores {:household_id (:household_id params)}))
 (defn view-households [params]
   (db/list-households {:person_id (:person_id params)}))
+(defn view-roomates [params]
+  (db/list-roomates {:living_situation_id (:living_situation_id params)}))
 
 (defroutes auth-routes
   (GET "/signup" [] (auth/signup-page))
@@ -88,6 +90,8 @@
   (POST "/edit/household" req (authenticated-resty req edit-household))
 
   (POST "/remove/living-situation" req (authenticated-resty req remove-living-situation))
+
+  (POST "/view/roomates" req (authenticated-resty req view-roomates))
 
   (POST "/chart/entry" req (authenticated-resty req chart-entry))
   (POST "/chart/entry/edit" [] chart-entry-edit)

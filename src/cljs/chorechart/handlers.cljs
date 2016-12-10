@@ -156,6 +156,24 @@
      :on-success      [:confirmed-remove-household]
      :on-failure      [:post-resp]}}))
 
+(reg-event-fx
+ :get-roomates-selected-household
+ (fn [_world [_ living_situation_id]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/view/roomates"
+     :params          (get-in _world [:db :selected-household])
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:set-roomates-selected-household]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-db
+ :set-roomates-selected-household
+ (fn [db [_ roomates]]
+   (assoc-in db [:selected-household :roomates] roomates)))
+
 (reg-event-db
  :confirmed-remove-household
  (fn [db [a household_gone]]
