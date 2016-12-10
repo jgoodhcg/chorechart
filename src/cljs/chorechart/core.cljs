@@ -112,9 +112,8 @@
                        (:living_situation_id @selected_household))]
 
     [:div.list-group-item
-     (if is_selected
-       {:style {:background-color "#f4f4f5"}
-        :key index})
+     {:key index
+      :style (if is_selected {:background-color "#f4f4f5"} {})}
 
      (case this_options_pressed
        :options [:div.row
@@ -151,7 +150,18 @@
                               "cancel"]]]
 
        :normal [:div.row
-                [:div.col-xs-10.list-group-item-heading (:house_name household)]
+                [:div.col-xs-1
+                 (if (not is_selected)
+                   [:button.btn.btn-sm
+                    {:on-click #(rf/dispatch
+                                 [:set-selected-household
+                                  (:living_situation_id household)])}
+                    ]
+
+                   [:button.btn.btn-sm.btn-primary]
+                   )
+                 ]
+                [:div.col-xs-9.list-group-item-heading (:house_name household)]
                 [:div.col-xs-2
                  [:button.btn.btn-sm.btn-secondary
                   {:on-click #(swap! options-pressed assoc index :options)}
@@ -324,4 +334,5 @@
   (hook-browser-navigation!)
   (mount-components)
   (rf/dispatch [:set-person])
+  (rf/dispatch [:get-households])
   )

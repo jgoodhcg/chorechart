@@ -146,7 +146,7 @@
 (reg-event-db
  :confirmed-edit-household
  (fn [db [a b]]
-   (pprint b)
+   (pprint "confirmed edit household")
    db))
 
 (reg-event-db
@@ -166,15 +166,15 @@
 (reg-event-db
  :set-households
  (fn [db [_ households]]
-   (assoc db :households households :selected-household (first households))))
+   (assoc db :households households)))
 
 (reg-event-db
  :set-selected-household
  (fn [db [_ selected_living_situation_id]]
-   (assoc db :selected-household                    ;; set selected household
-          (filter #(= selected_living_situation_id  ;; to the household with a matching
-                      (get % :living_situation_id)) ;; living situtation id
-                  (:households db)))))              ;; from the households col
+   (assoc db :selected-household
+          (first (filter #(= selected_living_situation_id
+                           (get % :living_situation_id))
+                       (:households db))))))
 
 (reg-event-db
  :set-chart
