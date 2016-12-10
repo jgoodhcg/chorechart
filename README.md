@@ -48,10 +48,13 @@ expect some commands to fail due to the nature of random data generation and rel
    - [x] email as login credential
  - [ ] households page
    - [x] add household
-   - [ ] display households
-   - [ ] select household
-   - [ ] better default select household
-   - [ ] view roomates for a household
+   - [x] display households
+   - [x] select household
+   - [x] better default select household
+   - [x] delete household
+   - [x] rename household
+ - [ ] roomates page
+   - [ ] view roomates for selected household
    - [ ] invite user to household
  - [ ] chores page
   - [ ] list selected household chores
