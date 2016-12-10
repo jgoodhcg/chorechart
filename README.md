@@ -46,7 +46,7 @@ expect some commands to fail due to the nature of random data generation and rel
    - [x] handle error
  - [x] login page
    - [x] email as login credential
- - [ ] households page
+ - [x] households page
    - [x] add household
    - [x] display households
    - [x] select household
@@ -84,7 +84,7 @@ expect some commands to fail due to the nature of random data generation and rel
 
 #### migrations
  - [ ] rename pass to password people table
- - [ ] refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`)
+ - [ ] refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`) OR use the kebab library mentioned in luminus docs
  - [ ] add on delete cascade clause
  - [ ] add a first/last name to the people table
  - [ ] constraint for no duplicate names on chores per household

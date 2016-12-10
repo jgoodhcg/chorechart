@@ -27,7 +27,7 @@
       [:nav.navbar.navbar-light.bg-faded {:style {:border-radius "0em"}}
        [:div.row
         [:div.col-xs-6
-         [:a.navbar-brand {:href "#/"} "chorechart"]
+         [:a.navbar-brand {:href "#/"} "Chorechart"]
          ]
         [:div.col-xs-4
          [:ul.nav.navbar-nav.hidden-md-up
@@ -43,8 +43,9 @@
           (when-not @collapsed? {:class "in"})
           [:ul.nav.navbar-nav
            [nav-link "#/" "Home" :home collapsed?]
-           [nav-link "#/chart" "chart" :chart collapsed?]
+           [nav-link "#/chart" "Chart" :chart collapsed?]
            [nav-link "#/households" "Households" :households collapsed?]
+           [nav-link "#/roomates" "Roomates" :roomates collapsed?]
            ]]
          ]]
        ])))
@@ -235,8 +236,8 @@
   (let [households (rf/subscribe [:households])]
     [:div.container
      [:div.row
+      [:br]
       [:div.col-xs-12
-       [:h2 "Households"]
        [:div
         (if (> (count @households) 0)
           (households-list @households)
@@ -302,10 +303,60 @@
      (chart-table @chart)
      (chart-input @chores)]))
 
+(defn roomates-add-new []
+  (r/with-let [add-new-pressed (r/atom false)]
+
+    (if @add-new-pressed
+      ;; new form
+      [:div.row
+       [:div.col-xs-12
+        [:div.row
+         [:div.col-xs-12.col-sm-9.form-group
+          [:input.form-control
+           {:type "text" :placeholder "roomate's email"
+            :on-change
+            #(pprint (-> % .-target .-value))
+            ;; #(rf/dispatch [:set-pending-roomate (-> % .-target .-value)])
+            }]]
+         [:div.col-xs-12.col-sm-3.form-group
+          [:input.btn.btn-primary.btn-block
+           {:type "button" :value "submit"
+            :on-click
+            #(do
+               (reset! add-new-pressed false)
+               (pprint "add-roomate")
+               ;; (rf/dispatch [:add-roomate])
+               )}]
+          [:input.btn.btn-secondary.btn-block
+           {:type "button" :value "cancel"
+            :on-click #(reset! add-new-pressed false)}]]]]]
+
+      ;; button only
+      [:div.row
+       [:div.col-xs-12.form-group
+        [:input.btn.btn-primary.btn-block
+         {:type "button" :value "add new roomate"
+          :on-click #(reset! add-new-pressed true)}]
+        ]])))
+
+(defn roomates-page []
+  [:div.container
+   [:div.row
+    [:br]
+    [:div.col-xs-12
+     [:div "current household"]
+     [:br]
+     [:div "roomates list"]
+     [:br]
+     (roomates-add-new)
+     ]]]
+  )
+
 (def pages
   {:home #'home-page
    :chart #'chart-page
-   :households #'households-page})
+   :households #'households-page
+   :roomates #'roomates-page})
 
 (defn page []
   [:div
@@ -324,6 +375,9 @@
 
 (secretary/defroute "/chart" []
   (rf/dispatch [:set-active-page :chart]))
+
+(secretary/defroute "/roomates" []
+  (rf/dispatch [:set-active-page :roomates]))
 
 ;; -------------------------
 ;; History
