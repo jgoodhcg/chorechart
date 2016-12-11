@@ -56,15 +56,11 @@ expect some commands to fail due to the nature of random data generation and rel
  - [x] roomates page
    - [x] view roomates for selected household
    - [x] invite user to household
- - [ ] chores page (works on selected household)
-   - [ ] list chores
-     - [ ] sql query
-     - [ ] endpoint
-     - [ ] handlers
-     - [ ] component
-   - [ ] remove chore
-   - [ ] add chore
-   - [ ] edit chore
+ - [x] chores page (works on selected household)
+   - [x] list chores
+   - [x] remove chore
+   - [x] add chore
+   - [x] edit chore
  - [ ] chart page
  - [ ] logout in navbar
 
@@ -91,12 +87,18 @@ expect some commands to fail due to the nature of random data generation and rel
    - [ ] list all chores from all households
    - [ ] copy chore
  - [ ] renaming household page does not update selected house for roomate page
+ - [ ] remove add new button before selected house selected
+ - [ ] refactore adding households/chores to use similar pattern
  
 
 #### migrations
  - [ ] rename pass to password people table
  - [ ] refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`) OR use the kebab library mentioned in luminus docs
  - [ ] add on delete cascade clause
+   - [ ] chores -> chart
+   - [ ] living_situations -> chart
+   - [ ] households -> living_situations ? allow deletes ?
+   - [ ] people -> living_situations ? allow deletes ?
  - [ ] add a first/last name to the people table
  - [ ] constraint for no duplicate names on chores per household
  - [ ] unieuqe constraint on living_situations `(person_id, household_id)`

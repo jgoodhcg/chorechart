@@ -26,17 +26,24 @@
 (defn remove-living-situation [params]
   (let [{:keys [living_situation_id]} params]
     (db/remove-living-situation! {:living_situation_id living_situation_id})
-    (list {:living_situation_id living_situation_id})
-    )
-  )
+    (list {:living_situation_id living_situation_id})))
+
+(defn remove-chore [params]
+  (let [{:keys [chore_id]} params]
+    (db/remove-chore! {:chore_id chore_id})
+    (list {:chore_id chore_id})))
 
 (defn edit-household [params]
   (let [{:keys [new_house_name living_situation_id]} params]
     (list (db/edit-household!
            {:new_house_name new_house_name
-            :living_situation_id living_situation_id}))
-    )
-  )
+            :living_situation_id living_situation_id}))))
+
+(defn edit-chore [params]
+  (let [{:keys [new_chore_name chore_id]} params]
+    (list (db/edit-chore!
+           {:new_chore_name new_chore_name
+            :chore_id chore_id}))))
 
 (defn add-household [params]
   (let [{:keys [house_name person_id]} params]
@@ -44,12 +51,15 @@
       (list (assoc (db/add-living-situation!
                     {:person_id person_id :household_id household_id})
                    :household_id household_id :house_name house_name))
-      (response/not-found "error entering household")
-    ))
-  )
+      (response/not-found "error entering household"))))
 
 (defn add-living-situation [] (str "not done"))
-(defn add-chore [] (str "not done"))
+
+(defn add-chore [params]
+  (let [{:keys [chore_name household_id]} params]
+    (list (db/add-chore! {:chore_name chore_name :household_id household_id
+                          :description "default description nobody made manually"}))
+    ))
 
 (defn add-roomate [params]
   (let [{:keys [roomate_email living_situation_id]} params]
@@ -58,11 +68,7 @@
                                      {:roomate_email roomate_email
                                       :living_situation_id living_situation_id})]
         (list (assoc (select-keys person [:user_name])
-                     :living_situation new_living_situation_id))
-        )
-      )
-    )
-  )
+                     :living_situation new_living_situation_id))))))
 
 (defn chart-entry [params]
   (let [{:keys [chore_id living_situation_id moment]} params]
@@ -99,8 +105,10 @@
   (POST "/add/chore" req (authenticated-resty req add-chore))
 
   (POST "/edit/household" req (authenticated-resty req edit-household))
+  (POST "/edit/chore" req (authenticated-resty req edit-chore))
 
   (POST "/remove/living-situation" req (authenticated-resty req remove-living-situation))
+  (POST "/remove/chore" req (authenticated-resty req remove-chore))
 
   (POST "/view/roomates" req (authenticated-resty req view-roomates))
   (POST "/add/roomate" req (authenticated-resty req add-roomate))

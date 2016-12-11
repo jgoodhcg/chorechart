@@ -74,18 +74,97 @@
      :on-success      [:set-chores]
      :on-failure      [:post-resp]}}))
 
+(reg-event-fx
+ :remove-chore
+ (fn [_world [_ chore_id]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/remove/chore"
+     :params          {:chore_id chore_id}
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format
+                       {:keywords? true})
+     :on-success      [:confirmed-remove-chore]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-fx
+ :edit-chore
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/edit/chore"
+     :params          (get-in _world
+                               [:db :pending-edit-chore ])
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format
+                       {:keywords? true})
+     :on-success      [:confirmed-edit-chore]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-fx
+ :add-chore
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/add/chore"
+     :params          {:chore_name
+                       (:chore_name (get-in _world [:db :pending-add-chore]))
+                       :household_id (get-in _world [:db :selected-household :household_id])}
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format
+                       {:keywords? true})
+     :on-success      [:confirmed-add-chore]
+     :on-failure      [:post-resp]}}))
+
 (reg-event-db
- :set-pending-chore-id
+ :set-pending-add-chore
+ (fn [db [_ chore_name]]
+   (assoc db :pending-add-chore {:chore_name chore_name})))
+
+(reg-event-db
+ :confirmed-add-chore
+ (fn [db [_ added_chore]]
+   (assoc db :chores (conj (:chores db) added_chore))
+   ))
+
+(reg-event-db
+ :confimred-edit-chore
+ (fn [db [_ edited_chore]]
+   (pprint "edited chore")
+   (pprint edited_chore)
+   db
+ ))
+
+(reg-event-db
+ :confirmed-remove-chore
+ (fn [db [a chore_gone]]
+   db
+   ;; (assoc db :chores
+   ;;        (vec (filter #(not (= (:chore_id chore_gone)
+   ;;                                (get % :id)))
+   ;;                     (:chores db))))
+   ))
+
+(reg-event-db
+ :set-pending-edit-chore
+ (fn [db [_ chore]]
+   (assoc db :pending-edit-chore chore)))
+
+(reg-event-db
+ :set-pending-chart-entry-chore-id
  (fn [db [_ chore_id]]
    (assoc-in db [:pending-chart-entry :chore_id] chore_id)))
 
 (reg-event-db
- :set-pending-date
+ :set-pending-chart-entry-date
  (fn [db [_ date]]
    (assoc-in db [:pending-chart-entry :moment] date)))
 
 (reg-event-db
- :set-pending-living-situation
+ :set-pending-chart-entry-living-situation
  (fn [db [_ _]]
    (assoc-in db [:pending-chart-entry :living_situation_id]
             (get-in db [:selected-household :living_situation_id]))))
@@ -218,7 +297,7 @@
  :confirmed-remove-household
  (fn [db [a household_gone]]
    (assoc db :households
-          (first (filter #(not (= (:living_situation_id household_gone)
+          (vec (filter #(not (= (:living_situation_id household_gone)
                              (get % :living_situation_id)))
                          (:households db))))))
 

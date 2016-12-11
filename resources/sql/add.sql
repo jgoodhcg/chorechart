@@ -37,10 +37,11 @@ values (:person_id, :household_id)
 returning living_situations.id as living_situation_id
 
 -- :name add-chore! :! :n
--- :doc creates a chore definition given a name, description, and household_id
+-- :doc creates a chore given a name, description, and household_id
 insert into chores
 (chore_name, description, household_id)
 values (:chore_name, :description, :household_id)
+returning chores.id, chores.chore_name, chores.description
 
 -- :name add-chart-entry! :! :n
 -- :doc creates a chore chart entry given a person_id, chore_id, and timestamp in yyyy-mm-dd

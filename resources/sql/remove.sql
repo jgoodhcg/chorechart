@@ -7,3 +7,8 @@ where id = :chart_id
 -- :doc given a living_situation_id remove that entry from living_situations
 delete from living_situations
 where id = :living_situation_id
+
+-- :name remove-chore! :! :n
+-- :doc given a chore_id delete it
+delete from chores
+where id = :chore_id

@@ -283,7 +283,7 @@
           :on-click #(reset! add-new-pressed true)}]]])))
 
 (defn households-page []
-  (rf/dispatch [:get-households])
+  (rf/dispatch [:get-households]) ;; renders :confirmed-remove-household useless
   (let [households (rf/subscribe [:households])]
     [:div.container
      [:div.row
@@ -333,14 +333,14 @@
          [:div.col-xs-12-down.col-sm-4.form-group
           [:input.form-control {:type "text" :disabled true :style {:width "100%"} :value "Name"}]]
          [:div.col-xs-12.col-sm-4.form-group
-          (select "name" :set-pending-chore-id
+          (select "name" :set-pending-chart-entry-chore-id
                   (map
                    #(hash-map :value (:id %) :label (:chore_name %)) ;; format chore maps for select fn
                    chores))]
          [:div.col-xs-12.col-sm-4.form-group
           [:input.form-control
            {:type "date" :style {:width "100%"}
-            :on-change #(rf/dispatch [:set-pending-date (-> % .-target .-value)])}]]
+            :on-change #(rf/dispatch [:set-pending-chart-entry-date (-> % .-target .-value)])}]]
          [:div.col-xs-12.col-sm-12.form-group
           [:input.btn.btn-primary.btn-block
            {:type "button" :value "submit" :width "100%"
@@ -355,7 +355,7 @@
 (defn chart-page []
   (let [chart (rf/subscribe [:chart])
         chores (rf/subscribe [:chores])]
-    (rf/dispatch [:set-pending-living-situation])
+    (rf/dispatch [:set-pending-chart-entry-living-situation])
     [:div.container-fluid
      (chart-table @chart)
      (chart-input @chores)]))
@@ -392,11 +392,7 @@
   )
 
 (defn chore-row [index chore options-pressed]
-  (let [this_options_pressed (nth @options-pressed index)
-        selected_household (rf/subscribe
-                            [:selected-household])]
-
-    (pprint chore)
+  (let [this_options_pressed (nth @options-pressed index)]
 
     [:div.list-group-item
      {:key index}
@@ -406,7 +402,7 @@
                  options-pressed
                  index
                  :remove-chore
-                 (:chore_id chore))
+                 (:id chore))
 
        :edit (row-case-edit
               options-pressed
@@ -415,8 +411,8 @@
               :set-pending-edit-chore
               (fn [val] {:new_chore_name
                          val
-                         :household_id
-                         (:household_id
+                         :chore_id
+                         (:id
                           chore)})
               :edit-chore)
 
@@ -445,7 +441,7 @@
      [:br]
      (generic-add-new
       "new chore name"
-      :set-pending-chore
+      :set-pending-add-chore
       :add-chore
       "add new chore")
      ])
