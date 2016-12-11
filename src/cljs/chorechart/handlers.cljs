@@ -4,7 +4,8 @@
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]
             [chorechart.misc :as misc]
-            [re-frame.core :refer [dispatch reg-event-db reg-event-fx path reg-fx]]))
+            [re-frame.core :refer
+             [dispatch reg-event-db reg-event-fx path reg-fx]]))
 
 ;; (reg-fx
 ;;  :dispatch
@@ -64,10 +65,12 @@
     {:method          :post
      :uri             "/view/chores"
      :params          {:household_id
-                       (get-in _world [:db :selected-household :id])}
+                       (get-in _world
+                               [:db :selected-household :household_id])}
      :timeout         5000
      :format          (ajax/json-request-format)
-     :response-format (ajax/json-response-format {:keywords? true})
+     :response-format (ajax/json-response-format
+                       {:keywords? true})
      :on-success      [:set-chores]
      :on-failure      [:post-resp]}}))
 

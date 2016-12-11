@@ -46,6 +46,7 @@
            [nav-link "#/chart" "Chart" :chart collapsed?]
            [nav-link "#/households" "Households" :households collapsed?]
            [nav-link "#/roomates" "Roomates" :roomates collapsed?]
+           [nav-link "#/chores" "Chores" :chores collapsed?]
            ]]
          ]]
        ])))
@@ -302,6 +303,8 @@
      ])
   )
 
+
+
 (defn chart-table [chart]
   [:div.row
    [:div.col-xs-12
@@ -377,7 +380,7 @@
         [:div.list-group-item.text-xs-center
          {:style {:background-color "#f4f4f5"}}
          [:h3 (:house_name @selected_household)]]]
-       (generic-list (:roomates @selected_household) :user_name)
+       (generic-no-options-list (:roomates @selected_household) :user_name)
        [:br]
        (generic-add-new
         "roomate's email"
@@ -388,10 +391,71 @@
     )
   )
 
+(defn chore-row [index chore options-pressed]
+  (let [this_options_pressed (nth @options-pressed index)
+        selected_household (rf/subscribe
+                            [:selected-household])]
+
+    (pprint chore)
+
+    [:div.list-group-item
+     {:key index}
+
+     (case this_options_pressed
+       :options (row-case-options
+                 options-pressed
+                 index
+                 :remove-chore
+                 (:chore_id chore))
+
+       :edit (row-case-edit
+              options-pressed
+              index
+              (str (:chore_name chore))
+              :set-pending-edit-chore
+              (fn [val] {:new_chore_name
+                         val
+                         :household_id
+                         (:household_id
+                          chore)})
+              :edit-chore)
+
+       :normal [:div.row
+                [:div.col-xs-9.list-group-item-heading
+                 (:chore_name chore)]
+                [:div.col-xs-3
+                 [:button.btn.btn-sm.btn-secondary
+                  {:on-click
+                   #(swap!
+                     options-pressed assoc index :options)}
+                  "options"]]])]))
+
+(defn chores-page []
+  (rf/dispatch [:get-chores])
+  (let [chores (rf/subscribe [:chores])]
+    [:div.container
+     [:div.row
+      [:br]
+      [:div.col-xs-12
+       [:div
+        (if (> (count @chores) 0)
+          (generic-list @chores chore-row)
+          "no chores yet ):")
+        ]]]
+     [:br]
+     (generic-add-new
+      "new chore name"
+      :set-pending-chore
+      :add-chore
+      "add new chore")
+     ])
+  )
+
 (def pages
   {:home #'home-page
    :chart #'chart-page
    :households #'households-page
+   :chores #'chores-page
    :roomates #'roomates-page})
 
 (defn page []
@@ -415,6 +479,8 @@
 (secretary/defroute "/roomates" []
   (rf/dispatch [:set-active-page :roomates]))
 
+(secretary/defroute "/chores" []
+  (rf/dispatch [:set-active-page :chores]))
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined

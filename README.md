@@ -58,6 +58,10 @@ expect some commands to fail due to the nature of random data generation and rel
    - [x] invite user to household
  - [ ] chores page (works on selected household)
    - [ ] list chores
+     - [ ] sql query
+     - [ ] endpoint
+     - [ ] handlers
+     - [ ] component
    - [ ] remove chore
    - [ ] add chore
    - [ ] edit chore
