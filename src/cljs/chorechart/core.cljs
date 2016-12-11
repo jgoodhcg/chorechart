@@ -107,99 +107,139 @@
      ]
   )
 
-(defn household-row [index household options-pressed]
-  (let [this_options_pressed (nth @options-pressed index)
-        selected_household (rf/subscribe [:selected-household])
-        is_selected (= (:living_situation_id household)
-                       (:living_situation_id @selected_household))]
+(defn row-case-options [options-pressed
+                        index
+                        remove-dispatch-key
+                        remove-dispatch-value]
+  [:div.row
+   [:div.col-xs-4.text-xs-left
+    [:button.btn.btn-sm
+     {:on-click
+      #(swap!
+        options-pressed assoc index :edit)}
+     "edit"]]
+   [:div.col-xs-4.text-xs-center
+    [:button.btn.btn-sm.btn-danger
+     {:on-click
+      #(do
+         (rf/dispatch
+          [remove-dispatch-key
+           remove-dispatch-value])
+         ;; remove options component state for this element
+         (swap!
+          options-pressed
+          misc/vec-remove index))}
+     "delete"]]
+   [:div.col-xs-4.text-xs-right
+    [:button.btn.btn-sm.btn-secondary
+     {:on-click
+      #(swap!
+        options-pressed assoc index :normal)}
+     "cancel"]]])
 
-    (pprint selected_household)
-
-    [:div.list-group-item
-     {:key index
-      :style (if is_selected {:background-color "#f4f4f5"} {})}
-
-     (case this_options_pressed
-       :options [:div.row
-                 [:div.col-xs-4.text-xs-left
-                  [:button.btn.btn-sm
-                   {:on-click #(swap! options-pressed assoc index :edit)}
-                   "edit"]]
-                 [:div.col-xs-4.text-xs-center
-                  [:button.btn.btn-sm.btn-danger
+(defn row-case-edit [options-pressed
+                     index
+                     placeholder
+                     on-change-dispatch-key
+                     on-change-dispatch-value-fn
+                     submit-dispatch-key]
+  [:div.row
+   [:div.col-xs-8
+    [:input
+     {:type "text"
+      :placeholder placeholder
+      :on-change #(rf/dispatch
+                   [on-change-dispatch-key
+                    (on-change-dispatch-value-fn
+                     (-> % .-target .-value))])}]]
+   [:div.col-xs-2 [:button.btn.btn-sm.btn-primary
                    {:on-click
                     #(do
                        (rf/dispatch
-                        [:remove-household
-                         (:living_situation_id household)])
-                       ;; remove options for this hosuehold
-                       (swap! options-pressed misc/vec-remove index)
-                       )}
-                   "delete"]]
-                 [:div.col-xs-4.text-xs-right
-                  [:button.btn.btn-sm.btn-secondary
-                   {:on-click #(swap! options-pressed assoc index :normal)}
+                        [submit-dispatch-key])
+                       (swap!
+                        options-pressed
+                        assoc index :normal))}
+                   "submit"]]
+   [:div.col-xs-2 [:button.btn.btn-sm.btn-secondary
+                   {:on-click
+                    #(swap!
+                      options-pressed
+                      assoc index :normal)}
                    "cancel"]]]
+  )
 
-       :edit [:div.row
-              [:div.col-xs-8
-               [:input
-                {:type "text"
-                 :placeholder (str (:house_name household))
-                 :on-change #(rf/dispatch
-                              [:set-pending-edit-household
-                               {:new_house_name (-> % .-target .-value)
-                                :living_situation_id
-                                (:living_situation_id household)}])}]]
-              [:div.col-xs-2 [:button.btn.btn-sm.btn-primary
-                              {:on-click #(do
-                                            (rf/dispatch [:edit-household])
-                                            (swap! options-pressed assoc index :normal))}
-                              "submit"]]
-              [:div.col-xs-2 [:button.btn.btn-sm.btn-secondary
-                              {:on-click #(swap! options-pressed assoc index :normal)}
-                              "cancel"]]]
+(defn household-row [index household options-pressed]
+  (let [this_options_pressed (nth @options-pressed index)
+        selected_household (rf/subscribe
+                            [:selected-household])
+        is_selected (= (:living_situation_id household)
+                       (:living_situation_id
+                        @selected_household))]
+
+    [:div.list-group-item
+     {:key index
+      :style (if is_selected
+               {:background-color "#f4f4f5"}
+               {})}
+
+     (case this_options_pressed
+       :options (row-case-options
+                 options-pressed
+                 index
+                 :remove-household
+                 (:living_situation_id household))
+
+       :edit (row-case-edit
+              options-pressed
+              index
+              (str (:house_name household))
+              :set-pending-edit-household
+              (fn [val] {:new_house_name
+                         val
+                         :living_situation_id
+                         (:living_situation_id
+                          household)})
+              :edit-household)
 
        :normal [:div.row
                 [:div.col-xs-1
                  (if (not is_selected)
                    [:button.btn.btn-sm
-                    {:on-click #(rf/dispatch
-                                 [:set-selected-household
-                                  (:living_situation_id household)])}
-                    ]
+                    {:on-click
+                     #(rf/dispatch
+                       [:set-selected-household
+                        (:living_situation_id household)])}]
 
-                   [:button.btn.btn-sm.btn-primary]
-                   )
-                 ]
-                [:div.col-xs-9.list-group-item-heading (:house_name household)]
+                   [:button.btn.btn-sm.btn-primary])]
+                [:div.col-xs-9.list-group-item-heading
+                 (:house_name household)]
                 [:div.col-xs-2
                  [:button.btn.btn-sm.btn-secondary
-                  {:on-click #(swap! options-pressed assoc index :options)}
-                  "options"
-                  ]]]
-       )
-     ]
-    )
-  )
+                  {:on-click
+                   #(swap!
+                     options-pressed assoc index :options)}
+                  "options"]]])]))
 
-(defn households-list [households]
-  (r/with-let [options-pressed ;; vec to hold state for each household
-               (r/atom (vec
-                        (map
-                         (fn [_] :normal)
-                         households)))]
+(defn generic-list [things row-comp-fn]
+  (r/with-let
+    [options-pressed ;; vec to hold state for each household
+     (r/atom (vec
+              (map
+               (fn [_] :normal) ;; default
+               things)))]
 
-    (if (> (count households) (count @options-pressed)) ;; adds options for new households
-      (swap! options-pressed conj :normal))             ;; since component render
+    ;; following condition adds new options state for
+    ;; new things since last render
+    (if (>
+         (count things)
+         (count @options-pressed))
+      (swap! options-pressed conj :normal))
 
     [:div.list-group
       (doall (map-indexed
-              #(household-row %1 %2 options-pressed)
-              households))
-     ]
-    )
-  )
+              #(row-comp-fn %1 %2 options-pressed)
+              things))]))
 
 (defn generic-add-new [placeholder
                        on-change-dispatch-key
@@ -250,7 +290,7 @@
       [:div.col-xs-12
        [:div
         (if (> (count @households) 0)
-          (households-list @households)
+          (generic-list @households household-row)
           "no households yet ):")
         ]]]
      [:br]
@@ -317,20 +357,14 @@
      (chart-table @chart)
      (chart-input @chores)]))
 
-(defn roomates-row [index name]
-  [:div.list-group-item
-   {:key index}
-   [:h5 (:user_name name)]
-   ]
-  )
+(defn generic-row [index thing display-key]
+  [:div.list-group-item {:key index}
+   [:h5 (display-key thing)]])
 
-(defn roomates-list [roomates]
+(defn generic-no-options-list [things display-key]
   [:div.list-group
    (doall (map-indexed
-           #(roomates-row %1 %2)
-           roomates))
-   ]
-  )
+           #(generic-row %1 %2 display-key) things))])
 
 (defn roomates-page []
   (rf/dispatch [:get-roomates-selected-household])
@@ -343,7 +377,7 @@
         [:div.list-group-item.text-xs-center
          {:style {:background-color "#f4f4f5"}}
          [:h3 (:house_name @selected_household)]]]
-       (roomates-list (:roomates @selected_household))
+       (generic-list (:roomates @selected_household) :user_name)
        [:br]
        (generic-add-new
         "roomate's email"

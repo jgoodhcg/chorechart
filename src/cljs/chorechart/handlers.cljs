@@ -6,10 +6,11 @@
             [chorechart.misc :as misc]
             [re-frame.core :refer [dispatch reg-event-db reg-event-fx path reg-fx]]))
 
-(reg-fx
- :dispatch
- (fn [dispatch-vec]
-   (dispatch dispatch-vec)))
+;; (reg-fx
+;;  :dispatch
+;;  (fn [dispatch-vec]
+;;    (dispatch dispatch-vec)))
+;; does this already exist?
 
 (reg-event-db
  :print-db

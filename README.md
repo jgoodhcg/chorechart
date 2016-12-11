@@ -86,6 +86,7 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] chore page
    - [ ] list all chores from all households
    - [ ] copy chore
+ - [ ] renaming household page does not update selected house for roomate page
  
 
 #### migrations
@@ -95,3 +96,4 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] add a first/last name to the people table
  - [ ] constraint for no duplicate names on chores per household
  - [ ] unieuqe constraint on living_situations `(person_id, household_id)`
+ - [ ] constraints for adding chores to households you don't belong to
