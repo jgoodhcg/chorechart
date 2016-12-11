@@ -254,7 +254,6 @@
           "no households yet ):")
         ]]]
      [:br]
-     (households-add-new)
      (generic-add-new
       "new houshold name"
       :set-pending-household
