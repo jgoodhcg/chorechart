@@ -51,6 +51,19 @@
 (defn add-living-situation [] (str "not done"))
 (defn add-chore [] (str "not done"))
 
+(defn add-roomate [params]
+  (let [{:keys [roomate_email living_situation_id]} params]
+    (if-let [person (db/find-person {:email roomate_email})]
+      (let [new_living_situation_id (db/add-roomate!
+                                     {:roomate_email roomate_email
+                                      :living_situation_id living_situation_id})]
+        (list (assoc (select-keys person [:user_name])
+                     :living_situation new_living_situation_id))
+        )
+      )
+    )
+  )
+
 (defn chart-entry [params]
   (let [{:keys [chore_id living_situation_id moment]} params]
     (str (db/add-chart-entry! {:living_situation_id living_situation_id
@@ -58,8 +71,6 @@
                                :moment moment}))))
 (defn chart-entry-edit [] (str "not done"))
 (defn chart-entry-remove [] (str "not done"))
-
-;; TODO some kind of validation that the session id can alter/view stuff
 
 (defn view-chart [params]
   (let [{:keys [household_id date]} params]
@@ -92,6 +103,7 @@
   (POST "/remove/living-situation" req (authenticated-resty req remove-living-situation))
 
   (POST "/view/roomates" req (authenticated-resty req view-roomates))
+  (POST "/add/roomate" req (authenticated-resty req add-roomate))
 
   (POST "/chart/entry" req (authenticated-resty req chart-entry))
   (POST "/chart/entry/edit" [] chart-entry-edit)

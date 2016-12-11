@@ -53,9 +53,9 @@ expect some commands to fail due to the nature of random data generation and rel
    - [x] better default select household
    - [x] delete household
    - [x] rename household
- - [ ] roomates page
-   - [ ] view roomates for selected household
-   - [ ] invite user to household
+ - [x] roomates page
+   - [x] view roomates for selected household
+   - [x] invite user to household
  - [ ] chores page
   - [ ] list selected household chores
   - [ ] list all chores from all households
@@ -81,6 +81,10 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] display first name in the chart
  - [ ] pending household_edit should have some color indication when it is successful
  - [ ] get rid of tables for households listing
+ - [ ] adding roomate that isn't signed up
+  - [ ] save as pending in postgres
+  - [ ] send email to both inviter and invitee
+  - [ ] spa notification to inviter
 
 #### migrations
  - [ ] rename pass to password people table
@@ -88,3 +92,4 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] add on delete cascade clause
  - [ ] add a first/last name to the people table
  - [ ] constraint for no duplicate names on chores per household
+ - [ ] unieuqe constraint on living_situations `(person_id, household_id)`

@@ -4,7 +4,12 @@
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]
             [chorechart.misc :as misc]
-            [re-frame.core :refer [dispatch reg-event-db reg-event-fx path]]))
+            [re-frame.core :refer [dispatch reg-event-db reg-event-fx path reg-fx]]))
+
+(reg-fx
+ :dispatch
+ (fn [dispatch-vec]
+   (dispatch dispatch-vec)))
 
 (reg-event-db
  :print-db
@@ -109,12 +114,31 @@
      :on-success      [:confirmed-add-household]
      :on-failure      [:post-resp]}}))
 
+(reg-event-fx
+ :add-roomate
+ (fn [_world [_ _]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/add/roomate"
+     :params          (get-in _world [:db :pending-add-roomate])
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format {:keywords? true})
+     :on-success      [:confirmed-add-roomate]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-db
+ :confirmed-add-roomate
+ (fn [db [_ new_roomate]]
+   (-> db
+       (assoc :pending-add-roomate {})
+       (assoc-in [:selected-household :roomates] new_roomate))))
+
 (reg-event-db
  :confirmed-add-household
  (fn [db [_ new_household]]
    (assoc db
           :pending-add-household {}
-          :confirmed-add-household new_household
           :households (conj (:households db) new_household))
    ))
 
@@ -122,6 +146,14 @@
  :set-pending-household
  (fn [db [_ house_name]]
    (assoc db :pending-add-household {:house_name house_name})))
+
+(reg-event-db
+ :set-pending-roomate
+ (fn [db [_ roomate_email]]
+   (assoc db :pending-add-roomate
+          {:roomate_email roomate_email
+           :living_situation_id
+           (get-in db [:selected-household :living_situation_id])})))
 
 (reg-event-db
  :set-pending-edit-household
@@ -172,7 +204,11 @@
 (reg-event-db
  :set-roomates-selected-household
  (fn [db [_ roomates]]
-   (assoc-in db [:selected-household :roomates] roomates)))
+   (if (empty? roomates)
+     db
+     (assoc-in db [:selected-household :roomates] roomates)
+     )
+   ))
 
 (reg-event-db
  :confirmed-remove-household

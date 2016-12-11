@@ -113,6 +113,8 @@
         is_selected (= (:living_situation_id household)
                        (:living_situation_id @selected_household))]
 
+    (pprint selected_household)
+
     [:div.list-group-item
      {:key index
       :style (if is_selected {:background-color "#f4f4f5"} {})}
@@ -315,8 +317,7 @@
           [:input.form-control
            {:type "text" :placeholder "roomate's email"
             :on-change
-            #(pprint (-> % .-target .-value))
-            ;; #(rf/dispatch [:set-pending-roomate (-> % .-target .-value)])
+            #(rf/dispatch [:set-pending-roomate (-> % .-target .-value)])
             }]]
          [:div.col-xs-12.col-sm-3.form-group
           [:input.btn.btn-primary.btn-block
@@ -324,8 +325,7 @@
             :on-click
             #(do
                (reset! add-new-pressed false)
-               (pprint "add-roomate")
-               ;; (rf/dispatch [:add-roomate])
+               (rf/dispatch [:add-roomate])
                )}]
           [:input.btn.btn-secondary.btn-block
            {:type "button" :value "cancel"
@@ -339,6 +339,21 @@
           :on-click #(reset! add-new-pressed true)}]
         ]])))
 
+(defn roomates-row [index name]
+  [:div.list-group-item
+   {:key index}
+   [:h5 (:user_name name)]
+   ]
+  )
+
+(defn roomates-list [roomates]
+  [:div.list-group
+   (doall (map-indexed
+           #(roomates-row %1 %2)
+           roomates))
+   ]
+  )
+
 (defn roomates-page []
   (rf/dispatch [:get-roomates-selected-household])
   (let [selected_household (rf/subscribe [:selected-household])]
@@ -350,8 +365,7 @@
         [:div.list-group-item.text-xs-center
          {:style {:background-color "#f4f4f5"}}
          [:h3 (:house_name @selected_household)]]]
-       [:br]
-       [:div (str (:roomates @selected_household))]
+       (roomates-list (:roomates @selected_household))
        [:br]
        (roomates-add-new)
        ]]]

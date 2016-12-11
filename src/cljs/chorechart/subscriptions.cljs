@@ -24,11 +24,7 @@
 (reg-sub
  :selected-household
  (fn [db _]
-   (let [sh (:selected-household db)]
-     (if (empty? sh)
-       (first (:households db))
-       sh
-       ))))
+   (:selected-household db)))
 
 (reg-sub
  :chart
