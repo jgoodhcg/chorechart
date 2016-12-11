@@ -201,37 +201,45 @@
     )
   )
 
-(defn households-add-new []
-  (r/with-let [add-new-pressed (r/atom false)
-               house-name-input "house-name-input"]
+(defn generic-add-new [placeholder
+                       on-change-dispatch-key
+                       submit-dispatch-key
+                       add-new-button-text]
+
+  (r/with-let [add-new-pressed (r/atom false)]
+
     (if @add-new-pressed
-      ;; new form
+
+      ;; form to add new entry
       [:div.row
        [:div.col-xs-12
         [:div.row
+         ;; input feild
          [:div.col-xs-12.col-sm-9.form-group
           [:input.form-control
-           {:type "text" :id house-name-input :placeholder "new household name"
+           {:type "text" :placeholder placeholder
             :on-change
-            #(rf/dispatch [:set-pending-household (-> % .-target .-value)])}]]
+            #(rf/dispatch
+              [on-change-dispatch-key
+               (-> % .-target .-value)])}]]
+         ;; submit button
          [:div.col-xs-12.col-sm-3.form-group
           [:input.btn.btn-primary.btn-block
            {:type "button" :value "submit"
             :on-click
             #(do
                (reset! add-new-pressed false)
-               (rf/dispatch [:add-household]))}]
+               (rf/dispatch [submit-dispatch-key]))}]
           [:input.btn.btn-secondary.btn-block
            {:type "button" :value "cancel"
             :on-click #(reset! add-new-pressed false)}]]]]]
 
-      ;; button only
+      ;; add new button to show form
       [:div.row
        [:div.col-xs-12.form-group
         [:input.btn.btn-primary.btn-block
-         {:type "button" :value "add new household"
-          :on-click #(reset! add-new-pressed true)}]
-        ]])))
+         {:type "button" :value add-new-button-text
+          :on-click #(reset! add-new-pressed true)}]]])))
 
 (defn households-page []
   (rf/dispatch [:get-households])
@@ -247,6 +255,11 @@
         ]]]
      [:br]
      (households-add-new)
+     (generic-add-new
+      "new houshold name"
+      :set-pending-household
+      :add-household
+      "add new household")
      ])
   )
 
@@ -305,40 +318,6 @@
      (chart-table @chart)
      (chart-input @chores)]))
 
-(defn roomates-add-new []
-  (r/with-let [add-new-pressed (r/atom false)]
-
-    (if @add-new-pressed
-      ;; new form
-      [:div.row
-       [:div.col-xs-12
-        [:div.row
-         [:div.col-xs-12.col-sm-9.form-group
-          [:input.form-control
-           {:type "text" :placeholder "roomate's email"
-            :on-change
-            #(rf/dispatch [:set-pending-roomate (-> % .-target .-value)])
-            }]]
-         [:div.col-xs-12.col-sm-3.form-group
-          [:input.btn.btn-primary.btn-block
-           {:type "button" :value "submit"
-            :on-click
-            #(do
-               (reset! add-new-pressed false)
-               (rf/dispatch [:add-roomate])
-               )}]
-          [:input.btn.btn-secondary.btn-block
-           {:type "button" :value "cancel"
-            :on-click #(reset! add-new-pressed false)}]]]]]
-
-      ;; button only
-      [:div.row
-       [:div.col-xs-12.form-group
-        [:input.btn.btn-primary.btn-block
-         {:type "button" :value "add new roomate"
-          :on-click #(reset! add-new-pressed true)}]
-        ]])))
-
 (defn roomates-row [index name]
   [:div.list-group-item
    {:key index}
@@ -367,7 +346,11 @@
          [:h3 (:house_name @selected_household)]]]
        (roomates-list (:roomates @selected_household))
        [:br]
-       (roomates-add-new)
+       (generic-add-new
+        "roomate's email"
+        :set-pending-roomate
+        :add-roomate
+        "add new roomate")
        ]]]
     )
   )

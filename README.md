@@ -56,13 +56,11 @@ expect some commands to fail due to the nature of random data generation and rel
  - [x] roomates page
    - [x] view roomates for selected household
    - [x] invite user to household
- - [ ] chores page
-  - [ ] list selected household chores
-  - [ ] list all chores from all households
-  - [ ] copy chore
-  - [ ] remove chore
-  - [ ] add chore
-  - [ ] edit chore
+ - [ ] chores page (works on selected household)
+   - [ ] list chores
+   - [ ] remove chore
+   - [ ] add chore
+   - [ ] edit chore
  - [ ] chart page
  - [ ] logout in navbar
 
@@ -82,9 +80,13 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] pending household_edit should have some color indication when it is successful
  - [ ] get rid of tables for households listing
  - [ ] adding roomate that isn't signed up
-  - [ ] save as pending in postgres
-  - [ ] send email to both inviter and invitee
-  - [ ] spa notification to inviter
+   - [ ] save as pending in postgres
+   - [ ] send email to both inviter and invitee
+   - [ ] spa notification to inviter
+ - [ ] chore page
+   - [ ] list all chores from all households
+   - [ ] copy chore
+ 
 
 #### migrations
  - [ ] rename pass to password people table
