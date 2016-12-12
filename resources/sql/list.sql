@@ -15,19 +15,21 @@ where chores.household_id = :household_id
 
 -- :name list-chart-entries :? :*
 -- :doc given a household_id  and a start date list all chores with the people who did them from date
-select people.user_name as user_name,
-chores.chore_name as chore_name, chores.id as chore_id,
-chart.id as chart_id, chart.moment as moment
+select people.user_name  as user_name,
+       chores.chore_name as chore_name,
+       chores.id         as chore_id,
+       chart.id          as chart_id,
+       chart.moment      as moment
 from chart
-inner join households
-on households.id = :household_id
-inner join living_situations
-on living_situations.household_id = :household_id
-inner join people
-on people.id = living_situations.person_id
 inner join chores
 on chores.id = chart.chore_id
+inner join living_situations
+on living_situations.household_id = :household_id
+and chart.living_situation_id = living_situations.id
+inner join people
+on people.id = living_situations.person_id
 where chart.moment >= :date_from::date
+order by chart.moment
 
 -- :name list-roomates :? :*
 -- :doc given a living_situation_id return a list of people living in the same household
