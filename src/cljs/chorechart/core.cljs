@@ -359,6 +359,7 @@
                              :on-click #(reset! collapsed false)}]]])]))
 
 (defn chart-page []
+  (rf/dispatch [:get-chart])
   (let [chart (rf/subscribe [:chart])
         chores (rf/subscribe [:chores])]
     (rf/dispatch [:set-pending-chart-entry-living-situation])
@@ -500,10 +501,8 @@
   (r/render [#'page] (.getElementById js/document "app")))
 
 (defn init! []
-  (rf/dispatch-sync [:initialize-db])
+  (rf/dispatch-sync [:boot])
   (load-interceptors!)
   (hook-browser-navigation!)
   (mount-components)
-  (rf/dispatch [:set-person])
-  (rf/dispatch [:get-households])
   )

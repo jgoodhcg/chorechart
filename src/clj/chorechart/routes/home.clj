@@ -72,7 +72,7 @@
 
 (defn chart-entry [params]
   (let [{:keys [chore_id living_situation_id moment]} params]
-    (str (db/add-chart-entry! {:living_situation_id living_situation_id
+    (list (db/add-chart-entry! {:living_situation_id living_situation_id
                                :chore_id chore_id
                                :moment moment}))))
 (defn chart-entry-edit [] (str "not done"))

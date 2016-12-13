@@ -25,6 +25,7 @@
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
                  [re-frame "0.8.0"]
                  [day8.re-frame/http-fx "0.1.2"]
+                 [day8.re-frame/async-flow-fx "0.0.6"]
                  [reagent "0.6.0"]
                  [reagent-utils "0.2.0"]
                  [ring-middleware-format "0.7.0"]

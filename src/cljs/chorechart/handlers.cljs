@@ -4,6 +4,7 @@
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]
             [chorechart.misc :as misc]
+            [day8.re-frame.async-flow-fx]
             [re-frame.core :refer
              [dispatch reg-event-db reg-event-fx path reg-fx]]))
 
@@ -12,6 +13,26 @@
 ;;  (fn [dispatch-vec]
 ;;    (dispatch dispatch-vec)))
 ;; does this already exist?
+
+(reg-event-fx
+ :boot
+ (fn [_ _]
+   {:db db/default-db
+    :async-flow
+    {:first-dispatch [:set-person]
+     :rules [
+             {:when :seen? :events :set-person
+              :dispatch [:get-households]}
+             {:when :seen? :events :set-households
+              :dispatch [:set-default-selected-house]}
+             {:when :seen? :events :set-default-selected-house
+              :dispatch-n [[:get-chores] [:get-chart]]}
+             ]}}))
+
+(reg-event-db
+ :set-default-selected-house
+ (fn [db [_ _]]
+   (assoc db :selected-household (first (:households db)))))
 
 (reg-event-db
  :print-db
@@ -307,10 +328,11 @@
    (pprint "confirmed edit household")
    db))
 
-(reg-event-db
+(reg-event-fx
  :confirmed-chart-entry
- (fn [db [a b]]
-   (assoc db :pending-chart-entry {})))
+ (fn [_world [_ living_situation_id]]
+   {:db (assoc (:db _world) :pending-chart-entry {})
+    :dispatch [:get-chart]}))
 
 (reg-event-db
  :post-resp
