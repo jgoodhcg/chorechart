@@ -24,13 +24,22 @@
              {:when :seen? :events :set-person
               :dispatch [:get-households]}
              {:when :seen? :events :set-households
-              :dispatch [:set-default-selected-house]}
-             {:when :seen? :events :set-default-selected-house
-              :dispatch-n [[:get-chores] [:get-chart]]}
+              :dispatch [:set-default-selected-household]}
+             {:when :seen? :events :set-default-selected-household
+              :dispatch-n [[:get-chores] [:get-chart] [:detect-new-account]]}
              ]}}))
 
 (reg-event-db
- :set-default-selected-house
+ :detect-new-account
+ (fn [db [_ _]]
+   (if (empty? (:selected-household db))
+       (assoc db :page :info)  ;; new people should see info page first
+     db
+     )
+   ))
+
+(reg-event-db
+ :set-default-selected-household
  (fn [db [_ _]]
    (assoc db :selected-household (first (:households db)))))
 

@@ -1,7 +1,7 @@
 (ns chorechart.db)
 
 (def default-db
-  {:page :home
+  {:page :chart
    :households []
    :selected-household {}
    :chart []

@@ -19,9 +19,9 @@
 
 (defn home-page [req]
   (let [{:keys [session]} req
-        user_name (:identity session)
+        email (:identity session)
         person (:person session)]
-    (layout/render "home.html" {:user_name user_name :person person})))
+    (layout/render "home.html" {:email email :person person})))
 
 (defn remove-living-situation [params]
   (let [{:keys [living_situation_id]} params]

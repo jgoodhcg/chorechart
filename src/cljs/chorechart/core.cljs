@@ -42,11 +42,11 @@
          [:div.collapse.navbar-toggleable-sm
           (when-not @collapsed? {:class "in"})
           [:ul.nav.navbar-nav
-           [nav-link "#/" "Home" :home collapsed?]
            [nav-link "#/chart" "Chart" :chart collapsed?]
            [nav-link "#/households" "Households" :households collapsed?]
            [nav-link "#/roomates" "Roomates" :roomates collapsed?]
            [nav-link "#/chores" "Chores" :chores collapsed?]
+           [nav-link "#/info" "Info" :info collapsed?]
            ]]
          ]]
        ])))
@@ -80,7 +80,7 @@
             (:label %)]) options))]])
 
 (defn get-btn [dispatch-key]
-  [:button.btn
+  [:button.btn.btn-primary
    {:on-click
       #(do
         (pprint (str "dispatched " dispatch-key))
@@ -97,14 +97,16 @@
     }
    "print"])
 
-(defn home-page []
-    [:div.container
-     (str js/user_name " home page")
-     [:br]
-     (get-btn :get-households)
-     (get-btn :get-chart)
-     (get-btn :get-chores)
-     (print-btn)
+(defn debug-page []
+    [:div.container [:br]
+     (str "email: " js/email) [:br]
+     (prn-str "person " js/person) [:br]
+     [:div
+      (get-btn :get-households) [:br]
+      (get-btn :get-chart) [:br]
+      (get-btn :get-chores) [:br]
+      (print-btn)
+      ]
      ]
   )
 
@@ -454,8 +456,14 @@
      ])
   )
 
+(defn info-page []
+  [:div [:br]
+   [:h1 "Getting Started"]
+   [:p "Congratulations on creating an account "]])
+
 (def pages
-  {:home #'home-page
+  {:debug #'debug-page
+   :info #'info-page
    :chart #'chart-page
    :households #'households-page
    :chores #'chores-page
@@ -471,7 +479,7 @@
 (secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
-  (rf/dispatch [:set-active-page :home]))
+  (rf/dispatch [:set-active-page :chart]))
 
 (secretary/defroute "/households" []
   (rf/dispatch [:set-active-page :households]))
@@ -484,6 +492,13 @@
 
 (secretary/defroute "/chores" []
   (rf/dispatch [:set-active-page :chores]))
+
+(secretary/defroute "/debug" []
+  (rf/dispatch [:set-active-page :debug]))
+
+(secretary/defroute "/info" []
+  (rf/dispatch [:set-active-page :info]))
+
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined

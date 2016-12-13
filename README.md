@@ -61,7 +61,10 @@ expect some commands to fail due to the nature of random data generation and rel
    - [x] remove chore
    - [x] add chore
    - [x] edit chore
- - [ ] chart page
+ - [x] chart page
+ - [x] login page
+ - [ ] signup page
+ - [ ] info page
  - [ ] logout in navbar
 
 ### eventually
