@@ -180,6 +180,8 @@
                        (:living_situation_id
                         @selected_household))]
 
+    (pprint {:sel @selected_household :this household})
+
     [:div.list-group-item
      {:key index
       :style (if is_selected
@@ -360,14 +362,28 @@
          [:input.btn.btn-sm {:type "button" :value "▲"
                              :on-click #(reset! collapsed false)}]]])]))
 
+(defn new-account-link []
+  [:a.btn.btn-primary.btn-block
+   {
+    :href "#/info"
+    :style
+    {:box-shadow " 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px"}}
+   "Get Started"])
+
 (defn chart-page []
   (rf/dispatch [:get-chart])
+  (rf/dispatch [:set-pending-chart-entry-living-situation])
   (let [chart (rf/subscribe [:chart])
-        chores (rf/subscribe [:chores])]
-    (rf/dispatch [:set-pending-chart-entry-living-situation])
+        chores (rf/subscribe [:chores])
+        new-account (rf/subscribe [:new-account])]
+    (pprint @new-account)
     [:div.container-fluid
      (chart-table @chart)
-     (chart-input @chores)]))
+     (if @new-account
+       (new-account-link)
+       (chart-input @chores)
+       )
+     ]))
 
 (defn generic-row [index thing display-key]
   [:div.list-group-item {:key index}

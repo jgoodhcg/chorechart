@@ -24,24 +24,20 @@
              {:when :seen? :events :set-person
               :dispatch [:get-households]}
              {:when :seen? :events :set-households
-              :dispatch [:set-default-selected-household]}
-             {:when :seen? :events :set-default-selected-household
+              :dispatch [:set-selected-household]}
+             {:when :seen? :events :set-selected-household
               :dispatch-n [[:get-chores] [:get-chart] [:detect-new-account]]}
              ]}}))
 
+;; this should always run after set-selected-household
 (reg-event-db
  :detect-new-account
  (fn [db [_ _]]
    (if (empty? (:selected-household db))
-       (assoc db :page :info)  ;; new people should see info page first
+       (assoc db :new-account true)  ;; new people should see info page first
      db
      )
    ))
-
-(reg-event-db
- :set-default-selected-household
- (fn [db [_ _]]
-   (assoc db :selected-household (first (:households db)))))
 
 (reg-event-db
  :print-db
@@ -247,12 +243,15 @@
        (assoc :pending-add-roomate {})
        (assoc-in [:selected-household :roomates] new_roomate))))
 
-(reg-event-db
+(reg-event-fx
  :confirmed-add-household
- (fn [db [_ new_household]]
-   (assoc db
-          :pending-add-household {}
-          :households (conj (:households db) new_household))
+ (fn [_world [_ new_household]]
+   (let [db (:db _world)]
+     {:db (assoc db
+                 :pending-add-household {}
+                 :households (conj (:households db) new_household))
+      :dispatch [:set-selected-household]} 
+     )
    ))
 
 (reg-event-db
@@ -361,9 +360,13 @@
  :set-selected-household
  (fn [db [_ selected_living_situation_id]]
    (assoc db :selected-household
-          (first (filter #(= selected_living_situation_id
-                           (get % :living_situation_id))
-                       (:households db))))))
+          (if selected_living_situation_id
+            (first (filter #(= selected_living_situation_id
+                               (get % :living_situation_id))
+                           (:households db)))
+              (first (:households db))
+            )
+          )))
 
 (reg-event-db
  :set-chart

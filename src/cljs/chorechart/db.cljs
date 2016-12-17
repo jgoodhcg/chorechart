@@ -7,6 +7,7 @@
    :chart []
    :chores []
    :pending-chart-entry {}
+   :new-account false
    })
 
 ;; filters for entries
