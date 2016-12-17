@@ -249,7 +249,7 @@
    (let [db (:db _world)]
      {:db (assoc db
                  :pending-add-household {}
-                 :households (conj (:households db) new_household))
+                 :households (conj (:households db) (first new_household)))
       :dispatch [:set-selected-household]} 
      )
    ))
@@ -318,17 +318,24 @@
  (fn [db [_ roomates]]
    (if (empty? roomates)
      db
-     (assoc-in db [:selected-household :roomates] roomates)
-     )
-   ))
+     (assoc-in db [:selected-household :roomates] roomates))))
 
 (reg-event-db
  :confirmed-remove-household
- (fn [db [a household_gone]]
-   (assoc db :households
-          (vec (filter #(not (= (:living_situation_id household_gone)
-                             (get % :living_situation_id)))
-                         (:households db))))))
+ (fn [db [_ household_gone]]
+   (let [liv_sit_id_to_rm (:living_situation_id (first household_gone))
+         selected_household (:selected-household db)
+         selected_household_liv_sit_id (:living_situation_id selected_household)
+         households (:households db)]
+     (assoc db
+            :households
+            (vec (filter #(not (= liv_sit_id_to_rm
+                                  (get % :living_situation_id)))
+                         households))
+            :selected-household
+            (if (= selected_household_liv_sit_id liv_sit_id_to_rm)
+              {}
+              selected_household)))))
 
 (reg-event-db
  :confirmed-edit-household
@@ -359,14 +366,18 @@
 (reg-event-db
  :set-selected-household
  (fn [db [_ selected_living_situation_id]]
-   (assoc db :selected-household
-          (if selected_living_situation_id
-            (first (filter #(= selected_living_situation_id
-                               (get % :living_situation_id))
-                           (:households db)))
-              (first (:households db))
-            )
-          )))
+   (let [selected_household (:selected-household db)
+         households (:households db)]
+     (assoc db :selected-household
+            (if selected_living_situation_id
+              (first
+               (filter
+                #(= selected_living_situation_id (get % :living_situation_id))
+                households))
+              (if (or (nil? selected_household)
+                      (empty? selected_household))
+                (first households)
+                selected_household))))))
 
 (reg-event-db
  :set-chart

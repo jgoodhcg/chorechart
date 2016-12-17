@@ -180,8 +180,6 @@
                        (:living_situation_id
                         @selected_household))]
 
-    (pprint {:sel @selected_household :this household})
-
     [:div.list-group-item
      {:key index
       :style (if is_selected
@@ -376,7 +374,6 @@
   (let [chart (rf/subscribe [:chart])
         chores (rf/subscribe [:chores])
         new-account (rf/subscribe [:new-account])]
-    (pprint @new-account)
     [:div.container-fluid
      (chart-table @chart)
      (if @new-account
@@ -473,9 +470,26 @@
   )
 
 (defn info-page []
-  [:div [:br]
-   [:h1 "Getting Started"]
-   [:p "Congratulations on creating an account "]])
+  [:div.container [:br]
+   [:div.row
+    [:div.col-xs-12
+     [:h1 "Getting Started"]
+     [:hr]
+     [:ol
+      [:li [:p "add a  "
+            [:a.btn.btn-primary.btn-sm {:href "#/households"} "household"]]]
+      [:li [:p "add chores for your selected household  "
+            [:a.btn.btn-primary.btn-sm {:href "#/chores"} "add chores"]]]
+      [:li
+       [:p
+        "invite roomates to your selected household via email (roomates must be signed up)  "
+            [:a.btn.btn-primary.btn-sm {:href "#/roomates"} "invite roomates"]]]
+      [:li [:p "add entries to your chart  "
+            [:a.btn.btn-primary.btn-sm {:href "#/chart"} "add to chart"]]]
+      ]
+       ]
+      ]
+   ])
 
 (def pages
   {:debug #'debug-page
