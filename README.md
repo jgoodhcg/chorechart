@@ -34,7 +34,7 @@ expect some commands to fail due to the nature of random data generation and rel
 
 ## todo
 
-### mvp
+### alpha
  - [x] remove all data from db
  - [x] migration improvement
    - [x] remove unique constraint on household_name
@@ -67,6 +67,13 @@ expect some commands to fail due to the nature of random data generation and rel
  - [x] info page
  - [x] remove chart entry
  - [x] logout in navbar
+ 
+ 
+### beta
+- [ ] refactor namespaces
+- [ ] refactor endpoints
+- [ ] authorization
+- [ ] material design
 
 ### eventually
 
@@ -101,6 +108,8 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] color code roomates
    - [ ] choose color on roomates page
    - [ ] chart displays colors
+ - [ ] roomate not found error message
+ - [ ] password recovery
  
 
 #### migrations
@@ -115,3 +124,4 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] constraint for no duplicate names on chores per household
  - [ ] unieuqe constraint on living_situations `(person_id, household_id)`
  - [ ] constraints for adding chores to households you don't belong to
+ - [ ] timestamp all database writes
