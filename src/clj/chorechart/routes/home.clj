@@ -76,7 +76,11 @@
                                :chore_id chore_id
                                :moment moment}))))
 (defn chart-entry-edit [] (str "not done"))
-(defn chart-entry-remove [] (str "not done"))
+(defn chart-entry-remove [params]
+  (let [chart_id (:chart_id params)]
+    (if (= 1 (db/remove-chart-entry! {:chart_id chart_id}))
+      (list {:chart_id chart_id}))
+    ))
 
 (defn view-chart [params]
   (let [{:keys [household_id date]} params]
@@ -94,7 +98,8 @@
   (POST "/signup" [] auth/signup)
   (GET "/login"  [] (auth/login-page ""))
   (GET "/login/:error"  [error] (auth/login-page error))
-  (POST "/login" [] auth/login))
+  (POST "/login" [] auth/login)
+  (GET "/logout" [] auth/logout))
 
 (defroutes home-routes
   (GET "/" req (authenticated-route req home-page))
@@ -115,7 +120,7 @@
 
   (POST "/chart/entry" req (authenticated-resty req chart-entry))
   (POST "/chart/entry/edit" [] chart-entry-edit)
-  (POST "/chart/entry/remove" [] chart-entry-remove)
+  (POST "/chart/entry/remove" req (authenticated-resty req chart-entry-remove))
 
   (POST "/view/chart" req (authenticated-resty req view-chart))
   (POST "/view/chores" req (authenticated-resty req view-chores))

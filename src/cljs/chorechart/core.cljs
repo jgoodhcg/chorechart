@@ -47,9 +47,9 @@
            [nav-link "#/roomates" "Roomates" :roomates collapsed?]
            [nav-link "#/chores" "Chores" :chores collapsed?]
            [nav-link "#/info" "Info" :info collapsed?]
-           ]]
-         ]]
-       ])))
+           [:li.nav-item
+            [:a.nav-link
+             {:href "/logout"} "Logout"]]]]]]])))
 
 (defn row [label input]
   [:div.row
@@ -312,13 +312,24 @@
    [:div.col-xs-12
     [:table.table
      [:thead
-      [:tr [:th "Person"] [:th "Chore"] [:th "Date"]]]
+      [:tr [:th "Person"] [:th "Chore"] [:th "Date"] [:th "Delete"]]]
      [:tbody
       (map
        #(vec [:tr {:key (.indexOf chart %)}
               [:td (:user_name %)]
               [:td (:chore_name %)]
-              [:td (subs (:moment %) 5 10)]])
+              [:td (subs (:moment %) 5 10)]
+              [:td (let [chart_id (:chart_id %)]
+                     [:input.btn.btn-sm.btn-secondary
+                      {:type "button"
+                       :value "X"
+                       :on-click
+                       (fn [e]
+                         (rf/dispatch
+                          [:remove-chart-entry
+                           chart_id]))}
+                      ]
+                     )]])
        chart)]]]])
 
 (defn chart-input [chores]

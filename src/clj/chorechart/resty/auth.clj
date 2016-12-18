@@ -47,3 +47,8 @@
             (response/found "/login/failed"))
           ))
       (catch Exception e (response/found "/login/failed")))))
+
+(defn logout [req]
+  (let [session (:session req)]
+    (-> (response/found "/login")
+        (assoc :session nil))))

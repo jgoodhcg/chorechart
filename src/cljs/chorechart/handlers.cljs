@@ -115,6 +115,30 @@
      :on-failure      [:post-resp]}}))
 
 (reg-event-fx
+ :remove-chart-entry
+ (fn [_world [_ chart_id]]
+   {:http-xhrio
+    {:method          :post
+     :uri             "/chart/entry/remove"
+     :params          {:chart_id chart_id}
+     :timeout         5000
+     :format          (ajax/json-request-format)
+     :response-format (ajax/json-response-format
+                       {:keywords? true})
+     :on-success      [:confirmed-remove-chart-entry]
+     :on-failure      [:post-resp]}}))
+
+(reg-event-db
+ :confirmed-remove-chart-entry
+ (fn [db [_ chart_entry_rm]]
+   (let [chart (:chart db)
+         chart_id_to_rm (:chart_id (first chart_entry_rm))]
+
+     (assoc db :chart (filter #(not (= chart_id_to_rm
+                                       (get % :chart_id)))
+                              chart)))))
+
+(reg-event-fx
  :edit-chore
  (fn [_world [_ _]]
    {:http-xhrio

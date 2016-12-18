@@ -63,9 +63,10 @@ expect some commands to fail due to the nature of random data generation and rel
    - [x] edit chore
  - [x] chart page
  - [x] login page
- - [ ] signup page
- - [ ] info page
- - [ ] logout in navbar
+ - [x] signup page
+ - [x] info page
+ - [x] remove chart entry
+ - [x] logout in navbar
 
 ### eventually
 
@@ -92,6 +93,14 @@ expect some commands to fail due to the nature of random data generation and rel
  - [ ] renaming household page does not update selected house for roomate page
  - [ ] remove add new button before selected house selected
  - [ ] refactore adding households/chores to use similar pattern
+ - [ ] add better re-frame dev tools
+ - [ ] get rid of the need for list returns on endpoints
+ - [ ] point system
+   - [ ] value each chore
+   - [ ] cumulative points listed next to roomates
+ - [ ] color code roomates
+   - [ ] choose color on roomates page
+   - [ ] chart displays colors
  
 
 #### migrations
