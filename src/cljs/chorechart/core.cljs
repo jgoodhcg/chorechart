@@ -2,16 +2,21 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [secretary.core :as secretary]
-            [cljs.pprint :refer [pprint]]
             [goog.events :as events]
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [chorechart.ajax :refer [load-interceptors!]]
-            [chorechart.handlers]
-            [chorechart.misc :as misc]
             [chorechart.pages.chart.page :refer [chart-page]]
-            [chorechart.subscriptions])
+            [chorechart.pages.households.page :refer [households-page]]
+            [chorechart.handlers]
+            [chorechart.subscriptions]
+;; eventually get rid of requires below this line
+            [cljs.pprint :refer [pprint]]
+            [chorechart.misc :as misc]
+            [chorechart.pages.misc-comps.add-new :refer [generic-add-new]]
+            [chorechart.pages.misc-comps.list :refer [generic-list]]
+            )
   (:import goog.History))
 
 (defn nav-link [uri title page collapsed?]
@@ -154,139 +159,6 @@
                       options-pressed
                       assoc index :normal)}
                    "cancel"]]]
-  )
-
-(defn household-row [index household options-pressed]
-  (let [this_options_pressed (nth @options-pressed index)
-        selected_household (rf/subscribe
-                            [:selected-household])
-        is_selected (= (:living_situation_id household)
-                       (:living_situation_id
-                        @selected_household))]
-
-    [:div.list-group-item
-     {:key index
-      :style (if is_selected
-               {:background-color "#f4f4f5"}
-               {})}
-
-     (case this_options_pressed
-       :options (row-case-options
-                 options-pressed
-                 index
-                 :remove-household
-                 (:living_situation_id household))
-
-       :edit (row-case-edit
-              options-pressed
-              index
-              (str (:house_name household))
-              :set-pending-edit-household
-              (fn [val] {:new_house_name
-                         val
-                         :living_situation_id
-                         (:living_situation_id
-                          household)})
-              :edit-household)
-
-       :normal [:div.row
-                [:div.col-xs-1
-                 (if (not is_selected)
-                   [:button.btn.btn-sm
-                    {:on-click
-                     #(rf/dispatch
-                       [:set-selected-household
-                        (:living_situation_id household)])}]
-
-                   [:button.btn.btn-sm.btn-primary])]
-                [:div.col-xs-9.list-group-item-heading
-                 (:house_name household)]
-                [:div.col-xs-2
-                 [:button.btn.btn-sm.btn-secondary
-                  {:on-click
-                   #(swap!
-                     options-pressed assoc index :options)}
-                  "options"]]])]))
-
-(defn generic-list [things row-comp-fn]
-  (r/with-let
-    [options-pressed ;; vec to hold state for each household
-     (r/atom (vec
-              (map
-               (fn [_] :normal) ;; default
-               things)))]
-
-    ;; following condition adds new options state for
-    ;; new things since last render
-    (if (>
-         (count things)
-         (count @options-pressed))
-      (swap! options-pressed conj :normal))
-
-    [:div.list-group
-      (doall (map-indexed
-              #(row-comp-fn %1 %2 options-pressed)
-              things))]))
-
-(defn generic-add-new [placeholder
-                       on-change-dispatch-key
-                       submit-dispatch-key
-                       add-new-button-text]
-
-  (r/with-let [add-new-pressed (r/atom false)]
-
-    (if @add-new-pressed
-
-      ;; form to add new entry
-      [:div.row
-       [:div.col-xs-12
-        [:div.row
-         ;; input feild
-         [:div.col-xs-12.col-sm-9.form-group
-          [:input.form-control
-           {:type "text" :placeholder placeholder
-            :on-change
-            #(rf/dispatch
-              [on-change-dispatch-key
-               (-> % .-target .-value)])}]]
-         ;; submit button
-         [:div.col-xs-12.col-sm-3.form-group
-          [:input.btn.btn-primary.btn-block
-           {:type "button" :value "submit"
-            :on-click
-            #(do
-               (reset! add-new-pressed false)
-               (rf/dispatch [submit-dispatch-key]))}]
-          [:input.btn.btn-secondary.btn-block
-           {:type "button" :value "cancel"
-            :on-click #(reset! add-new-pressed false)}]]]]]
-
-      ;; add new button to show form
-      [:div.row
-       [:div.col-xs-12.form-group
-        [:input.btn.btn-primary.btn-block
-         {:type "button" :value add-new-button-text
-          :on-click #(reset! add-new-pressed true)}]]])))
-
-(defn households-page []
-  (rf/dispatch [:get-households]) ;; renders :confirmed-remove-household useless
-  (let [households (rf/subscribe [:households])]
-    [:div.container
-     [:div.row
-      [:br]
-      [:div.col-xs-12
-       [:div
-        (if (> (count @households) 0)
-          (generic-list @households household-row)
-          "no households yet ):")
-        ]]]
-     [:br]
-     (generic-add-new
-      "new houshold name"
-      :set-pending-household
-      :add-household
-      "add new household")
-     ])
   )
 
 (defn generic-row [index thing display-key]

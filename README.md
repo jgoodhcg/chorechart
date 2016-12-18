@@ -34,9 +34,25 @@
 
 ### beta
 - [ ] refactor namespaces
-- [ ] refactor endpoints
+  - [ ] SPA components
+  - [ ] handlers
+  - [ ] endpoints
+
+- [ ] kebab the snakes this_that vs this-that
+  - [ ] remove all snakes from SPA components and handlers
+  - [ ] remove all snakes from endpoint params
+  - [ ] only snakes are in the parameter maps to db fn's
+
+- [ ] make authentication middleware
+
 - [ ] authorization
+
 - [ ] material design
+
+- [ ] cascade on delete migrations
+- [ ] delete chore (with warning)
+
+- [ ] forgot password
 
 ### eventually
 

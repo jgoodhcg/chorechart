@@ -1,8 +1,6 @@
 (ns chorechart.pages.chart.page
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
-            [cljs.pprint :refer [pprint]]
-            [chorechart.misc :as misc]
             [chorechart.pages.chart.components :as comp]))
 
 (defn chart-page []
