@@ -10,6 +10,7 @@
             [chorechart.ajax :refer [load-interceptors!]]
             [chorechart.handlers]
             [chorechart.misc :as misc]
+            [chorechart.pages.chart.page :refer [chart-page]]
             [chorechart.subscriptions])
   (:import goog.History))
 
@@ -61,23 +62,6 @@
                                    :name name
                                    :on-change
                                    #(rf/dispatch [dispatch-key (-> % .-target .-value)])}]))
-
-(defn select [name dispatch-key options]
-  [:div
-   [:select.form-control
-    {:name name
-     :defaultValue "default"
-     :style {:width "100%"}
-     :on-change #(rf/dispatch
-                  [dispatch-key (-> % .-target .-value int)])}
-    (cons
-     [:option
-      {:value "default" :disabled true :key (str -1)}
-      "-- choose an option --"]
-     (mapv
-      #(-> [:option
-            {:value (:value %) :key (str (.indexOf options %)) }
-            (:label %)]) options))]])
 
 (defn get-btn [dispatch-key]
   [:button.btn.btn-primary
@@ -304,94 +288,6 @@
       "add new household")
      ])
   )
-
-
-
-(defn chart-table [chart]
-  [:div.row
-   [:div.col-xs-12
-    [:table.table
-     [:thead
-      [:tr [:th "Person"] [:th "Chore"] [:th "Date"] [:th "Delete"]]]
-     [:tbody
-      (map
-       #(vec [:tr {:key (.indexOf chart %)}
-              [:td (:user_name %)]
-              [:td (:chore_name %)]
-              [:td (subs (:moment %) 5 10)]
-              [:td (let [chart_id (:chart_id %)]
-                     [:input.btn.btn-sm.btn-secondary
-                      {:type "button"
-                       :value "X"
-                       :on-click
-                       (fn [e]
-                         (rf/dispatch
-                          [:remove-chart-entry
-                           chart_id]))}
-                      ]
-                     )]])
-       chart)]]]])
-
-(defn chart-input [chores]
-  (r/with-let [collapsed (r/atom false)]
-    [:div.container-fluid.bg-faded {:style { :width "100%" :padding-top "1em"
-                                            :position "fixed" :bottom "0em"
-                                            :left "0em" :right "0em"}}
-    (if-not @collapsed
-       [:div.row
-        [:div.row
-         [:div.col-xs-1.offset-xs-10.form-group
-         [:input.btn.btn-sm {:type "button" :value "▼"
-                                  :on-click #(reset! collapsed true)}]]]
-        [:div.row
-         [:div.col-xs-12-down.col-sm-4.form-group
-          [:input.form-control {:type "text" :disabled true
-                                :style {:width "100%"} :value "Name"}]]
-         [:div.col-xs-12.col-sm-4.form-group
-          (select "name" :set-pending-chart-entry-chore-id
-                  (map
-                   #(hash-map
-                     :value (:id %)
-                     :label (:chore_name %)) ;; format chore maps for select fn
-                   chores))]
-         [:div.col-xs-12.col-sm-4.form-group
-          [:input.form-control
-           {:type "date" :style {:width "100%"}
-            :on-change
-            #(rf/dispatch
-              [:set-pending-chart-entry-date (-> % .-target .-value)])}]]
-         [:div.col-xs-12.col-sm-12.form-group
-          [:input.btn.btn-primary.btn-block
-           {:type "button" :value "submit" :width "100%"
-            :on-click #(rf/dispatch [:send-chart-entry])}]]]]
-
-       ;; collapsed
-       [:div.row
-        [:div.col-xs-1.offset-xs-10.form-group
-         [:input.btn.btn-sm {:type "button" :value "▲"
-                             :on-click #(reset! collapsed false)}]]])]))
-
-(defn new-account-link []
-  [:a.btn.btn-primary.btn-block
-   {
-    :href "#/info"
-    :style
-    {:box-shadow " 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px"}}
-   "Get Started"])
-
-(defn chart-page []
-  (rf/dispatch [:get-chart])
-  (rf/dispatch [:set-pending-chart-entry-living-situation])
-  (let [chart (rf/subscribe [:chart])
-        chores (rf/subscribe [:chores])
-        new-account (rf/subscribe [:new-account])]
-    [:div.container-fluid
-     (chart-table @chart)
-     (if @new-account
-       (new-account-link)
-       (chart-input @chores)
-       )
-     ]))
 
 (defn generic-row [index thing display-key]
   [:div.list-group-item {:key index}

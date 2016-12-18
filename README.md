@@ -28,47 +28,10 @@
 
 1. `vagrant ssh` to gain access to the vm  
 2. navigate to `~/chorechart/mockaroo`  
-3. run each of the `.sql` scripts in the current order of [people, households, living_situations, chores, chart] 
-with the command `sudo -u postgres psql -U postgres -d chorechart_dev -a -f scriptname.sql`  
-expect some commands to fail due to the nature of random data generation and relationships between tables  
+3. run the desired `.sql` scripts with the command `sudo -u postgres psql -U postgres -d chorechart_dev -a -f scriptname.sql`  
 
 ## todo
 
-### alpha
- - [x] remove all data from db
- - [x] migration improvement
-   - [x] remove unique constraint on household_name
-   - [x] remove unique constraint on user_name
-   - [x] add email unique constraint
- - [x] populate database with single household with multiple people
- - [x] signup page
-   - [x] email first
-   - [x] handle error
- - [x] login page
-   - [x] email as login credential
- - [x] households page
-   - [x] add household
-   - [x] display households
-   - [x] select household
-   - [x] better default select household
-   - [x] delete household
-   - [x] rename household
- - [x] roomates page
-   - [x] view roomates for selected household
-   - [x] invite user to household
- - [x] chores page (works on selected household)
-   - [x] list chores
-   - [x] remove chore
-   - [x] add chore
-   - [x] edit chore
- - [x] chart page
- - [x] login page
- - [x] signup page
- - [x] info page
- - [x] remove chart entry
- - [x] logout in navbar
- 
- 
 ### beta
 - [ ] refactor namespaces
 - [ ] refactor endpoints
