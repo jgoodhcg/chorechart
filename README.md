@@ -35,10 +35,13 @@
 ### beta
 - [ ] refactor namespaces
   - [ ] SPA components
+    - [x] chart page
+    - [x] households page
+    - [ ] roomates page
   - [ ] handlers
   - [ ] endpoints
 
-- [ ] kebab the snakes this_that vs this-that
+- [ ] kebab the snakes (`a_snake_example a-kebab-example`)
   - [ ] remove all snakes from SPA components and handlers
   - [ ] remove all snakes from endpoint params
   - [ ] only snakes are in the parameter maps to db fn's
@@ -53,6 +56,11 @@
 - [ ] delete chore (with warning)
 
 - [ ] forgot password
+
+- [ ] error messages in SPA
+  - [ ] add roomate
+  
+- [ ] change roomates to people in SPA
 
 ### eventually
 

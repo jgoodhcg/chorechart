@@ -1,17 +1,20 @@
 (ns chorechart.core
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
+            [chorechart.handlers]
+            [chorechart.subscriptions]
+
             [secretary.core :as secretary]
             [goog.events :as events]
             [goog.history.EventType :as HistoryEventType]
-            [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [chorechart.ajax :refer [load-interceptors!]]
+
             [chorechart.pages.chart.page :refer [chart-page]]
             [chorechart.pages.households.page :refer [households-page]]
-            [chorechart.handlers]
-            [chorechart.subscriptions]
-;; eventually get rid of requires below this line
+            [chorechart.pages.roomates.page :refer [roomates-page]]
+
+            ;; eventually get rid of requires below this line
             [cljs.pprint :refer [pprint]]
             [chorechart.misc :as misc]
             [chorechart.pages.misc-comps.add-new :refer [generic-add-new]]
@@ -33,16 +36,14 @@
       [:nav.navbar.navbar-light.bg-faded {:style {:border-radius "0em"}}
        [:div.row
         [:div.col-xs-6
-         [:a.navbar-brand {:href "#/"} "Chorechart"]
-         ]
+         [:a.navbar-brand {:href "#/"} "Chorechart"]]
         [:div.col-xs-4
          [:ul.nav.navbar-nav.hidden-md-up
           [:li.nav-item.active
-           [:a.nav-link {:href (str "#/" (name @selected-page))} @selected-page]]]
-         ]
+           [:a.nav-link {:href (str "#/" (name @selected-page))} @selected-page]]]]
         [:div.col-xs-2
          [:input.hidden-md-up.btn.btn-sm
-          {:type "button" :value "☰" :on-click #(swap! collapsed? not) } ]]]
+          {:type "button" :value "☰" :on-click #(swap! collapsed? not) }]]]
        [:div.row
         [:div.col-xs-12
          [:div.collapse.navbar-toggleable-sm
@@ -161,36 +162,11 @@
                    "cancel"]]]
   )
 
-(defn generic-row [index thing display-key]
-  [:div.list-group-item {:key index}
-   [:h5 (display-key thing)]])
 
-(defn generic-no-options-list [things display-key]
-  [:div.list-group
-   (doall (map-indexed
-           #(generic-row %1 %2 display-key) things))])
 
-(defn roomates-page []
-  (rf/dispatch [:get-roomates-selected-household])
-  (let [selected_household (rf/subscribe [:selected-household])]
-    [:div.container
-     [:div.row
-      [:br]
-      [:div.col-xs-12
-       [:div.list-group
-        [:div.list-group-item.text-xs-center
-         {:style {:background-color "#f4f4f5"}}
-         [:h3 (:house_name @selected_household)]]]
-       (generic-no-options-list (:roomates @selected_household) :user_name)
-       [:br]
-       (generic-add-new
-        "roomate's email"
-        :set-pending-roomate
-        :add-roomate
-        "add new roomate")
-       ]]]
-    )
-  )
+
+
+
 
 (defn chore-row [index chore options-pressed]
   (let [this_options_pressed (nth @options-pressed index)]
