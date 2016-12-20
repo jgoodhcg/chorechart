@@ -33,11 +33,15 @@
 ## todo
 
 ### beta
+- [ ] add name and context to chart page 
+- [ ] fix github issues
 - [ ] refactor namespaces
   - [ ] SPA components
     - [x] chart page
     - [x] households page
-    - [ ] roomates page
+    - [x] roomates page
+    - [ ] chores
+    - [ ] info
   - [ ] handlers
   - [ ] endpoints
 

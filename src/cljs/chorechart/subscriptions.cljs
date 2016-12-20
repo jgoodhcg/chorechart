@@ -7,6 +7,11 @@
     (:page db)))
 
 (reg-sub
+ :user_name
+ (fn [db _]
+   (:user_name db)))
+
+(reg-sub
  :docs
  (fn [db _]
    (:docs db)))

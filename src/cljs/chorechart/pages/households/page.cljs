@@ -5,7 +5,7 @@
             [chorechart.pages.misc-comps.add-new :refer [generic-add-new]]))
 
 (defn households-page []
-  (rf/dispatch [:get-households]) ;; renders :confirmed-remove-household useless
+  (rf/dispatch [:get-households])
   (let [households (rf/subscribe [:households])]
     [:div.container
      [:div.row

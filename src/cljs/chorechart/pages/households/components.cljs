@@ -1,5 +1,7 @@
 (ns chorechart.pages.households.components
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [chorechart.pages.misc-comps.row-cases :refer [row-case-options row-case-edit]]))
+
 
 (defn household-row [index household options-pressed]
   (let [this_options_pressed (nth @options-pressed index)

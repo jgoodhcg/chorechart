@@ -5,10 +5,7 @@
 (defn generic-list [items row-comp-fn]
   (r/with-let
     [options-pressed ;; vec to hold local options state
-     (r/atom (vec
-              (map
-               (fn [_] :normal) ;; default option state
-               items)))]
+     (r/atom (vec (map (fn [_] :normal) items)))] ;; set default
 
     ;; following adds default option state for new items since last render
     (if (>

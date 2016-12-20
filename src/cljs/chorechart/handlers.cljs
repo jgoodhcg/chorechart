@@ -33,11 +33,12 @@
 (reg-event-db
  :detect-new-account
  (fn [db [_ _]]
-   (if (empty? (:selected-household db))
-       (assoc db :new-account true)  ;; new people should see info page first
-     db
-     )
-   ))
+   (let [selected-household (:selected-household db)]
+     (assoc db
+            :new-account
+            (or
+             (nil? selected-household)
+             (empty? selected-household))))))
 
 (reg-event-db
  :print-db
@@ -54,7 +55,9 @@
  :set-person
  (fn [db [_ _]]
       (assoc db
-             :id (.-id js/person))))
+             :id (.-id js/person)
+             :user_name (.-user_name js/person)
+             :email (.-email js/person))))
 
 (reg-event-fx
  :get-households
@@ -272,11 +275,10 @@
  (fn [_world [_ new_household]]
    (let [db (:db _world)]
      {:db (assoc db
+                 :new-account false
                  :pending-add-household {}
                  :households (conj (:households db) (first new_household)))
-      :dispatch [:set-selected-household]} 
-     )
-   ))
+      :dispatch [:set-selected-household]})))
 
 (reg-event-db
  :set-pending-household
@@ -393,13 +395,13 @@
    (let [selected_household (:selected-household db)
          households (:households db)]
      (assoc db :selected-household
-            (if selected_living_situation_id
-              (first
+            (if selected_living_situation_id ;; if given a living situation
+              (first                         ;; set that is the selected
                (filter
                 #(= selected_living_situation_id (get % :living_situation_id))
                 households))
-              (if (or (nil? selected_household)
-                      (empty? selected_household))
+              (if (or (nil? selected_household)    ;; set a default if there isn't
+                      (empty? selected_household)) ;; if there isn't one
                 (first households)
                 selected_household))))))
 
