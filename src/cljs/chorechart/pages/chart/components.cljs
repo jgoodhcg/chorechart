@@ -34,6 +34,7 @@
   (r/with-let [collapsed (r/atom false)]
     (let [user_name @(rf/subscribe [:user_name])
           household_name (:house_name @(rf/subscribe [:selected-household]))]
+
       [:div.container-fluid.bg-faded {:style { :width "100%" :padding-top "1em"
                                               :position "fixed" :bottom "0em"
                                               :left "0em" :right "0em"}}
@@ -49,7 +50,7 @@
           [:div.row
            [:div.col-xs-12-down.col-sm-4.form-group
             [:input.form-control {:type "text" :disabled true
-                                  :style {:width "100%"} :value user_name}]]
+                                  :style {:width "100%"} :value (str " " user_name " ")}]]
            [:div.col-xs-12.col-sm-4.form-group
             (select "name" :set-pending-chart-entry-chore-id
                     (map
