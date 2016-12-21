@@ -13,6 +13,7 @@
             [chorechart.pages.chart.page :refer [chart-page]]
             [chorechart.pages.households.page :refer [households-page]]
             [chorechart.pages.roomates.page :refer [roomates-page]]
+            [chorechart.pages.chores.page :refer [chores-page]]
 
             ;; eventually get rid of requires below this line
             [chorechart.pages.misc-comps.row-cases :refer [row-case-options row-case-edit]]
@@ -83,9 +84,7 @@
    {:on-click
     #(do
        (pprint "print pressed")
-       (rf/dispatch [:print-db])
-       )
-    }
+       (rf/dispatch [:print-db]))}
    "print"])
 
 (defn debug-page []
@@ -96,72 +95,7 @@
       (get-btn :get-households) [:br]
       (get-btn :get-chart) [:br]
       (get-btn :get-chores) [:br]
-      (print-btn)
-      ]
-     ]
-  )
-
-
-
-
-
-
-
-(defn chore-row [index chore options-pressed]
-  (let [this_options_pressed (nth @options-pressed index)]
-
-    [:div.list-group-item
-     {:key index}
-
-     (case this_options_pressed
-       :options (row-case-options
-                 options-pressed
-                 index
-                 :remove-chore
-                 (:id chore))
-
-       :edit (row-case-edit
-              options-pressed
-              index
-              (str (:chore_name chore))
-              :set-pending-edit-chore
-              (fn [val] {:new_chore_name
-                         val
-                         :chore_id
-                         (:id
-                          chore)})
-              :edit-chore)
-
-       :normal [:div.row
-                [:div.col-xs-9.list-group-item-heading
-                 (:chore_name chore)]
-                [:div.col-xs-3
-                 [:button.btn.btn-sm.btn-secondary
-                  {:on-click
-                   #(swap!
-                     options-pressed assoc index :options)}
-                  "options"]]])]))
-
-(defn chores-page []
-  (rf/dispatch [:get-chores])
-  (let [chores (rf/subscribe [:chores])]
-    [:div.container
-     [:div.row
-      [:br]
-      [:div.col-xs-12
-       [:div
-        (if (> (count @chores) 0)
-          (generic-list @chores chore-row)
-          "no chores yet ):")
-        ]]]
-     [:br]
-     (generic-add-new
-      "new chore name"
-      :set-pending-add-chore
-      :add-chore
-      "add new chore")
-     ])
-  )
+      (print-btn)]])
 
 (defn info-page []
   [:div.container [:br]
@@ -179,11 +113,7 @@
         "invite roomates to your selected household via email (roomates must be signed up)  "
             [:a.btn.btn-primary.btn-sm {:href "#/roomates"} "invite roomates"]]]
       [:li [:p "add entries to your chart  "
-            [:a.btn.btn-primary.btn-sm {:href "#/chart"} "add to chart"]]]
-      ]
-       ]
-      ]
-   ])
+            [:a.btn.btn-primary.btn-sm {:href "#/chart"} "add to chart"]]]]]]])
 
 (def pages
   {:debug #'debug-page

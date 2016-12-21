@@ -33,8 +33,6 @@
 ## todo
 
 ### beta
-- [ ] add name and context to chart page 
-- [ ] fix github issues
 - [ ] refactor namespaces
   - [ ] SPA components
     - [x] chart page
