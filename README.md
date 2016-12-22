@@ -35,11 +35,13 @@
 ### beta
 - [ ] refactor namespaces
   - [ ] SPA components
-    - [x] chart page
-    - [x] households page
-    - [x] roomates page
-    - [ ] chores
-    - [ ] info
+    - [x] chart
+    - [x] households
+    - [x] roomates
+    - [x] chores
+    - [x] info
+    - [x] navbar
+    - [x] other misc
   - [ ] handlers
   - [ ] endpoints
 
