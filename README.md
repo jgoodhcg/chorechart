@@ -34,7 +34,7 @@
 
 ### beta
 - [ ] refactor namespaces
-  - [ ] SPA components
+  - [x] SPA components
     - [x] chart
     - [x] households
     - [x] roomates
@@ -43,6 +43,11 @@
     - [x] navbar
     - [x] other misc
   - [ ] handlers
+    - [x] chart
+    - [ ] households
+    - [ ] roomates
+    - [ ] chores
+    - [ ] other misc
   - [ ] endpoints
 
 - [ ] kebab the snakes (`a_snake_example a-kebab-example`)
@@ -59,12 +64,14 @@
 - [ ] cascade on delete migrations
 - [ ] delete chore (with warning)
 
-- [ ] forgot password
+- [ ] forgot password link
 
 - [ ] error messages in SPA
   - [ ] add roomate
   
 - [ ] change roomates to people in SPA
+
+- [ ] test suite
 
 ### eventually
 
