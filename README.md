@@ -44,9 +44,9 @@
     - [x] other misc
   - [ ] handlers
     - [x] chart
-    - [ ] households
-    - [ ] roomates
+    - [x] households
     - [ ] chores
+    - [ ] roomates
     - [ ] other misc
   - [ ] endpoints
 

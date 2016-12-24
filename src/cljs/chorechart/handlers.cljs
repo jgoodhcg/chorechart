@@ -10,6 +10,7 @@
 
             [chorechart.handlers.chart]
             [chorechart.handlers.households]
+            [chorechart.handlers.chores]
             ))
 
 (reg-event-fx
@@ -57,100 +58,7 @@
              :user_name (.-user_name js/person)
              :email (.-email js/person))))
 
-(reg-event-fx
- :get-chores
- (fn [_world [_ _]]
-   {:http-xhrio
-    {:method          :post
-     :uri             "/view/chores"
-     :params          {:household_id
-                       (get-in _world
-                               [:db :selected-household :household_id])}
-     :timeout         5000
-     :format          (ajax/json-request-format)
-     :response-format (ajax/json-response-format
-                       {:keywords? true})
-     :on-success      [:set-chores]
-     :on-failure      [:post-resp]}}))
 
-(reg-event-fx
- :remove-chore
- (fn [_world [_ chore_id]]
-   {:http-xhrio
-    {:method          :post
-     :uri             "/remove/chore"
-     :params          {:chore_id chore_id}
-     :timeout         5000
-     :format          (ajax/json-request-format)
-     :response-format (ajax/json-response-format
-                       {:keywords? true})
-     :on-success      [:confirmed-remove-chore]
-     :on-failure      [:post-resp]}}))
-
-(reg-event-fx
- :edit-chore
- (fn [_world [_ _]]
-   {:http-xhrio
-    {:method          :post
-     :uri             "/edit/chore"
-     :params          (get-in _world
-                               [:db :pending-edit-chore ])
-     :timeout         5000
-     :format          (ajax/json-request-format)
-     :response-format (ajax/json-response-format
-                       {:keywords? true})
-     :on-success      [:confirmed-edit-chore]
-     :on-failure      [:post-resp]}}))
-
-(reg-event-fx
- :add-chore
- (fn [_world [_ _]]
-   {:http-xhrio
-    {:method          :post
-     :uri             "/add/chore"
-     :params          {:chore_name
-                       (:chore_name (get-in _world [:db :pending-add-chore]))
-                       :household_id (get-in _world [:db :selected-household :household_id])}
-     :timeout         5000
-     :format          (ajax/json-request-format)
-     :response-format (ajax/json-response-format
-                       {:keywords? true})
-     :on-success      [:confirmed-add-chore]
-     :on-failure      [:post-resp]}}))
-
-(reg-event-db
- :set-pending-add-chore
- (fn [db [_ chore_name]]
-   (assoc db :pending-add-chore {:chore_name chore_name})))
-
-(reg-event-db
- :confirmed-add-chore
- (fn [db [_ added_chore]]
-   (assoc db :chores (conj (:chores db) added_chore))
-   ))
-
-(reg-event-db
- :confimred-edit-chore
- (fn [db [_ edited_chore]]
-   (pprint "edited chore")
-   (pprint edited_chore)
-   db
- ))
-
-(reg-event-db
- :confirmed-remove-chore
- (fn [db [a chore_gone]]
-   db
-   ;; (assoc db :chores
-   ;;        (vec (filter #(not (= (:chore_id chore_gone)
-   ;;                                (get % :id)))
-   ;;                     (:chores db))))
-   ))
-
-(reg-event-db
- :set-pending-edit-chore
- (fn [db [_ chore]]
-   (assoc db :pending-edit-chore chore)))
 
 (reg-event-fx
  :add-roomate
