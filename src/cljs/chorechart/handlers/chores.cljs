@@ -83,6 +83,9 @@
   ;;                     (:chores db))))
 )
 
+(defn set-chores [db [_ chores]]
+  (assoc db :chores chores))
+
 (reg-event-fx :get-chores get-chores)
 (reg-event-fx :edit-chore edit-chore)
 (reg-event-fx :remove-chore remove-chore)
@@ -93,3 +96,4 @@
 (reg-event-db :confirmed-add-chore confirmed-add-chore)
 (reg-event-db :confirmed-remove-chore confirmed-remove-chore)
 (reg-event-db :confirmed-edit-chore confirmed-edit-chore)
+(reg-event-db :set-chores set-chores)

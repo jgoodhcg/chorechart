@@ -42,12 +42,11 @@
     - [x] info
     - [x] navbar
     - [x] other misc
-  - [ ] handlers
+  - [x] handlers
     - [x] chart
     - [x] households
-    - [ ] chores
-    - [ ] roomates
-    - [ ] other misc
+    - [x] chores
+    - [x] roomates
   - [ ] endpoints
 
 - [ ] kebab the snakes (`a_snake_example a-kebab-example`)
@@ -62,7 +61,7 @@
 - [ ] material design
 
 - [ ] cascade on delete migrations
-- [ ] delete chore (with warning)
+- [ ] delete chore (with warning) (or make non-visible)
 
 - [ ] forgot password link
 

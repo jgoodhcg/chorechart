@@ -40,73 +40,12 @@
              (empty? selected-household))))))
 
 (reg-event-db
- :print-db
- (fn [db [_ _]]
-   (pprint db)
-   db))
-
-(reg-event-db
-  :initialize-db
-  (fn [db [_ a]]
-    db/default-db))
-
-(reg-event-db
  :set-person
  (fn [db [_ _]]
       (assoc db
              :id (.-id js/person)
              :user_name (.-user_name js/person)
              :email (.-email js/person))))
-
-
-
-(reg-event-fx
- :add-roomate
- (fn [_world [_ _]]
-   {:http-xhrio
-    {:method          :post
-     :uri             "/add/roomate"
-     :params          (get-in _world [:db :pending-add-roomate])
-     :timeout         5000
-     :format          (ajax/json-request-format)
-     :response-format (ajax/json-response-format {:keywords? true})
-     :on-success      [:confirmed-add-roomate]
-     :on-failure      [:post-resp]}}))
-
-(reg-event-db
- :confirmed-add-roomate
- (fn [db [_ new_roomate]]
-   (-> db
-       (assoc :pending-add-roomate {})
-       (assoc-in [:selected-household :roomates] new_roomate))))
-
-(reg-event-db
- :set-pending-roomate
- (fn [db [_ roomate_email]]
-   (assoc db :pending-add-roomate
-          {:roomate_email roomate_email
-           :living_situation_id
-           (get-in db [:selected-household :living_situation_id])})))
-
-(reg-event-fx
- :get-roomates-selected-household
- (fn [_world [_ living_situation_id]]
-   {:http-xhrio
-    {:method          :post
-     :uri             "/view/roomates"
-     :params          (get-in _world [:db :selected-household])
-     :timeout         5000
-     :format          (ajax/json-request-format)
-     :response-format (ajax/json-response-format {:keywords? true})
-     :on-success      [:set-roomates-selected-household]
-     :on-failure      [:post-resp]}}))
-
-(reg-event-db
- :set-roomates-selected-household
- (fn [db [_ roomates]]
-   (if (empty? roomates)
-     db
-     (assoc-in db [:selected-household :roomates] roomates))))
 
 (reg-event-db
  :post-resp
@@ -118,34 +57,12 @@
      (assoc db :new 1))))
 
 (reg-event-db
- :set-chores
- (fn [db [_ chores]]
-   (assoc db :chores chores)))
-
-(reg-event-db
   :set-active-page
   (fn [db [_ page]]
     (assoc db :page page)))
 
 (reg-event-db
-  :set-docs
-  (fn [db [_ docs]]
-    (assoc db :docs docs)))
-
-(reg-event-db
- :set-chore
- (path [:current :chore])
-       (fn [old-chore [_ new-chore]]
-         new-chore))
-
-(reg-event-db
- :set-name
- (path [:current :name])
-       (fn [old-name [_ new-name]]
-         new-name))
-
-(reg-event-db
- :set-date
- (path [:current :date])
-       (fn [old-date [_ new-date]]
-         new-date))
+ :print-db
+ (fn [db [_ _]]
+   (pprint db)
+   db))
