@@ -49,12 +49,13 @@
     - [x] roomates
   - [ ] endpoints
 
+- [ ] make authentication middleware
+
 - [ ] kebab the snakes (`a_snake_example a-kebab-example`)
   - [ ] remove all snakes from SPA components and handlers
   - [ ] remove all snakes from endpoint params
-  - [ ] only snakes are in the parameter maps to db fn's
+  - [ ] only snakes are in the keys to maps sent to db fn's
 
-- [ ] make authentication middleware
 
 - [ ] authorization
 

@@ -6,7 +6,7 @@
             [chorechart.resty.auth :as auth]
             [chorechart.db.core :as db]))
 
-(defn authenticated-resty [req route-fn]
+(defn authenticated-post [req route-fn]
   (if (authenticated? req)
     (let [{:keys [params]} req]
       (route-fn params))
@@ -101,29 +101,26 @@
   (POST "/login" [] auth/login)
   (GET "/logout" [] auth/logout))
 
-(defroutes home-routes
-  (GET "/" req (authenticated-route req home-page))
+(defroutes post-routes
+  (POST "/households/add" req (authenticated-post req add-household))
+  (POST "/households/view" req (authenticated-post req view-households))
+  (POST "/households/edit" req (authenticated-post req edit-household))
 
-  (POST "/add/household" req (authenticated-resty req add-household))
-  (POST "/add/test" [] (hash-map :key "value"))
-  (POST "/add/living-situation" [] add-living-situation)
-  (POST "/add/chore" req (authenticated-resty req add-chore))
+  (POST "/chores/add" req (authenticated-post req add-chore))
+  (POST "/chores/remove" req (authenticated-post req remove-chore))
+  (POST "/chores/edit" req (authenticated-post req edit-chore))
+  (POST "/chores/view" req (authenticated-post req view-chores))
 
-  (POST "/edit/household" req (authenticated-resty req edit-household))
-  (POST "/edit/chore" req (authenticated-resty req edit-chore))
+  (POST "/living-situations/remove" req (authenticated-post req remove-living-situation))
+  (POST "/living-situations/add" [] add-living-situation)
 
-  (POST "/remove/living-situation" req (authenticated-resty req remove-living-situation))
-  (POST "/remove/chore" req (authenticated-resty req remove-chore))
+  (POST "/roomates/view" req (authenticated-post req view-roomates))
+  (POST "/roomates/add" req (authenticated-post req add-roomate))
 
-  (POST "/view/roomates" req (authenticated-resty req view-roomates))
-  (POST "/add/roomate" req (authenticated-resty req add-roomate))
-
-  (POST "/chart/entry" req (authenticated-resty req chart-entry))
-  (POST "/chart/entry/edit" [] chart-entry-edit)
-  (POST "/chart/entry/remove" req (authenticated-resty req chart-entry-remove))
-
-  (POST "/view/chart" req (authenticated-resty req view-chart))
-  (POST "/view/chores" req (authenticated-resty req view-chores))
-  (POST "/view/households" req (authenticated-resty req view-households))
-  ;; TODO put authenticated-route/resty in middleware
+  (POST "/chart/add" req (authenticated-post req chart-entry))
+  (POST "/chart/remove" req (authenticated-post req chart-entry-remove))
+  (POST "/chart/view" req (authenticated-post req view-chart))
   )
+
+(defroutes home-routes
+  (GET "/" req (authenticated-route req home-page)))

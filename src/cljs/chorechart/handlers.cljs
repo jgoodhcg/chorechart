@@ -25,8 +25,7 @@
              {:when :seen? :events :set-households
               :dispatch [:set-selected-household]}
              {:when :seen? :events :set-selected-household
-              :dispatch-n [[:get-chores] [:get-chart] [:detect-new-account]]}
-             ]}}))
+              :dispatch-n [[:get-chores] [:get-chart] [:detect-new-account]]}]}}))
 
 ;; this should always run after set-selected-household
 (reg-event-db

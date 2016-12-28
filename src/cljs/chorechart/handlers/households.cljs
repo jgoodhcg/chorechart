@@ -11,7 +11,7 @@
 (defn get-households [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/view/households"
+    :uri             "/households/view"
     :params          {:person_id (get-in _world [:db :id])}
     :timeout         5000
     :format          (ajax/json-request-format)
@@ -22,7 +22,7 @@
 (defn add-household [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/add/household"
+    :uri             "/households/add"
     :params          {:house_name
                       (:house_name (get-in _world [:db :pending-add-household]))
                       :person_id (get-in _world [:db :id])}
@@ -35,7 +35,7 @@
 (defn edit-household [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/edit/household"
+    :uri             "/households/edit"
     :params          (select-keys (get-in _world [:db :pending-edit-household])
                                   [:new_house_name :living_situation_id])
     :timeout         5000
@@ -47,7 +47,7 @@
 (defn remove-household [_world [_ living_situation_id]]
   {:http-xhrio
    {:method          :post
-    :uri             "/remove/living-situation"
+    :uri             "/living-situations/remove"
     :params          {:living_situation_id living_situation_id}
     :timeout         5000
     :format          (ajax/json-request-format)

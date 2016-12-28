@@ -1,7 +1,7 @@
 (ns chorechart.handler
   (:require [compojure.core :refer [routes wrap-routes]]
             [chorechart.layout :refer [error-page]]
-            [chorechart.routes.home :refer [auth-routes home-routes]]
+            [chorechart.routes.home :refer [auth-routes home-routes post-routes]]
             [compojure.route :as route]
             [chorechart.env :refer [defaults]]
             [mount.core :as mount]
@@ -36,7 +36,12 @@
   (routes
    (-> #'auth-routes
        (wrap-routes middleware/wrap-csrf))
-   (-> (wrap-authentication #'home-routes auth-backend)
+   (-> #'home-routes
+       (wrap-routes wrap-authentication auth-backend)
+       (wrap-routes middleware/wrap-csrf)
+       (wrap-routes middleware/wrap-formats))
+   (-> #'post-routes
+       (wrap-routes wrap-authentication auth-backend)
        (wrap-routes middleware/wrap-csrf)
        (wrap-routes middleware/wrap-formats))
    (route/not-found

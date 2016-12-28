@@ -11,7 +11,7 @@
 (defn get-chores [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/view/chores"
+    :uri             "/chores/view"
     :params          {:household_id
                       (get-in _world
                               [:db :selected-household :household_id])}
@@ -25,7 +25,7 @@
 (defn remove-chore [_world [_ chore_id]]
   {:http-xhrio
    {:method          :post
-    :uri             "/remove/chore"
+    :uri             "/chores/remove"
     :params          {:chore_id chore_id}
     :timeout         5000
     :format          (ajax/json-request-format)
@@ -37,7 +37,7 @@
 (defn edit-chore [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/edit/chore"
+    :uri             "/chores/edit"
     :params          (get-in _world
                              [:db :pending-edit-chore ])
     :timeout         5000
@@ -50,7 +50,7 @@
 (defn add-chore [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/add/chore"
+    :uri             "/chores/add"
     :params          {:chore_name
                       (:chore_name (get-in _world [:db :pending-add-chore]))
                       :household_id (get-in _world [:db :selected-household :household_id])}

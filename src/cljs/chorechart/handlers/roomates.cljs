@@ -11,12 +11,23 @@
 (defn add-roomates [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/add/roomate"
+    :uri             "/roomates/add"
     :params          (get-in _world [:db :pending-add-roomate])
     :timeout         5000
     :format          (ajax/json-request-format)
     :response-format (ajax/json-response-format {:keywords? true})
     :on-success      [:confirmed-add-roomate]
+    :on-failure      [:post-resp]}})
+
+(defn get-roomates-selected-household [_world [_ living_situation_id]]
+  {:http-xhrio
+   {:method          :post
+    :uri             "/roomates/view"
+    :params          (get-in _world [:db :selected-household])
+    :timeout         5000
+    :format          (ajax/json-request-format)
+    :response-format (ajax/json-response-format {:keywords? true})
+    :on-success      [:set-roomates-selected-household]
     :on-failure      [:post-resp]}})
 
 (defn confirmed-add-roomate [db [_ new_roomate]]
@@ -29,17 +40,6 @@
          {:roomate_email roomate_email
           :living_situation_id
           (get-in db [:selected-household :living_situation_id])}))
-
-(defn get-roomates-selected-household [_world [_ living_situation_id]]
-  {:http-xhrio
-   {:method          :post
-    :uri             "/view/roomates"
-    :params          (get-in _world [:db :selected-household])
-    :timeout         5000
-    :format          (ajax/json-request-format)
-    :response-format (ajax/json-response-format {:keywords? true})
-    :on-success      [:set-roomates-selected-household]
-    :on-failure      [:post-resp]}})
 
 (defn set-roomates-selected-household [db [_ roomates]]
   (if (empty? roomates)

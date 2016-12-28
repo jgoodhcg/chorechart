@@ -11,7 +11,7 @@
 (defn get-chart [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/view/chart"
+    :uri             "/chart/view"
     :params          {:household_id
                       (get-in _world [:db :selected-household :household_id])
                       :date (misc/start-of-week (new js/Date))}
@@ -24,7 +24,7 @@
 (defn remove-chart-entry [_world [_ chart_id]]
   {:http-xhrio
    {:method          :post
-    :uri             "/chart/entry/remove"
+    :uri             "/chart/remove"
     :params          {:chart_id chart_id}
     :timeout         5000
     :format          (ajax/json-request-format)
@@ -36,7 +36,7 @@
 (defn send-chart-entry [_world [_ _]]
   {:http-xhrio
    {:method          :post
-    :uri             "/chart/entry"
+    :uri             "/chart/add"
     :params          (get-in _world [:db :pending-chart-entry])
     :timeout         5000
     :format          (ajax/json-request-format)
