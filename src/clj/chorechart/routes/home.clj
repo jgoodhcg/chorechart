@@ -6,16 +6,8 @@
             [chorechart.resty.auth :as auth]
             [chorechart.db.core :as db]))
 
-(defn authenticated-post [req route-fn]
-  (if (authenticated? req)
-    (let [{:keys [params]} req]
-      (route-fn params))
-    (response/found "/login/no-auth")))
-
-(defn authenticated-route [req route-fn]
-  (if (authenticated? req)
-    (route-fn req)
-    (response/found "/login/no-auth")))
+(defn failed-authentication-handler [request _]
+  (response/found "/login/no-auth"))
 
 (defn home-page [req]
   (let [{:keys [session]} req
@@ -102,25 +94,23 @@
   (GET "/logout" [] auth/logout))
 
 (defroutes post-routes
-  (POST "/households/add" req (authenticated-post req add-household))
-  (POST "/households/view" req (authenticated-post req view-households))
-  (POST "/households/edit" req (authenticated-post req edit-household))
+  (POST "/households/add" req (add-household (:params req)))
+  (POST "/households/view" req (view-households (:params req)))
+  (POST "/households/edit" req (edit-household (:params req)))
 
-  (POST "/chores/add" req (authenticated-post req add-chore))
-  (POST "/chores/remove" req (authenticated-post req remove-chore))
-  (POST "/chores/edit" req (authenticated-post req edit-chore))
-  (POST "/chores/view" req (authenticated-post req view-chores))
+  (POST "/chores/add" req (add-chore (:params req)))
+  (POST "/chores/remove" req (remove-chore (:params req)))
+  (POST "/chores/edit" req (edit-chore (:params req)))
+  (POST "/chores/view" req (view-chores (:params req)))
 
-  (POST "/living-situations/remove" req (authenticated-post req remove-living-situation))
-  (POST "/living-situations/add" [] add-living-situation)
+  (POST "/living-situations/remove" req (remove-living-situation (:params req)))
 
-  (POST "/roomates/view" req (authenticated-post req view-roomates))
-  (POST "/roomates/add" req (authenticated-post req add-roomate))
+  (POST "/roomates/view" req (view-roomates (:params req)))
+  (POST "/roomates/add" req (add-roomate (:params req)))
 
-  (POST "/chart/add" req (authenticated-post req chart-entry))
-  (POST "/chart/remove" req (authenticated-post req chart-entry-remove))
-  (POST "/chart/view" req (authenticated-post req view-chart))
-  )
+  (POST "/chart/add" req (chart-entry (:params req)))
+  (POST "/chart/remove" req (chart-entry-remove (:params req)))
+  (POST "/chart/view" req (view-chart (:params req))))
 
 (defroutes home-routes
-  (GET "/" req (authenticated-route req home-page)))
+  (GET "/" req (home-page req)))

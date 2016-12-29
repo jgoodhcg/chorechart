@@ -48,8 +48,8 @@
     - [x] chores
     - [x] roomates
   - [ ] endpoints
-
-- [ ] make authentication middleware
+    - [x] make authentication middleware
+    - [ ] refactor home routes into logically grouped resty ns
 
 - [ ] kebab the snakes (`a_snake_example a-kebab-example`)
   - [ ] remove all snakes from SPA components and handlers
