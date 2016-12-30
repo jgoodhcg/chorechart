@@ -50,6 +50,11 @@
   - [ ] endpoints
     - [x] make authentication middleware
     - [ ] refactor home routes into logically grouped resty ns
+      - [x] chores
+      - [x] households
+      - [x] living_situations
+      - [ ] roomates
+      - [ ] chart
 
 - [ ] authorization
 - [ ] fake deleting (inactive bools)
