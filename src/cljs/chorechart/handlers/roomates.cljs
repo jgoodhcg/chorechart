@@ -1,10 +1,7 @@
 (ns chorechart.handlers.roomates
   (:require [chorechart.db :as db]
             [day8.re-frame.http-fx]
-            [day8.re-frame.async-flow-fx]
             [ajax.core :as ajax]
-            [chorechart.misc :as misc]
-            [cljs.pprint :refer [pprint]]
             [re-frame.core :refer
              [dispatch reg-event-db reg-event-fx path]]))
 

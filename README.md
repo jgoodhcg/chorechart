@@ -50,29 +50,22 @@
   - [ ] endpoints
     - [x] make authentication middleware
     - [ ] refactor home routes into logically grouped resty ns
-      - [ ] put the identity in the right spot!
 
+- [ ] authorization
+- [ ] fake deleting (inactive bools)
+  - [ ] chores
+  - [ ] living situations (use this to allow "soft kicks" that a user can recover from)
 - [ ] kebab the snakes (`a_snake_example a-kebab-example`)
   - [ ] remove all snakes from SPA components and handlers
   - [ ] remove all snakes from endpoint params
   - [ ] only snakes are in the keys to maps sent to db fn's
-
-
-- [ ] authorization
-
-- [ ] material design
-
-- [ ] cascade on delete migrations
-- [ ] delete chore (with warning) (or make non-visible)
-
-- [ ] forgot password link
-
 - [ ] error messages in SPA
   - [ ] add roomate
-  
+- [ ] forgot password link
+- [ ] material design
 - [ ] change roomates to people in SPA
-
 - [ ] test suite
+- [ ] add new household on click causes js error (can't find call)
 
 ### eventually
 

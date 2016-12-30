@@ -30,7 +30,7 @@
           [:input.btn.btn-primary.btn-block
            {:type "button" :value "submit"
             :on-click
-            #(do
+            (fn [_]
                (reset! add-new-pressed false)
                (rf/dispatch [submit-dispatch-key]))}]
           [:input.btn.btn-secondary.btn-block

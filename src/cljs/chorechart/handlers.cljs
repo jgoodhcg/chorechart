@@ -11,6 +11,8 @@
             [chorechart.handlers.chart]
             [chorechart.handlers.households]
             [chorechart.handlers.chores]
+            [chorechart.handlers.roomates]
+
             ))
 
 (reg-event-fx
