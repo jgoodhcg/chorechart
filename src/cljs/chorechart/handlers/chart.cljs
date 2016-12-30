@@ -9,12 +9,26 @@
              [dispatch reg-event-db reg-event-fx path]]))
 
 (defn get-chart [_world [_ _]]
+  (let [today (new js/Date)
+        date (case (get-in _world [:db :chart-filter])
+               :this-week  (misc/start-of-week today)
+               :last-week  (misc/start-of-week
+                            (.setDate today
+                                      (- (.getDate today) 7)))
+               :this-month (misc/start-of-month today)
+               :last-month (misc/start-of-month
+                            (.setMonth today
+                                       (- (.getMonth today) 7)))
+
+               (misc/start-of-week today) ;; default
+
+               )])
   {:http-xhrio
    {:method          :post
     :uri             "/chart/view"
     :params          {:household_id
                       (get-in _world [:db :selected-household :household_id])
-                      :date (misc/start-of-week (new js/Date))}
+                      :date date}
     :timeout         5000
     :format          (ajax/json-request-format)
     :response-format (ajax/json-response-format {:keywords? true})
@@ -69,6 +83,9 @@
 (defn set-chart [db [_ chart]]
   (assoc db :chart chart))
 
+(defn set-chart-filter [db [_ filter]]
+  (assoc db :chart-filter filter))
+
 (reg-event-fx :get-chart get-chart)
 (reg-event-fx :remove-chart-entry remove-chart-entry)
 (reg-event-fx :send-chart-entry send-chart-entry)
@@ -79,3 +96,4 @@
 (reg-event-db :set-pending-chart-entry-date set-pending-chart-entry-date)
 (reg-event-db :set-pending-chart-entry-living-situation set-pending-chart-entry-living-situation)
 (reg-event-db :set-chart set-chart)
+(reg-event-db :set-chart-filter set-chart-filter)

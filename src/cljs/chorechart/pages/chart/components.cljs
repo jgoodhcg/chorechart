@@ -3,6 +3,13 @@
             [re-frame.core :as rf]
             [chorechart.pages.misc-comps.select :refer [select]]))
 
+(defn filter-btn [this-filter btn-filter btn-value]
+  [(if (= this-filter btn-filter)
+     :button.btn.btn-sm.btn-primary.col-xs-6.col-sm-3
+     :button.btn.btn-sm.btn-secondary.col-xs-6.col-sm-3)
+   {:on-click (fn [_] (rf/dispatch [:set-chart-filter btn-filter]))}
+   btn-value])
+
 (defn chart-table [chart]
   [:div.row
    [:div.col-xs-12
@@ -40,11 +47,11 @@
                                               :left "0em" :right "0em"}}
        (if-not @collapsed
          ;; expanded
-         [:div.row
+         [:div
           [:div.row
-           [:div.col-xs-9.offset-xs-1.form-group
-            [:h3 [:span.tag.tag-default household_name]]]
-           [:div.col-xs-1.form-group
+           [:div.col-xs-9.form-group
+            [:h3 [:span.tag.tag-primary household_name]]]
+           [:div {:style {:position "absolute" :right "0.5em"}}
             [:input.btn.btn-sm {:type "button" :value "▼"
                                 :on-click #(reset! collapsed true)}]]]
           [:div.row
@@ -71,9 +78,9 @@
 
          ;; collapsed
          [:div.row
-          [:div.col-xs-9.offset-xs-1.form-group
+          [:div.col-xs-9.form-group
            [:h3 [:span.tag.tag-default household_name]]]
-          [:div.col-xs-1.form-group
+          [:div {:style {:position "absolute" :right "0.5em"}}
            [:input.btn.btn-sm {:type "button" :value "▼"
                                :on-click #(reset! collapsed false)}]]])])))
 

@@ -8,6 +8,7 @@
    :chores []
    :pending-chart-entry {}
    :new-account false
+   :chart-filter :this-week
    })
 
 ;; filters for entries

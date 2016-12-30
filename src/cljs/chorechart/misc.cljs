@@ -13,6 +13,16 @@
            (+ 1 (.getMonth d)) "-"
            (.getDate d)))))
 
+(defn start-of-month
+  "takes any valid js/Date constructor arguments and returns a string yyyy-mm-dd of the monday of that week"
+  [date]
+  (let [d (new js/Date date)]
+    (do
+      (.setDate d 1)
+      (str (.getFullYear d) "-" ;; creates a string in yyyy-mm-dd format
+           (+ 1 (.getMonth d)) "-"
+           (.getDate d)))))
+
 (defn vec-remove
   "remove elem in coll"
   [coll pos]

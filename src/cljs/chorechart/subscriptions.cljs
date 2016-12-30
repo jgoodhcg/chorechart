@@ -45,3 +45,8 @@
  :chores
  (fn [db _]
    (:chores db)))
+
+(reg-sub
+ :chart-filter
+ (fn [db _]
+   (:chart-filter db)))

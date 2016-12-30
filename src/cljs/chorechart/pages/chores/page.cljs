@@ -6,11 +6,16 @@
 
 (defn chores-page []
   (rf/dispatch [:get-chores])
-  (let [chores (rf/subscribe [:chores])]
+  (let [chores (rf/subscribe [:chores])
+        selected_household (rf/subscribe [:selected-household])]
     [:div.container
      [:div.row
       [:br]
       [:div.col-xs-12
+       [:div.list-group
+        [:div.list-group-item.text-xs-center
+         {:style {:background-color "#f4f4f5"}}
+         [:h3 (:house_name @selected_household)]]]
        [:div
         (if (> (count @chores) 0)
           (generic-list @chores comp/chore-row)
