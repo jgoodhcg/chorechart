@@ -50,6 +50,7 @@
   - [ ] endpoints
     - [x] make authentication middleware
     - [ ] refactor home routes into logically grouped resty ns
+      - [ ] put the identity in the right spot!
 
 - [ ] kebab the snakes (`a_snake_example a-kebab-example`)
   - [ ] remove all snakes from SPA components and handlers
