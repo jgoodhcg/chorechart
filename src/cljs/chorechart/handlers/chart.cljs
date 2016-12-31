@@ -11,8 +11,12 @@
 (defn get-chart [_world [_ _]]
   (let [today (new js/Date)
         date (case (get-in _world [:db :chart-filter])
-               :week  (misc/start-of-week today)
-               :month (misc/start-of-month today)
+               :week   (misc/start-of-week today)
+               :month  (misc/start-of-month today)
+               :custom (if (misc/valid-interval
+                            (get-in [:db :chart-filter-interval-start])
+                            (get-in [:db :chart-filter-interval-end]))
+                         )
                (misc/start-of-week today))] ;; last is default case option
     {:http-xhrio
      {:method          :post
@@ -82,28 +86,12 @@
   (assoc db :chart-filter filter))
 
 (defn set-chart-filter-interval-start [db [_ date]]
-  (let [input (misc/zero-in-day date)
-        end   (misc/zero-in-day (:chart-filter-interval-end db))]
-    (if (< (.valueOf input)
-           (.valueOf end))
-      (assoc db :chart-filter-interval-start date)
-      ;; if it isn't a valid date then set the start to be one day
-      ;; behind the current end (setDate wraps for <1 and >28/29/30/31)
-      (assoc db :chart-filter-interval-start
-             (misc/date-string
-              (new js/Date (.setDate end (- (.getDate end) 1))))))))
+  (let [input (misc/zero-in-day date)]
+     (assoc db :chart-filter-interval-start date)))
 
 (defn set-chart-filter-interval-end [db [_ date]]
-  (let [input (misc/zero-in-day date)
-        start (misc/zero-in-day (:chart-filter-interval-start db))]
-    (if (> (.valueOf input)
-           (.valueOf start))
-      (assoc db :chart-filter-interval-end date)
-      ;; if it isn't a valid date then set the end to be one day
-      ;; beyond the current start (setDate wraps for <1 and >28/29/30/31)
-      (assoc db :chart-filter-interval-end
-             (misc/date-string
-              (new js/Date (.setDate start (+ (.getDate start) 1))))))))
+  (let [input (misc/zero-in-day date)]
+      (assoc db :chart-filter-interval-end date)))
 
 (reg-event-fx :get-chart get-chart)
 (reg-event-fx :remove-chart-entry remove-chart-entry)

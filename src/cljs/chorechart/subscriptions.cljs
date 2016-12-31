@@ -1,5 +1,6 @@
 (ns chorechart.subscriptions
-  (:require [re-frame.core :refer [reg-sub]]))
+  (:require [re-frame.core :refer [reg-sub]]
+            [chorechart.misc :as misc]))
 
 (reg-sub
   :page
@@ -50,3 +51,9 @@
  :chart-filter
  (fn [db _]
    (:chart-filter db)))
+
+(reg-sub
+ :chart-filter-interval-valid
+ (fn [db _]
+   (misc/valid-interval (:chart-filter-interval-start db)
+                        (:chart-filter-interval-end   db))))

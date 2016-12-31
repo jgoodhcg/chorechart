@@ -7,10 +7,13 @@
 (defn chart-page []
   (rf/dispatch [:get-chart])
   (rf/dispatch [:set-pending-chart-entry-living-situation])
-  (let [chart @(rf/subscribe [:chart])
-        chores @(rf/subscribe [:chores])
-        new-account @(rf/subscribe [:new-account])
-        filter @(rf/subscribe [:chart-filter])]
+  (let [chart          @(rf/subscribe [:chart])
+        chores         @(rf/subscribe [:chores])
+        new-account    @(rf/subscribe [:new-account])
+        filter         @(rf/subscribe [:chart-filter])
+        valid-interval @(rf/subscribe [:chart-filter-interval-valid])]
+
+    (pprint valid-interval)
 
     [:div.container-fluid
 
@@ -22,9 +25,12 @@
         (comp/filter-btn filter :custom "range")]]]
 
      (if (= filter :custom)
-       [:div [:br] [:div.row
+       [:div [:br]
+        [:div.row
          [:div {:style {:text-align "center"}}
-          [:div.form-group.col-xs-6
+          [(keyword
+            (str "div.form-group.col-xs-6"
+                 (if-not valid-interval ".has-danger" "")))
            [:input.form-control
             {:type "date"
              :on-change
@@ -32,7 +38,9 @@
                (rf/dispatch
                 [:set-chart-filter-interval-start
                  (-> e .-target .-value)]))}]]
-          [:div.form-group.col-xs-6
+          [(keyword
+            (str "div.form-group.col-xs-6"
+                 (if-not valid-interval ".has-danger" "")))
            [:input.form-control
             {:type "date"
              :on-change

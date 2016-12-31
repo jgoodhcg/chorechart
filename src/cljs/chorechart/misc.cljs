@@ -10,7 +10,16 @@
 (defn zero-in-day
   "taking a date obj, or string, will return a new date object with Hours, Minutes, Seconds, and Milliseconds set to default 0"
   [date]
-  (new js/Date (date-string (new js/Date date))))
+  (let [d (if (string? date)
+            (clojure.string/replace date #"-" "/") ;; sql needs "-" but js/Date does wierd time zone stuff unless the string uses "/"
+            date)]
+    (new js/Date (date-string (new js/Date d)))))
+
+(defn [start end]
+  (let [s (misc/zero-in-day start)
+        e (misc/zero-in-day end)]
+    (< (.valueOf s)
+       (.valueOf e)))
 
 (defn start-of-week
   "takes any valid js/Date constructor arguments and returns a string yyyy-mm-dd of the monday of that week"
