@@ -11,18 +11,19 @@
 (defn get-chart [_world [_ _]]
   (let [today (new js/Date)
         date (case (get-in _world [:db :chart-filter])
-               :this-week  (misc/start-of-week today)
-               :last-week  (misc/start-of-week
+               :one-week  (misc/start-of-week today)
+               :two-week  (misc/start-of-week
                             (.setDate today
                                       (- (.getDate today) 7)))
-               :this-month (misc/start-of-month today)
-               :last-month (misc/start-of-month
+               :one-month (misc/start-of-month today)
+               :two-month (misc/start-of-month
                             (.setMonth today
                                        (- (.getMonth today) 7)))
 
                (misc/start-of-week today) ;; default
 
-               )])
+               )]
+
   {:http-xhrio
    {:method          :post
     :uri             "/chart/view"
@@ -33,7 +34,8 @@
     :format          (ajax/json-request-format)
     :response-format (ajax/json-response-format {:keywords? true})
     :on-success      [:set-chart]
-    :on-failure      [:post-resp]}})
+    :on-failure      [:post-resp]}}
+  ))
 
 (defn remove-chart-entry [_world [_ chart_id]]
   {:http-xhrio
@@ -48,15 +50,25 @@
     :on-failure      [:post-resp]}})
 
 (defn send-chart-entry [_world [_ _]]
-  {:http-xhrio
-   {:method          :post
-    :uri             "/chart/add"
-    :params          (get-in _world [:db :pending-chart-entry])
-    :timeout         5000
-    :format          (ajax/json-request-format)
-    :response-format (ajax/json-response-format {:keywords? true})
-    :on-success      [:confirmed-chart-entry]
-    :on-failure      [:post-resp]}})
+  (let [pending-chart-entry (get-in _world [:db :pending-chart-entry])]
+    (pprint pending-chart-entry)
+    (pprint (every? #(contains? pending-chart-entry %)
+                    [:chore_id :moment :living_situation_id]))
+    (if (every? #(contains? pending-chart-entry %)
+                [:chore_id :moment :living_situation_id])
+      {:http-xhrio
+       {:method          :post
+        :uri             "/chart/add"
+        :params          (get-in _world [:db :pending-chart-entry])
+        :timeout         5000
+        :format          (ajax/json-request-format)
+        :response-format (ajax/json-response-format {:keywords? true})
+        :on-success      [:confirmed-chart-entry]
+        :on-failure      [:post-resp]}}
+      {:db (:db _world)}
+      )
+    )
+  )
 
 (defn confirmed-chart-entry [_world [_ living_situation_id]]
   {:db (assoc (:db _world) :pending-chart-entry {})

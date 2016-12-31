@@ -15,10 +15,10 @@
      [:div.row
       [:div.col-xs-12 {:style {:text-align "center"}}
        [:div.btn-group
-        (comp/filter-btn filter :this-week  "this week")
-        (comp/filter-btn filter :last-week  "last week")
-        (comp/filter-btn filter :this-month "this month")
-        (comp/filter-btn filter :last-month "last month")]]]
+        (comp/filter-btn filter :one-week  "this week")
+        (comp/filter-btn filter :two-week  "since last week")
+        (comp/filter-btn filter :one-month "this month")
+        (comp/filter-btn filter :two-month "since last month")]]]
 
      (comp/chart-table chart)
 
