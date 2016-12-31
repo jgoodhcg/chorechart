@@ -31,7 +31,7 @@
           [:ul.nav.navbar-nav
            [nav-link "#/chart" "Chart" :chart collapsed?]
            [nav-link "#/households" "Households" :households collapsed?]
-           [nav-link "#/roomates" "Roomates" :roomates collapsed?]
+           [nav-link "#/roomates" "People" :roomates collapsed?]
            [nav-link "#/chores" "Chores" :chores collapsed?]
            [nav-link "#/info" "Info" :info collapsed?]
            [:li.nav-item

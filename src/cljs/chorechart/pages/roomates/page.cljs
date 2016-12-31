@@ -18,8 +18,8 @@
        (generic-list-no-options (:roomates @selected_household) :user_name)
        [:br]
        (generic-add-new
-        "roomate's email"
+        "user's email"
         :set-pending-roomate
         :add-roomate
-        "add new roomate")]]]))
+        "add new person")]]]))
 
