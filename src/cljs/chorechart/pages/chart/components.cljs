@@ -5,8 +5,8 @@
 
 (defn filter-btn [this-filter btn-filter btn-value]
   [(if (= this-filter btn-filter)
-     :button.btn.btn-sm.btn-primary.col-xs-6.col-md-3
-     :button.btn.btn-sm.btn-secondary.col-xs-6.col-md-3)
+     :button.btn.btn-sm.btn-primary
+     :button.btn.btn-sm.btn-secondary)
    {:on-click (fn [_] (rf/dispatch [:set-chart-filter btn-filter]))}
    btn-value])
 

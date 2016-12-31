@@ -47,14 +47,25 @@
     - [x] households
     - [x] chores
     - [x] roomates
-  - [ ] endpoints
+  - [x] endpoints
     - [x] make authentication middleware
-    - [ ] refactor home routes into logically grouped resty ns
+    - [x] refactor home routes into logically grouped resty ns
       - [x] chores
       - [x] households
       - [x] living_situations
-      - [ ] roomates
-      - [ ] chart
+      - [x] roomates
+      - [x] chart
+- [ ] chart filter
+  - [x] filter buttons
+  - [ ] interval selector
+    - [x] interval inputs
+    - [ ] start interval dispatch
+    - [ ] end interval dispatch
+  - [ ] default interval 
+  - [ ] alter to accept intervval
+    - [ ] get-chart handler
+    - [ ] endpoint
+    - [ ] db fn
 
 - [ ] authorization
 - [ ] fake deleting (inactive bools)

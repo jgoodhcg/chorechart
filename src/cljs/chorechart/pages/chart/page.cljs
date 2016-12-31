@@ -1,6 +1,7 @@
 (ns chorechart.pages.chart.page
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
+            [cljs.pprint :refer [pprint]]
             [chorechart.pages.chart.components :as comp]))
 
 (defn chart-page []
@@ -12,13 +13,32 @@
         filter @(rf/subscribe [:chart-filter])]
 
     [:div.container-fluid
+
      [:div.row
       [:div.col-xs-12 {:style {:text-align "center"}}
        [:div.btn-group
-        (comp/filter-btn filter :one-week  "this week")
-        (comp/filter-btn filter :two-week  "since last week")
-        (comp/filter-btn filter :one-month "this month")
-        (comp/filter-btn filter :two-month "since last month")]]]
+        (comp/filter-btn filter :week   "week")
+        (comp/filter-btn filter :month  "month")
+        (comp/filter-btn filter :custom "range")]]]
+
+     (if (= filter :custom)
+       [:div [:br] [:div.row
+         [:div {:style {:text-align "center"}}
+          [:div.form-group.col-xs-6
+           [:input.form-control
+            {:type "date"
+             :on-change
+             (fn [e]
+               (rf/dispatch
+                [:set-chart-filter-interval-start
+                 (-> e .-target .-value)]))}]]
+          [:div.form-group.col-xs-6
+           [:input.form-control
+            {:type "date"
+             :on-change
+             (fn [e] (rf/dispatch
+                      [:set-chart-filter-interval-end
+                       (-> e .-target .-value)]))}]]]]])
 
      (comp/chart-table chart)
 

@@ -11,31 +11,20 @@
 (defn get-chart [_world [_ _]]
   (let [today (new js/Date)
         date (case (get-in _world [:db :chart-filter])
-               :one-week  (misc/start-of-week today)
-               :two-week  (misc/start-of-week
-                            (.setDate today
-                                      (- (.getDate today) 7)))
-               :one-month (misc/start-of-month today)
-               :two-month (misc/start-of-month
-                            (.setMonth today
-                                       (- (.getMonth today) 7)))
-
-               (misc/start-of-week today) ;; default
-
-               )]
-
-  {:http-xhrio
-   {:method          :post
-    :uri             "/chart/view"
-    :params          {:household_id
-                      (get-in _world [:db :selected-household :household_id])
-                      :date date}
-    :timeout         5000
-    :format          (ajax/json-request-format)
-    :response-format (ajax/json-response-format {:keywords? true})
-    :on-success      [:set-chart]
-    :on-failure      [:post-resp]}}
-  ))
+               :week  (misc/start-of-week today)
+               :month (misc/start-of-month today)
+               (misc/start-of-week today))] ;; last is default case option
+    {:http-xhrio
+     {:method          :post
+      :uri             "/chart/view"
+      :params          {:household_id
+                        (get-in _world [:db :selected-household :household_id])
+                        :date date}
+      :timeout         5000
+      :format          (ajax/json-request-format)
+      :response-format (ajax/json-response-format {:keywords? true})
+      :on-success      [:set-chart]
+      :on-failure      [:post-resp]}}))
 
 (defn remove-chart-entry [_world [_ chart_id]]
   {:http-xhrio
@@ -51,9 +40,6 @@
 
 (defn send-chart-entry [_world [_ _]]
   (let [pending-chart-entry (get-in _world [:db :pending-chart-entry])]
-    (pprint pending-chart-entry)
-    (pprint (every? #(contains? pending-chart-entry %)
-                    [:chore_id :moment :living_situation_id]))
     (if (every? #(contains? pending-chart-entry %)
                 [:chore_id :moment :living_situation_id])
       {:http-xhrio
@@ -65,10 +51,7 @@
         :response-format (ajax/json-response-format {:keywords? true})
         :on-success      [:confirmed-chart-entry]
         :on-failure      [:post-resp]}}
-      {:db (:db _world)}
-      )
-    )
-  )
+      {:db (:db _world)})))
 
 (defn confirmed-chart-entry [_world [_ living_situation_id]]
   {:db (assoc (:db _world) :pending-chart-entry {})
@@ -98,6 +81,30 @@
 (defn set-chart-filter [db [_ filter]]
   (assoc db :chart-filter filter))
 
+(defn set-chart-filter-interval-start [db [_ date]]
+  (let [input (misc/zero-in-day date)
+        end   (misc/zero-in-day (:chart-filter-interval-end db))]
+    (if (< (.valueOf input)
+           (.valueOf end))
+      (assoc db :chart-filter-interval-start date)
+      ;; if it isn't a valid date then set the start to be one day
+      ;; behind the current end (setDate wraps for <1 and >28/29/30/31)
+      (assoc db :chart-filter-interval-start
+             (misc/date-string
+              (new js/Date (.setDate end (- (.getDate end) 1))))))))
+
+(defn set-chart-filter-interval-end [db [_ date]]
+  (let [input (misc/zero-in-day date)
+        start (misc/zero-in-day (:chart-filter-interval-start db))]
+    (if (> (.valueOf input)
+           (.valueOf start))
+      (assoc db :chart-filter-interval-end date)
+      ;; if it isn't a valid date then set the end to be one day
+      ;; beyond the current start (setDate wraps for <1 and >28/29/30/31)
+      (assoc db :chart-filter-interval-end
+             (misc/date-string
+              (new js/Date (.setDate start (+ (.getDate start) 1))))))))
+
 (reg-event-fx :get-chart get-chart)
 (reg-event-fx :remove-chart-entry remove-chart-entry)
 (reg-event-fx :send-chart-entry send-chart-entry)
@@ -109,3 +116,5 @@
 (reg-event-db :set-pending-chart-entry-living-situation set-pending-chart-entry-living-situation)
 (reg-event-db :set-chart set-chart)
 (reg-event-db :set-chart-filter set-chart-filter)
+(reg-event-db :set-chart-filter-interval-start set-chart-filter-interval-start)
+(reg-event-db :set-chart-filter-interval-end set-chart-filter-interval-end)

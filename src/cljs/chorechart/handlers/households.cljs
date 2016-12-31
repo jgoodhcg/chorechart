@@ -110,7 +110,7 @@
 (reg-event-fx :add-household add-household)
 (reg-event-fx :edit-household edit-household)
 (reg-event-fx :remove-household remove-household)
-(reg-event-fx :confirmed-add-household cconfirmed-add-household)
+(reg-event-fx :confirmed-add-household confirmed-add-household)
 
 (reg-event-db :set-selected-household set-selected-household)
 (reg-event-db :set-pending-household set-pending-household)

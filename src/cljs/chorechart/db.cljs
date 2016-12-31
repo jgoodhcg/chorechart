@@ -1,4 +1,6 @@
-(ns chorechart.db)
+(ns chorechart.db
+  (:require [chorechart.misc :as misc]))
+
 
 (def default-db
   {:page :chart
@@ -8,7 +10,12 @@
    :chores []
    :pending-chart-entry {}
    :new-account false
-   :chart-filter :this-week
+   :chart-filter :week
+   :chart-filter-interval-start (misc/date-string
+                                 (let [d (new js/Date)]
+                                   (.setDate d (- (.getDate d) 1))
+                                   d))
+   :chart-filter-interval-end (misc/date-string (new js/Date))
    })
 
 ;; filters for entries
