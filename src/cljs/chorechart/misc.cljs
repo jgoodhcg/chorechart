@@ -15,32 +15,30 @@
             date)]
     (new js/Date (date-string (new js/Date d)))))
 
-(defn [start end]
-  (let [s (misc/zero-in-day start)
-        e (misc/zero-in-day end)]
+(defn valid-interval
+"taking two date obj, or strings, will return boolean if it is a valid interval"
+  [start end]
+  (let [s (zero-in-day start)
+        e (zero-in-day end)]
     (< (.valueOf s)
-       (.valueOf e)))
+       (.valueOf e))))
 
 (defn start-of-week
-  "takes any valid js/Date constructor arguments and returns a string yyyy-mm-dd of the monday of that week"
+  "takes any valid js/Date constructor arguments and returns a date obj of the monday of that week"
   [date]
   (let [d (new js/Date date)
         day_of_month (.getDate d)
         day_of_week (.getDay d)] ;; set up
-    (do
-      (.setDate d (+ (- day_of_month day_of_week) ;; sets d to the monday
-                     (if (= day_of_week 0) -6 1)))
-      (date-string d))))
+    (.setDate d (+ (- day_of_month day_of_week) ;; sets d to the monday
+                   (if (= day_of_week 0) -6 1)))
+    d))
 
 (defn start-of-month
-  "takes any valid js/Date constructor arguments and returns a string yyyy-mm-dd of the monday of that week"
+  "takes any valid js/Date constructor arguments and returns a date object of the monday of that week"
   [date]
   (let [d (new js/Date date)]
-    (do
-      (.setDate d 1)
-      (str (.getFullYear d) "-" ;; creates a string in yyyy-mm-dd format
-           (+ 1 (.getMonth d)) "-"
-           (.getDate d)))))
+    (.setDate d 1)
+    d))
 
 (defn vec-remove
   "remove elem in coll"

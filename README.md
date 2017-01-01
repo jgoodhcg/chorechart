@@ -55,17 +55,17 @@
       - [x] living_situations
       - [x] roomates
       - [x] chart
-- [ ] chart filter
+- [x] chart filter
   - [x] filter buttons
-  - [ ] interval selector
+  - [x] interval selector
     - [x] interval inputs
-    - [ ] start interval dispatch
-    - [ ] end interval dispatch
-  - [ ] default interval 
-  - [ ] alter to accept intervval
-    - [ ] get-chart handler
-    - [ ] endpoint
-    - [ ] db fn
+    - [x] start interval dispatch
+    - [x] end interval dispatch
+  - [x] default interval 
+  - [x] alter to accept intervval
+    - [x] get-chart handler
+    - [x] endpoint
+    - [x] sql query 
 
 - [ ] authorization
 - [ ] fake deleting (inactive bools)
@@ -86,6 +86,7 @@
 ### eventually
 
 #### general
+ - [ ] custom date ranges are zero'd but chart entry moments are not (makes them not entirely inclusive ranges)
  - [ ] admin privs for households
  - [ ] copy chore from one household to another
  - [ ] hash/salt passwords

@@ -9,21 +9,30 @@
              [dispatch reg-event-db reg-event-fx path]]))
 
 (defn get-chart [_world [_ _]]
-  (let [today (new js/Date)
-        date (case (get-in _world [:db :chart-filter])
-               :week   (misc/start-of-week today)
-               :month  (misc/start-of-month today)
-               :custom (if (misc/valid-interval
-                            (get-in [:db :chart-filter-interval-start])
-                            (get-in [:db :chart-filter-interval-end]))
-                         )
-               (misc/start-of-week today))] ;; last is default case option
+  (let [today        (new js/Date)
+        default      {:start (misc/start-of-week today)
+                      :end   today}
+        custom-start (new js/Date
+                          (get-in _world [:db :chart-filter-interval-start]))
+        custom-end   (new js/Date
+                          (get-in _world [:db :chart-filter-interval-end]))
+
+        interval     (case (get-in _world [:db :chart-filter])
+                       :week   default
+                       :month  {:start (misc/start-of-month today)
+                                :end   today}
+                       :custom (if (misc/valid-interval custom-start custom-end)
+                                 {:start custom-start :end custom-end}
+                                 default)
+                       default)]
     {:http-xhrio
      {:method          :post
       :uri             "/chart/view"
       :params          {:household_id
-                        (get-in _world [:db :selected-household :household_id])
-                        :date date}
+                        (get-in _world
+                                [:db :selected-household :household_id])
+                        :start (-> interval :start misc/date-string)
+                        :end   (-> interval :end   misc/date-string)}
       :timeout         5000
       :format          (ajax/json-request-format)
       :response-format (ajax/json-response-format {:keywords? true})
@@ -86,12 +95,10 @@
   (assoc db :chart-filter filter))
 
 (defn set-chart-filter-interval-start [db [_ date]]
-  (let [input (misc/zero-in-day date)]
-     (assoc db :chart-filter-interval-start date)))
+  (assoc db :chart-filter-interval-start date))
 
 (defn set-chart-filter-interval-end [db [_ date]]
-  (let [input (misc/zero-in-day date)]
-      (assoc db :chart-filter-interval-end date)))
+  (assoc db :chart-filter-interval-end date))
 
 (reg-event-fx :get-chart get-chart)
 (reg-event-fx :remove-chart-entry remove-chart-entry)

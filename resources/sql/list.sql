@@ -28,7 +28,8 @@ on living_situations.household_id = :household_id
 and chart.living_situation_id = living_situations.id
 inner join people
 on people.id = living_situations.person_id
-where chart.moment >= :date_from::date
+where chart.moment >= :start::date
+and chart.moment <= :end::date
 order by chart.moment
 
 -- :name list-roomates :? :*

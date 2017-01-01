@@ -2,9 +2,9 @@
   (:require [chorechart.db.core :as db]))
 
 (defn view [params]
-  (let [{:keys [household_id date]} params]
+  (let [{:keys [household_id start end]} params]
     (db/list-chart-entries
-     {:household_id household_id :date_from date})))
+     {:household_id household_id :start start :end end})))
 
 (defn remove [params]
   (let [chart_id (:chart_id params)]

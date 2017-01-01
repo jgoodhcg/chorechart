@@ -44,9 +44,11 @@
            [:input.form-control
             {:type "date"
              :on-change
-             (fn [e] (rf/dispatch
-                      [:set-chart-filter-interval-end
-                       (-> e .-target .-value)]))}]]]]])
+             (fn [e]
+               (rf/dispatch
+                [:set-chart-filter-interval-end
+                 (-> e .-target .-value)])
+               (rf/dispatch [:get-chart]))}]]]]])
 
      (comp/chart-table chart)
 
