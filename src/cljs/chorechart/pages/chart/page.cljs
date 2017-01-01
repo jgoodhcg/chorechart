@@ -13,8 +13,6 @@
         filter         @(rf/subscribe [:chart-filter])
         valid-interval @(rf/subscribe [:chart-filter-interval-valid])]
 
-    (pprint valid-interval)
-
     [:div.container-fluid
 
      [:div.row
@@ -25,30 +23,7 @@
         (comp/filter-btn filter :custom "range")]]]
 
      (if (= filter :custom)
-       [:div [:br]
-        [:div.row
-         [:div {:style {:text-align "center"}}
-          [(keyword
-            (str "div.form-group.col-xs-6"
-                 (if-not valid-interval ".has-danger" "")))
-           [:input.form-control
-            {:type "date"
-             :on-change
-             (fn [e]
-               (rf/dispatch
-                [:set-chart-filter-interval-start
-                 (-> e .-target .-value)]))}]]
-          [(keyword
-            (str "div.form-group.col-xs-6"
-                 (if-not valid-interval ".has-danger" "")))
-           [:input.form-control
-            {:type "date"
-             :on-change
-             (fn [e]
-               (rf/dispatch
-                [:set-chart-filter-interval-end
-                 (-> e .-target .-value)])
-               (rf/dispatch [:get-chart]))}]]]]])
+       (comp/custom-interval-input valid-interval))
 
      (comp/chart-table chart)
 

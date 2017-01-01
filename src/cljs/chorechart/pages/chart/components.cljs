@@ -10,6 +10,32 @@
    {:on-click (fn [_] (rf/dispatch [:set-chart-filter btn-filter]))}
    btn-value])
 
+(defn custom-interval-input [valid-interval]
+  [:div [:br]
+   [:div.row
+    [:div {:style {:text-align "center"}}
+     [(keyword
+       (str "div.form-group.col-xs-6"
+            (if-not valid-interval ".has-danger" "")))
+      [:input.form-control
+       {:type "date"
+        :on-change
+        (fn [e]
+          (rf/dispatch
+           [:set-chart-filter-interval-start
+            (-> e .-target .-value)]))}]]
+     [(keyword
+       (str "div.form-group.col-xs-6"
+            (if-not valid-interval ".has-danger" "")))
+      [:input.form-control
+       {:type "date"
+        :on-change
+        (fn [e]
+          (rf/dispatch
+           [:set-chart-filter-interval-end
+            (-> e .-target .-value)])
+          (rf/dispatch [:get-chart]))}]]]]])
+
 (defn chart-table [chart]
   [:div.row
    [:div.col-xs-12
