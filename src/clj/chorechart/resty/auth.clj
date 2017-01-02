@@ -16,18 +16,25 @@
 
 (defn signup [req]
   (let [{:keys [params]} req
-        {:keys [user_name password confirm email]} params]
-    (if (empty? email)
-      (signup-page {:flash "email cannot be blank"})
-      (if-not (= password confirm)
-        (signup-page {:flash "passwords must match"})
-        (let [house_name (str user_name "'s house")] ;; default household name
-          (try
-            (do
-              (db/add-person! {:user_name user_name :email email :password password})
-              (response/found "/login"))
-            ;; logically the only thing that breaks the above is taken person user_name
-            (catch Exception e (signup-page {:flash (str (.getMessage e))}))))))))
+        {:keys [user_name password confirm email]} params
+        flash (fn [msg] (signup-page {:flash msg}))]
+    (cond
+      (empty? email)             (flash "email cannot be blank")
+      (nil?
+       (re-matches
+        #".+\@.+\..+" email))    (flash "please use a valid email address")
+      (empty? user_name)         (flash "name cannot be blank")
+      (empty? password)          (flash "password cannot be blank")
+      (not (= password confirm)) (flash "passwords must match")
+      :else (try
+              (do
+                (db/add-person!
+                 {:user_name user_name :email email :password password})
+                (response/found "/login"))
+              ;; the only thing that should break the above
+              ;; is a taken user_name
+              (catch Exception e
+                (flash (str (.getMessage e))))))))
 
 (defn login [req]
   ;; (str req))
