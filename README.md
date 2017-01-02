@@ -71,34 +71,34 @@
   - [x] add roomate
   - [x] households
   - [x] chores
-- [ ] forgot password link
-  - [x] validate email on signup http://stackoverflow.com/a/33737528/5040125 
-  - [ ] send recovery email
+- [x] validate email on signup http://stackoverflow.com/a/33737528/5040125 
+- [ ] splash screen
+  
+### alpha_v003
+- [ ] test suite
+- [ ] material design
+
+### beta_v001
+- [ ] authorization
+- [ ] optional image upload for verification on chart entries
+- [ ] better passwording
+  - [ ] hash/salt passwords
+  - [ ] forgot password link
+    - [ ] send recovery email http://www.luminusweb.net/docs/useful_libraries.md#email
 - [ ] fake deleting (inactive bools)
   - [ ] chores
   - [ ] living situations (use this to allow "soft kicks" that a user can recover from)
-- [ ] splash screen
-  
-### beta
-- [ ] authorization
-- [ ] material design
-- [ ] optional image upload for verification on chart entries
-
 - [ ] kebab the snakes `a_snake_example a-kebab-example`
   - [ ] remove all snakes from SPA components and handlers
   - [ ] remove all snakes from endpoint params
-  - [ ] only snakes are in the keys to maps sent to db fn's
- 
-- [ ] test suite
+  - [ ] only snakes are in the keys to maps sent to db fn's OR kebab to snake library
 
 ### eventually
-
 #### general
 - [ ] add new household on click causes js error (can't find call)
 - [ ] custom date ranges are zero'd but chart entry moments are not (makes them not entirely inclusive ranges)
 - [ ] admin privs for households
 - [ ] copy chore from one household to another
-- [ ] hash/salt passwords
 - [ ] redirect (signup/login) if logged in
 - [ ] refactor db intensive actions to use rollback transactions (ex: signup with default house setup)
 - [ ] adding roomate that isn't signed up
@@ -114,11 +114,8 @@
   - [ ] choose color on roomates page
   - [ ] chart displays colors
 - [ ] password recovery
- 
-
 #### migrations
 - [ ] rename pass to password people table
-- [ ] refactor db/col names to use `-` instead of `_` (add escaping `"quotes"`) OR use the kebab library mentioned in luminus docs
 - [ ] add a first/last name to the people table
 - [ ] constraint for no duplicate names on chores per household
 - [ ] uniqueue constraint on living_situations `(person_id, household_id)`
