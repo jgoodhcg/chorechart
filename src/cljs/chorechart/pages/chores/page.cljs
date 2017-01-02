@@ -25,4 +25,5 @@
       "new chore name"
       :set-pending-add-chore
       :add-chore
-      "add new chore")]))
+      "add new chore"
+      false)]))

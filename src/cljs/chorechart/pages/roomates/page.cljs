@@ -6,7 +6,8 @@
 
 (defn roomates-page []
   (rf/dispatch [:get-roomates-selected-household])
-  (let [selected_household (rf/subscribe [:selected-household])]
+  (let [selected_household @(rf/subscribe [:selected-household])
+        add-roomate-failed @(rf/subscribe [:add-roomate-failed])]
     [:div.container
      [:div.row
       [:br]
@@ -14,12 +15,13 @@
        [:div.list-group
         [:div.list-group-item.text-xs-center
          {:style {:background-color "#f4f4f5"}}
-         [:h3 (:house_name @selected_household)]]]
-       (generic-list-no-options (:roomates @selected_household) :user_name)
+         [:h3 (:house_name selected_household)]]]
+       (generic-list-no-options (:roomates selected_household) :user_name)
        [:br]
        (generic-add-new
         "user's email"
         :set-pending-roomate
         :add-roomate
-        "add new person")]]]))
+        "add new person"
+        add-roomate-failed)]]]))
 

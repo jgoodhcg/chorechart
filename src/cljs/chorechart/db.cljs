@@ -16,6 +16,7 @@
                                    (.setDate d (- (.getDate d) 1))
                                    d))
    :chart-filter-interval-end (misc/date-string (new js/Date))
+   :add-roomate-failed false
    })
 
 ;; filters for entries

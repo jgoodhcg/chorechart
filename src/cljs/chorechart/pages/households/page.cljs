@@ -20,4 +20,5 @@
       "new houshold name"
       :set-pending-household
       :add-household
-      "add new household")]))
+      "add new household"
+      false)]))

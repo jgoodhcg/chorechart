@@ -1,5 +1,7 @@
 (ns chorechart.resty.roomates
-  (:require [chorechart.db.core :as db]))
+  (:require [chorechart.db.core :as db]
+            [ring.util.http-response :as response]
+            ))
 
 (defn view [params]
   (db/list-roomates {:living_situation_id (:living_situation_id params)}))
@@ -11,4 +13,6 @@
                                      {:roomate_email roomate_email
                                       :living_situation_id living_situation_id})]
         (list (assoc (select-keys person [:user_name])
-                     :living_situation new_living_situation_id))))))
+                     :living_situation new_living_situation_id)))
+      (response/unprocessable-entity)
+      )))

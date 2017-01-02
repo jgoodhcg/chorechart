@@ -69,18 +69,22 @@
 - [x] change roomates to people in SPA
 - [ ] error messages in SPA
   - [ ] add roomate
+  - [ ] households
+  - [ ] chores
 - [ ] forgot password link
   - [ ] validate email on signup http://stackoverflow.com/a/33737528/5040125 
+  - [ ] send recovery email
 - [ ] fake deleting (inactive bools)
   - [ ] chores
   - [ ] living situations (use this to allow "soft kicks" that a user can recover from)
+- [ ] splash screen
   
 ### beta
 - [ ] authorization
 - [ ] material design
 - [ ] test suite
 
-- [ ] kebab the snakes (`a_snake_example a-kebab-example`)
+- [ ] kebab the snakes `a_snake_example a-kebab-example`
   - [ ] remove all snakes from SPA components and handlers
   - [ ] remove all snakes from endpoint params
   - [ ] only snakes are in the keys to maps sent to db fn's

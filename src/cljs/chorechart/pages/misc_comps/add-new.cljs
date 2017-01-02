@@ -5,11 +5,12 @@
 (defn generic-add-new [placeholder
                        on-change-dispatch-key
                        submit-dispatch-key
-                       add-new-button-text]
+                       add-new-button-text
+                       error]
 
   (r/with-let [add-new-pressed (r/atom false)]
 
-    (if @add-new-pressed
+    (if (or @add-new-pressed error)
 
       ;; form to add new entry
       [:div.row
@@ -17,7 +18,9 @@
         [:div.row
 
          ;; input feild
-         [:div.col-xs-12.col-sm-9.form-group
+         [(-> "div.col-xs-12.col-sm-9.form-group"
+              (#(str % (if error ".has-danger" "")))
+              keyword)
           [:input.form-control
            {:type "text" :placeholder placeholder
             :on-change
