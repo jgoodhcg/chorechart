@@ -48,7 +48,10 @@
     :on-failure      [:post-resp]}})
 
 (defn add-chore [_world [_ _]]
-  {:http-xhrio
+  {:db (-> _world
+           (#(assoc-in % [:db :add-chore-failed] false))
+           :db)
+   :http-xhrio
    {:method          :post
     :uri             "/chores/add"
     :params          {:chore_name
@@ -59,7 +62,7 @@
     :response-format (ajax/json-response-format
                       {:keywords? true})
     :on-success      [:confirmed-add-chore]
-    :on-failure      [:post-resp]}})
+    :on-failure      [:add-chore-failed]}})
 
 (defn set-pending-add-chore [db [_ chore_name]]
   (assoc db :pending-add-chore {:chore_name chore_name}))
@@ -86,6 +89,9 @@
 (defn set-chores [db [_ chores]]
   (assoc db :chores chores))
 
+(defn add-chore-failed [db [_ _]]
+  (assoc db :add-chore-failed true))
+
 (reg-event-fx :get-chores get-chores)
 (reg-event-fx :edit-chore edit-chore)
 (reg-event-fx :remove-chore remove-chore)
@@ -97,3 +103,4 @@
 (reg-event-db :confirmed-remove-chore confirmed-remove-chore)
 (reg-event-db :confirmed-edit-chore confirmed-edit-chore)
 (reg-event-db :set-chores set-chores)
+(reg-event-db :add-chore-failed add-chore-failed)

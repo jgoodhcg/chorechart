@@ -6,8 +6,9 @@
 
 (defn chores-page []
   (rf/dispatch [:get-chores])
-  (let [chores (rf/subscribe [:chores])
-        selected_household (rf/subscribe [:selected-household])]
+  (let [chores @(rf/subscribe [:chores])
+        selected_household @(rf/subscribe [:selected-household])
+        add-chore-failed @(rf/subscribe [:add-chore-failed])]
     [:div.container
      [:div.row
       [:br]
@@ -15,10 +16,10 @@
        [:div.list-group
         [:div.list-group-item.text-xs-center
          {:style {:background-color "#f4f4f5"}}
-         [:h3 (:house_name @selected_household)]]]
+         [:h3 (:house_name selected_household)]]]
        [:div
-        (if (> (count @chores) 0)
-          (generic-list @chores comp/chore-row)
+        (if (> (count chores) 0)
+          (generic-list chores comp/chore-row)
           "no chores yet ):")]]]
      [:br]
      (generic-add-new
@@ -26,4 +27,4 @@
       :set-pending-add-chore
       :add-chore
       "add new chore"
-      false)]))
+      add-chore-failed)]))

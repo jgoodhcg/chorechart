@@ -69,8 +69,8 @@
 - [x] change roomates to people in SPA
 - [ ] error messages in SPA
   - [x] add roomate
-  - [ ] households
-  - [ ] chores
+  - [x] households
+  - [x] chores
 - [ ] forgot password link
   - [ ] validate email on signup http://stackoverflow.com/a/33737528/5040125 
   - [ ] send recovery email

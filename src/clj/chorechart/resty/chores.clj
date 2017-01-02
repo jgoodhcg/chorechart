@@ -1,13 +1,16 @@
 (ns chorechart.resty.chores
-  (:require [chorechart.db.core :as db]))
+  (:require [chorechart.db.core :as db]
+            [ring.util.http-response :as response]))
 
 (defn view [params]
   (db/list-chores {:household_id (:household_id params)}))
 
 (defn add [params]
   (let [{:keys [chore_name household_id]} params]
-    (list (db/add-chore! {:chore_name chore_name :household_id household_id
-                          :description "default description nobody made manually"}))))
+    (if-let [chore (db/add-chore! {:chore_name chore_name :household_id household_id
+                                   :description "default description nobody made manually"})]
+      (list chore)
+      (response/unprocessable-entity))))
 
 (defn edit [params]
   (let [{:keys [new_chore_name chore_id]} params]

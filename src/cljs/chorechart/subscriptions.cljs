@@ -29,3 +29,5 @@
 (reg-sub :add-roomate-failed (fn [db _] (:add-roomate-failed db)))
 
 (reg-sub :add-household-failed (fn [db _] (:add-household-failed db)))
+
+(reg-sub :add-chore-failed (fn [db _] (:add-chore-failed db)))
