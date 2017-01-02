@@ -14,7 +14,7 @@
       (list (assoc (db/add-living-situation!
                     {:person_id person_id :household_id household_id})
                    :household_id household_id :house_name house_name))
-      (response/not-found "error entering household"))))
+      (response/unprocessable-entity))))
 
 (defn view [params]
   (db/list-households {:person_id (:person_id params)}))

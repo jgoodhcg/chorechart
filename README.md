@@ -68,7 +68,7 @@
     - [x] sql query 
 - [x] change roomates to people in SPA
 - [ ] error messages in SPA
-  - [ ] add roomate
+  - [x] add roomate
   - [ ] households
   - [ ] chores
 - [ ] forgot password link

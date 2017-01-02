@@ -17,6 +17,7 @@
                                    d))
    :chart-filter-interval-end (misc/date-string (new js/Date))
    :add-roomate-failed false
+   :add-household-failed false
    })
 
 ;; filters for entries

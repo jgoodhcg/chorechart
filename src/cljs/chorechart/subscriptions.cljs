@@ -27,3 +27,5 @@
                         (:chart-filter-interval-end   db))))
 
 (reg-sub :add-roomate-failed (fn [db _] (:add-roomate-failed db)))
+
+(reg-sub :add-household-failed (fn [db _] (:add-household-failed db)))

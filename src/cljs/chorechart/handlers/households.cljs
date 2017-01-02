@@ -20,7 +20,10 @@
     :on-failure      [:post-resp]}})
 
 (defn add-household [_world [_ _]]
-  {:http-xhrio
+  {:db (-> _world
+           (#(assoc-in % [:db :add-household-failed] false))
+           :db)
+   :http-xhrio
    {:method          :post
     :uri             "/households/add"
     :params          {:house_name
@@ -30,7 +33,7 @@
     :format          (ajax/json-request-format)
     :response-format (ajax/json-response-format {:keywords? true})
     :on-success      [:confirmed-add-household]
-    :on-failure      [:post-resp]}})
+    :on-failure      [:add-household-failed]}})
 
 (defn edit-household [_world [_ _]]
   {:http-xhrio
@@ -106,6 +109,9 @@
                (first households)
                selected_household)))))
 
+(defn add-household-failed [db [_ _]]
+  (assoc db :add-household-failed true))
+
 (reg-event-fx :get-households get-households)
 (reg-event-fx :add-household add-household)
 (reg-event-fx :edit-household edit-household)
@@ -118,3 +124,4 @@
 (reg-event-db :confirmed-remove-household confirmed-remove-household)
 (reg-event-db :confirmed-edit-household confirmed-edit-household)
 (reg-event-db :set-households set-households)
+(reg-event-db :add-household-failed add-household-failed)
