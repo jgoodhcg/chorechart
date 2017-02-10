@@ -72,11 +72,17 @@
   - [x] households
   - [x] chores
 - [x] validate email on signup http://stackoverflow.com/a/33737528/5040125 
-- [ ] splash screen
+- [x] splash screen
   
 ### alpha_v003
 - [ ] test suite
 - [ ] material design
+- [ ] fix chart submission sticking after entry
+- [ ] fix chore list not refreshing when switching household and going directly to chart
+- [ ] safari squashes date field for chart entry
+- [ ] house selection should be a click event on the whole row, not tiny box that safari doesn't even render
+- [ ] remove name from chart entry input
+- [ ] send an email after signing up
 
 ### beta_v001
 - [ ] authorization
