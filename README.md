@@ -75,22 +75,27 @@
 - [x] splash screen
   
 ### alpha_v003
-- [ ] test suite
-- [ ] material design
 - [ ] fix chart submission sticking after entry
 - [ ] fix chore list not refreshing when switching household and going directly to chart
 - [ ] safari squashes date field for chart entry
 - [ ] house selection should be a click event on the whole row, not tiny box that safari doesn't even render
 - [ ] remove name from chart entry input
+- [ ] hash/salt passwords
+- [ ] update readme
+
+### alpha_v004
 - [ ] send an email after signing up
+- [ ] forgot password link
+    - [ ] send recovery email http://www.luminusweb.net/docs/useful_libraries.md#email 
+- [ ] invite friend
+    - [ ] send email
+    - [ ] add to house if already a member
+    - [ ] add to house on signup (or prompt?)
+- [ ] test suite
 
 ### beta_v001
 - [ ] authorization
 - [ ] optional image upload for verification on chart entries
-- [ ] better passwording
-  - [ ] hash/salt passwords
-  - [ ] forgot password link
-    - [ ] send recovery email http://www.luminusweb.net/docs/useful_libraries.md#email
 - [ ] fake deleting (inactive bools)
   - [ ] chores
   - [ ] living situations (use this to allow "soft kicks" that a user can recover from)
@@ -98,6 +103,7 @@
   - [ ] remove all snakes from SPA components and handlers
   - [ ] remove all snakes from endpoint params
   - [ ] only snakes are in the keys to maps sent to db fn's OR kebab to snake library
+- [ ] material design
 
 ### eventually
 #### general
