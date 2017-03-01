@@ -81,6 +81,8 @@
 - [ ] house selection should be a click event on the whole row, not tiny box that safari doesn't even render
 - [ ] remove name from chart entry input
 - [ ] hash/salt passwords
+- [ ] error message on invite
+- [ ] case insesitive emails
 - [ ] update readme
 
 ### alpha_v004
