@@ -81,9 +81,6 @@
             [:input.btn.btn-sm {:type "button" :value "▼"
                                 :on-click #(reset! collapsed true)}]]]
           [:div.row
-           [:div.col-xs-12-down.col-sm-4.form-group
-            [:input.form-control {:type "text" :disabled true
-                                  :style {:width "100%"} :value (str " " user_name " ")}]]
            [:div.col-xs-12.col-sm-4.form-group
             (select "name" :set-pending-chart-entry-chore-id
                     (map
@@ -97,7 +94,7 @@
               :on-change
               #(rf/dispatch
                 [:set-pending-chart-entry-date (-> % .-target .-value)])}]]
-           [:div.col-xs-12.col-sm-12.form-group
+           [:div.col-xs-12.col-sm-4.form-group
             [:input.btn.btn-primary.btn-block
              {:type "button" :value "submit" :width "100%"
               :on-click #(rf/dispatch [:send-chart-entry])}]]]]

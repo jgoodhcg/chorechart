@@ -75,11 +75,11 @@
 - [x] splash screen
   
 ### alpha_v003
+- [x] remove name from chart entry input
 - [ ] fix chart submission sticking after entry
 - [ ] fix chore list not refreshing when switching household and going directly to chart
 - [ ] safari squashes date field for chart entry
 - [ ] house selection should be a click event on the whole row, not tiny box that safari doesn't even render
-- [ ] remove name from chart entry input
 - [ ] hash/salt passwords
 - [ ] error message on invite
 - [ ] case insesitive emails
