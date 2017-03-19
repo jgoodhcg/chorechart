@@ -9,6 +9,7 @@
   (let [chores @(rf/subscribe [:chores])
         selected_household @(rf/subscribe [:selected-household])
         add-chore-failed @(rf/subscribe [:add-chore-failed])]
+
     [:div.container
      [:div.row
       [:br]

@@ -104,7 +104,7 @@
               (filter
                #(= selected_living_situation_id (get % :living_situation_id))
                households))
-             (if (or (nil? selected_household)    ;; set a default if there isn't
+             (if (or (nil? selected_household)    ;; set a default
                      (empty? selected_household)) ;; if there isn't one
                (first households)
                selected_household)))))
