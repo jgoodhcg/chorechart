@@ -2,7 +2,9 @@
   (:require
    [ring.util.http-response :as response]
    [chorechart.db.core :refer [*db*] :as db]
-   [chorechart.layout :as layout]))
+   [chorechart.layout :as layout]
+   [buddy.hashers :as hashers]
+   ))
 
 (defn signup-page
   ([] (layout/render "signup.html"))
@@ -29,7 +31,7 @@
       :else (try
               (do
                 (db/add-person!
-                 {:user_name user_name :email email :password password})
+                 {:user_name user_name :email email :password (hashers/derive password)})
                 (response/found "/login"))
               ;; the only thing that should break the above
               ;; is a taken user_name
@@ -45,7 +47,7 @@
       (do
         (let [person (db/find-person {:email email})
               found-pass (:pass person)]
-          (if (and found-pass (= found-pass password))
+          (if (and found-pass (hashers/check password found-pass))
             (let [ updated-session (assoc session
                                           :identity email
                                           :person (select-keys person [:id :user_name :email]))]
