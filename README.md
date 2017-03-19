@@ -1,18 +1,19 @@
 # Chore Chart
+Chore Chart is a simple clojure(script) application using reframe. Meant as a test pilot for learning reframe development and something moderately useful.
 
-## start
-
+## dev start
 1. install Vagrant + Virtualbox 
 2. clone repo
 3. run `vagrant up` in cloned directory
 4. wait
 
-### non connectable repl way  
+### regular repl  
 5. open 2 shells and run `vagrant ssh` in both, after the box is initialized  
 6. in 1 shell run `lein run` and wait until it is serving  
 7. in the other shell run `lein figwheel`  
+8. visit `localhost:3000` in browser  
 
-### connectable repl way  
+### nrepl  
 5. run `bash start.sh` to conenct to vm with ssh ?tunneled ports?  
 6. run `cd/chorechart` to get into the project  
 7. run `./cider-deps-repl` to create an nrepl that cider can connect to  
@@ -21,8 +22,7 @@
 10. run `(start)` to launch the webserver  
 11. when that returns run `(start-fw)` to start figwheel  
 12. when that returns run `(cljs)` to start a cljs nrepl  
-
-8/13. visit `localhost:3000` in browser  
+13. visit `localhost:3000` in browser  
 
 ## mock data
 
