@@ -80,12 +80,13 @@
 - [x] fix chore list not refreshing when switching household and going directly to chart
 - [x] safari squashes date field for chart entry
 - [x] house selection should be a click event on the whole row, not tiny box that safari doesn't even render
-- [ ] hash/salt passwords
-- [ ] error message on invite
-- [ ] case insesitive emails
+- [x] hash passwords
+- [x] error message on invite
+- [x] case insesitive emails
 - [ ] update readme
 
 ### alpha_v004
+- [ ] unique constraint on living situations to avoid duplicates
 - [ ] send an email after signing up
 - [ ] forgot password link
     - [ ] send recovery email http://www.luminusweb.net/docs/useful_libraries.md#email 
