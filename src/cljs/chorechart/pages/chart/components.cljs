@@ -97,7 +97,9 @@
            [:div.col-xs-12.col-sm-4.form-group
             [:input.btn.btn-primary.btn-block
              {:type "button" :value "submit" :width "100%"
-              :on-click #(rf/dispatch [:send-chart-entry])}]]]]
+              :on-click #(do
+                           (rf/dispatch [:send-chart-entry])
+                           (reset! collapsed true))}]]]]
 
          ;; collapsed
          [:div.row
