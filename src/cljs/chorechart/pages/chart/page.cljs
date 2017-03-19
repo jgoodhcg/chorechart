@@ -5,8 +5,9 @@
             [chorechart.pages.chart.components :as comp]))
 
 (defn chart-page []
-  (rf/dispatch [:get-chart])
   (rf/dispatch [:set-pending-chart-entry-living-situation])
+  (rf/dispatch [:get-chart])
+  (rf/dispatch [:get-chores])
   (let [chart          @(rf/subscribe [:chart])
         chores         @(rf/subscribe [:chores])
         new-account    @(rf/subscribe [:new-account])
