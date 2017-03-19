@@ -91,6 +91,7 @@
            [:div.col-xs-12.col-sm-4.form-group
             [:input.form-control
              {:type "date" :style {:width "100%"}
+              :placeholder "mm/dd/yyyy"
               :on-change
               #(rf/dispatch
                 [:set-pending-chart-entry-date (-> % .-target .-value)])}]]

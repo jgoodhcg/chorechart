@@ -37,16 +37,11 @@
               :edit-household)
 
        :normal [:div.row
-                [:div.col-xs-1
-                 (if (not is_selected)
-                   [:button.btn.btn-sm
-                    {:on-click
-                     #(rf/dispatch
-                       [:set-selected-household
-                        (:living_situation_id household)])}]
-
-                   [:button.btn.btn-sm.btn-primary])]
                 [:div.col-xs-9.list-group-item-heading
+                 {:on-click
+                  #(rf/dispatch
+                    [:set-selected-household
+                     (:living_situation_id household)])}
                  (:house_name household)]
                 [:div.col-xs-2
                  [:button.btn.btn-sm.btn-secondary

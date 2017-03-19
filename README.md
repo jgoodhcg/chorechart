@@ -76,10 +76,10 @@
   
 ### alpha_v003
 - [x] remove name from chart entry input
-- [ ] fix chart submission sticking after entry
-- [ ] fix chore list not refreshing when switching household and going directly to chart
-- [ ] safari squashes date field for chart entry
-- [ ] house selection should be a click event on the whole row, not tiny box that safari doesn't even render
+- [x] fix chart submission sticking after entry
+- [x] fix chore list not refreshing when switching household and going directly to chart
+- [x] safari squashes date field for chart entry
+- [x] house selection should be a click event on the whole row, not tiny box that safari doesn't even render
 - [ ] hash/salt passwords
 - [ ] error message on invite
 - [ ] case insesitive emails
