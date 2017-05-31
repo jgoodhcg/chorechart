@@ -36,7 +36,9 @@
               ;; the only thing that should break the above
               ;; is a taken user_name
               (catch Exception e
-                (flash (str (.getMessage e))))))))
+                (do (print (str (.getMessage e)))
+                    (flash "there was an error"))
+                )))))
 
 (defn login [req]
   ;; (str req))
