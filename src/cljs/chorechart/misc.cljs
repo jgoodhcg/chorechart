@@ -52,6 +52,14 @@
     (.setDate d 1)
     d))
 
+(defn end-of-month
+  [date]
+  (let [d (new js/Date date)
+        year (.getFullYear d)
+        next-month (+ 1 (.getMonth d))
+        day 0]
+    (new js/Date year next-month day)))
+
 (defn vec-remove
   "remove elem in coll"
   [coll pos]

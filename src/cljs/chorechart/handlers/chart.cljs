@@ -20,7 +20,7 @@
         interval     (case (get-in _world [:db :chart-filter])
                        :week   default
                        :month  {:start (misc/start-of-month today)
-                                :end   today}
+                                :end   (misc/end-of-month today)}
                        :custom (if (misc/valid-interval custom-start custom-end)
                                  {:start custom-start :end custom-end}
                                  default)
