@@ -39,7 +39,7 @@
 (defn chart-table [chart]
   [:div.row
    [:div.col-xs-12
-    [:table.table
+    [:table.table {:style {:overflow "scroll" :margin-bottom "20em"}}
      [:thead
       [:tr
        [:th "Person"]
