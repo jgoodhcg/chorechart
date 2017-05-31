@@ -11,7 +11,7 @@
 (defn get-chart [_world [_ _]]
   (let [today        (new js/Date)
         default      {:start (misc/start-of-week today)
-                      :end   today}
+                      :end   (misc/end-of-week today)}
         custom-start (new js/Date
                           (get-in _world [:db :chart-filter-interval-start]))
         custom-end   (new js/Date
@@ -100,9 +100,9 @@
 (defn set-chart-filter-interval-end [db [_ date]]
   (assoc db :chart-filter-interval-end date))
 
-(reg-event-fx :get-chart get-chart)
+(reg-event-fx :get-chart  [(when ^boolean goog.DEBUG re-frame.core/debug)] get-chart)
 (reg-event-fx :remove-chart-entry remove-chart-entry)
-(reg-event-fx :send-chart-entry send-chart-entry)
+(reg-event-fx :send-chart-entry [(when ^boolean goog.DEBUG re-frame.core/debug)] send-chart-entry)
 (reg-event-fx :confirmed-chart-entry confirmed-chart-entry)
 
 (reg-event-db :confirmed-remove-chart-entry confirmed-remove-chart-entry)

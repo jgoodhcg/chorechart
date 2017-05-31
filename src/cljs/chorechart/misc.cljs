@@ -29,8 +29,20 @@
   (let [d (new js/Date date)
         day_of_month (.getDate d)
         day_of_week (.getDay d)] ;; set up
-    (.setDate d (+ (- day_of_month day_of_week) ;; sets d to the monday
-                   (if (= day_of_week 0) -6 1)))
+    (.setDate d (+ (- day_of_month day_of_week) ;; sets d to the monday instead of sunday
+                   (if (= day_of_week 0) -6 0)))
+    d))
+
+(defn end-of-week
+  "takes any valid js/Date constructor arguments and returns a date obj of the monday of that week"
+  [date]
+  (let [d (new js/Date date)
+        day_of_month (.getDate d)
+        day_of_week (.getDay d)] ;; set up
+    (.setDate d (-> day_of_month
+                    (- day_of_week)
+                    (- 1)
+                    (+ 7))) ;; end of the week is Sunday
     d))
 
 (defn start-of-month
