@@ -67,7 +67,7 @@
       {:db (:db _world)})))
 
 (defn confirmed-chart-entry [_world [_ living_situation_id]]
-  {:db (assoc (:db _world) :pending-chart-entry {})
+  {:db (:db _world)
    :dispatch [:get-chart]})
 
 (defn confirmed-remove-chart-entry [db [_ chart_entry_rm]]
