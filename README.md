@@ -32,7 +32,7 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
 
 ## todo
 
-### alpha_v002
+### alpha_2
 - [x] refactor namespaces
   - [x] SPA components
     - [x] chart
@@ -74,7 +74,7 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
 - [x] validate email on signup http://stackoverflow.com/a/33737528/5040125 
 - [x] splash screen
   
-### alpha_v003
+### alpha_3
 - [x] remove name from chart entry input
 - [x] fix chart submission sticking after entry
 - [x] fix chore list not refreshing when switching household and going directly to chart
@@ -85,7 +85,7 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
 - [x] case insesitive emails
 - [x] update readme
 
-### alpha_v004
+### alpha_4
 - [ ] padding on bottom of chart to go above absolutely placed input section
 - [ ] unique constraint on living situations to avoid duplicates
 - [ ] send an email after signing up
@@ -97,10 +97,10 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
     - [ ] add to house on signup (or prompt?)
 - [ ] test suite
 
-### beta_v001
+### beta_1
 - [ ] material design
 
-### beta_v002
+### beta_2
 - [ ] follow all these rules
 - [ ] authorization
 - [ ] optional image upload for verification on chart entries
