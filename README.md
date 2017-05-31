@@ -83,9 +83,10 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
 - [x] hash passwords
 - [x] error message on invite
 - [x] case insesitive emails
-- [ ] update readme
+- [x] update readme
 
 ### alpha_v004
+- [ ] padding on bottom of chart to go above absolutely placed input section
 - [ ] unique constraint on living situations to avoid duplicates
 - [ ] send an email after signing up
 - [ ] forgot password link
@@ -97,6 +98,10 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
 - [ ] test suite
 
 ### beta_v001
+- [ ] material design
+
+### beta_v002
+- [ ] follow all these rules
 - [ ] authorization
 - [ ] optional image upload for verification on chart entries
 - [ ] fake deleting (inactive bools)
@@ -106,7 +111,6 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
   - [ ] remove all snakes from SPA components and handlers
   - [ ] remove all snakes from endpoint params
   - [ ] only snakes are in the keys to maps sent to db fn's OR kebab to snake library
-- [ ] material design
 
 ### eventually
 #### general
