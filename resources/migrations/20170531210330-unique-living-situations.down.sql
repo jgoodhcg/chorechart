@@ -1,0 +1,2 @@
+alter table living_situations
+drop constraint unique_living_situation;

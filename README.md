@@ -86,8 +86,8 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
 - [x] update readme
 
 ### alpha_4
-- [ ] padding on bottom of chart to go above absolutely placed input section
-- [ ] unique constraint on living situations to avoid duplicates
+- [x] margin on bottom of chart to go above absolutely placed input section
+- [x] unique constraint on living situations to avoid duplicates
 - [ ] send an email after signing up
 - [ ] forgot password link
     - [ ] send recovery email http://www.luminusweb.net/docs/useful_libraries.md#email 
