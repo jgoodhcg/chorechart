@@ -11,3 +11,4 @@ profiles.clj
 .nrepl-port
 .vagrant
 *.log
+config.edn
