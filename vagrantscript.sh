@@ -11,6 +11,15 @@ sudo apt-get install -y postgresql postgresql-contrib
 
 sudo apt-get install -y openjdk-8-jre-headless
 
+sudo apt-get install -y sendmail mailutils sendmail-bin
+# below should not be necessary (app hard codes utilizing sendmail as a relay?)
+# sudo mkdir -m 700 /etc/mail/authinfo/
+# sudo cp /home/vagrant/chorechart/gmail-auth /etc/mail/authinfo
+# sudo makemap hash /etc/mail/authinfo/gmail-auth < /etc/mail/authinfo/gmail-auth
+# sudo cp /home/vagrant/chorechart/sendmail.mc /etc/mail/
+sudo make -C /etc/mail
+sudo /etc/init.d/sendmail reload
+
 sudo /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 cd /usr/local/lib

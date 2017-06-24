@@ -9,9 +9,16 @@ Vagrant.configure(2) do |config|
     config.ssh.insert_key = false
     config.vm.synced_folder ".", "/home/vagrant/chorechart"
     config.vm.synced_folder "~/.m2", "/home/vagrant/.m2"
-    config.vm.network "forwarded_port", guest: 3000, host: 3000
-    config.vm.network "forwarded_port", guest: 3449, host: 3449
-    config.vm.network "forwarded_port", guest: 7002, host: 7002
+
+    config.vm.network "public_network"
+
+    # config.vm.network "forwarded_port", guest: 3000, host: 3000
+    # config.vm.network "forwarded_port", guest: 3449, host: 3449
+    # config.vm.network "forwarded_port", guest: 7002, host: 7002
+    # config.vm.network "forwarded_port", guest: 25, host: 25
+    # config.vm.network "forwarded_port", guest: 587, host: 587
+    # config.vm.network "forwarded_port", guest: 465, host: 465
+
     config.vm.provision "shell", path: "vagrantscript.sh"
 
     config.vm.provider "virtualbox" do |v,override|

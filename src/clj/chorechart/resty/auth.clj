@@ -4,6 +4,7 @@
    [chorechart.db.core :refer [*db*] :as db]
    [chorechart.layout :as layout]
    [buddy.hashers :as hashers]
+   [chorechart.misc :refer [mail]]
    ))
 
 (defn signup-page
@@ -32,12 +33,16 @@
               (do
                 (db/add-person!
                  {:user_name user_name :email email :password (hashers/derive password)})
+                (mail
+                 {:to email
+                  :subject "Chorechart Signup"
+                  :body "Thanks for signing up for Chorechart!"})
                 (response/found "/login"))
               ;; the only thing that should break the above
-              ;; is a taken user_name
+              ;; is a taken email
               (catch Exception e
                 (do (print (str (.getMessage e)))
-                    (flash "there was an error"))
+                    (flash "there was an error, try another email"))
                 )))))
 
 (defn login [req]

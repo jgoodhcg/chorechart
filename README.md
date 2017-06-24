@@ -1,6 +1,10 @@
 # Chore Chart
 Chore Chart is a simple clojure(script) application using reframe. Meant as a test pilot for learning reframe development and something moderately useful.
 
+## email (dev|production)
+1. To support email provide the chorechart gmail password in `config.edn` at the base of this project
+    - include this in file `{:mail-password "password.here"}`
+
 ## dev start
 1. install Vagrant + Virtualbox 
 2. clone repo
@@ -29,6 +33,10 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
 1. `vagrant ssh` to gain access to the vm  
 2. navigate to `~/chorechart/mockaroo`  
 3. run the desired `.sql` scripts with the command `sudo -u postgres psql -U postgres -d chorechart_dev -a -f scriptname.sql`  
+
+## connect to db
+1. `vagrant ssh`
+2. `sudo -u postgres psql -U postgres -d chorechart_dev ` 
 
 ## todo
 
@@ -89,16 +97,29 @@ Chore Chart is a simple clojure(script) application using reframe. Meant as a te
 - [x] margin on bottom of chart to go above absolutely placed input section
 - [x] unique constraint on living situations to avoid duplicates
 - [ ] send an email after signing up
-- [ ] forgot password link
-    - [ ] send recovery email http://www.luminusweb.net/docs/useful_libraries.md#email 
+    - [x] [try this](https://nakkaya.com/2009/11/10/using-java-mail-api-from-clojure/)
+        - [x] did not work
+    - [x] [this worked](https://linuxconfig.org/configuring-gmail-as-sendmail-email-relay)
+- [ ] password recovery
+    - [ ] forgot password enpoint
+        - [ ] set random identifier on users table with timestamp
+        - [ ] send recovery email with link
+    - [ ] password reset endpoint GET
+        - [ ] check identifier from GET param
+        - [ ] check timestamp
+        - [ ] show password recovery form (embed identifier in POST) or Error
+    - [ ] password reset endpiont POST
+        - [ ] check identifier from POST
+        - [ ] check timestamp
+        - [ ] reset password or error
 - [ ] invite friend
     - [ ] send email
     - [ ] add to house if already a member
     - [ ] add to house on signup (or prompt?)
-- [ ] test suite
 
 ### beta_1
 - [ ] material design
+- [ ] test suite
 
 ### beta_2
 - [ ] follow all these rules

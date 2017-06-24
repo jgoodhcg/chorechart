@@ -35,6 +35,8 @@
                  [selmer "1.10.0"]
                  [buddy/buddy-auth "1.2.0"]
                  [buddy/buddy-hashers "1.2.0"]
+                 [com.draines/postal "2.0.2"]
+                 [javax.mail/mail "1.4.3"]
                  ]
 
   :min-lein-version "2.0.0"
